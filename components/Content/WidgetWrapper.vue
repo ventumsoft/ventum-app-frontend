@@ -1,7 +1,7 @@
 <template>
   <component
     :is="'ContentWidget' + name"
-    :bind="data"
+    v-bind="data"
   ></component>
 </template>
 
@@ -9,7 +9,7 @@
 export default {
   props: {
     name: {type: String, required: true},
-    data: {type: Object, required: true},
+    data: {type: Object},
   },
 }
 </script>

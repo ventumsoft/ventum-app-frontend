@@ -11,7 +11,7 @@
       >
         <NuxtLink
           :hreflang="iteratedLanguage.slug"
-          :to="'/' + iteratedLanguage.slug"
+          :to="iteratedLanguage?.localizedCurrentUrl || ('/' + iteratedLanguage.slug)"
         >
           {{ iteratedLanguage.name }}
         </NuxtLink>

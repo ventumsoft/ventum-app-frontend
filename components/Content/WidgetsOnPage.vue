@@ -1,12 +1,13 @@
 <template>
-  <fragment>
+  <Fragment>
     <ContentWidgetWrapper
       v-for="widget of widgets"
       :key="widget.id"
       :name="widget.class_name"
-      :data="{test: '1234'}"
+      :data="widget.data"
+      :class="additionalClass"
     ></ContentWidgetWrapper>
-  </fragment>
+  </Fragment>
 </template>
 
 <script>
@@ -20,6 +21,7 @@ export default {
     type: {type: String, required: true},
     location: {type: String, required: true},
     name: {type: String},
+    additionalClass: {type: String},
   },
   computed: {
     widgets() {

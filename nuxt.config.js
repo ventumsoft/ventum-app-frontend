@@ -13,12 +13,18 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    ],
+    bodyAttrs: {
+      class: 'stretched no-transition',
+      'data-loader': 12,
+      'data-loader-color': '#59BA40',
+    },
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/css/main.scss',
+    '~/assets/css/widgets.scss',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

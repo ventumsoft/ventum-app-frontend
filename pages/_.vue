@@ -1,25 +1,29 @@
 <template>
-  <div style="background: lightgray;">
-    <div>Page Content</div>
-    <div>
-      <NuxtLink to="/">Main</NuxtLink>
-      <NuxtLink to="/en">En</NuxtLink>
-      <NuxtLink to="/stdtsandnbsptststst">stdtsandnbsptststst</NuxtLink>
-      <NuxtLink to="/jw45jw45jw45j/jw45j/45j45wj/45j45fd">Some Page</NuxtLink>
-    </div>
-    <div>{{ JSON.stringify(path) }}</div>
-    <div>
-      {{ JSON.stringify(data) }}
-    </div>
-  </div>
+  <Fragment>
+    <TheTitle
+      :title="'Page title'"
+      :breadcrumbs="[{title: 'Main', url: '/'}, {title: 'Page'}]"
+    />
+    <ContentWidgetsOnPage type="page" location="top" />
+    <section id="content" :class="{'no-top-widgets': false}">
+      <div class="content-wrap showcase-widget-container">
+        <!-- product category: items -->
+        <!-- product: images/calculator/creators/tabs -->
+        <!-- blog article: content -->
+        <!-- custom page: content -->
+        <ContentWidgetsOnPage type="page" location="middle" />
+      </div>
+    </section>
+    <ContentWidgetsOnPage type="page" location="bottom" />
+  </Fragment>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {Fragment} from 'vue-frag';
 
 export default {
-  computed: {
-    ...mapState('page', ['path', 'data']),
+  components: {
+    Fragment,
   },
 }
 </script>

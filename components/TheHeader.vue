@@ -5,15 +5,15 @@
         <div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
         <ContentWidgetsOnPage type="header" location="top" name="MainthemLogo" />
         <nav id="primary-menu">
-          <ul>
+          <ul class="clearfix">
             <li class="hidden-md hidden-lg">
               <a href="#">
                 <template v-if="false">user</template>
                 <template v-else><i class="icon-signin"></i> site/header.login</template>
               </a>
             </li>
-            <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" />
-            <LanguagesMenu />
+            <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" additionalClass="hidden-md hidden-lg" />
+            <LanguagesMenu class="hidden-md hidden-lg" />
             <ContentWidgetsOnPage type="header" location="top" name="MainthemPhones" />
             <ContentWidgetsOnPage type="header" location="middle" />
           </ul>
