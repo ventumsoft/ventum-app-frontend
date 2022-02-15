@@ -68,6 +68,9 @@ typings/
 # nuxt.js build output
 .nuxt
 
+# nuxt-storm
+.components.gen.js
+
 # Nuxt generate
 dist
 

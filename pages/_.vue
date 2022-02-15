@@ -1,7 +1,11 @@
 <template>
-  <div>
+  <div style="background: lightgray;">
+    <div>Page Content</div>
     <div>
-      some page
+      <NuxtLink to="/">Main</NuxtLink>
+      <NuxtLink to="/en">En</NuxtLink>
+      <NuxtLink to="/stdtsandnbsptststst">stdtsandnbsptststst</NuxtLink>
+      <NuxtLink to="/jw45jw45jw45j/jw45j/45j45wj/45j45fd">Some Page</NuxtLink>
     </div>
     <div>{{ JSON.stringify(path) }}</div>
     <div>
