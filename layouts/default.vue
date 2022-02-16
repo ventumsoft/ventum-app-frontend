@@ -21,3 +21,15 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep {
+  #top-bar, #primary-menu {
+    li:hover {
+      &>ul {
+        display: block;
+      }
+    }
+  }
+}
+</style>

@@ -20,11 +20,3 @@
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-::v-deep li:hover {
-  &>ul {
-    display: block;
-  }
-}
-</style>
