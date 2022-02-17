@@ -3,10 +3,11 @@ export default async function ({$axios, route, store, redirect}) {
 
   const {data: {
     redirect: redirectUri,
-    type,
     language,
     languages,
     widgets,
+    type,
+    entity,
   }} = await $axios.get('page/data', {params: {path}});
 
   if (redirectUri) {
@@ -15,9 +16,10 @@ export default async function ({$axios, route, store, redirect}) {
 
   store.commit('page/set', {
     path,
-    type,
     language,
     languages,
     widgets,
+    type,
+    entity,
   });
 }

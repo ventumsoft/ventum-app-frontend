@@ -6,7 +6,7 @@
       <div class="col_half col_last nobottommargin">
         <div class="fright top-links">
           <ul class="clearfix">
-            <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" additionalClass="hidden-xs hidden-sm" />
+            <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" class="hidden-xs hidden-sm" />
             <LanguagesMenu class="hidden-xs hidden-sm" />
             <li class="hidden-xs hidden-sm">
               <a href="#">

@@ -2,7 +2,7 @@
   <section id="page-title">
     <div class="container clearfix">
       <h1 class="nobottommargin">
-        {{ title }}
+        {{ h1 }}
       </h1>
       <ol
         v-if="breadcrumbs?.length"
@@ -34,7 +34,7 @@
 <script>
 export default {
   props: {
-    title: {type: String, required: true},
+    h1: {type: String, required: true},
     breadcrumbs: {type: Array},
   },
 }

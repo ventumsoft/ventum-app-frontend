@@ -21,7 +21,6 @@ export default {
     type: {type: String, required: true},
     location: {type: String, required: true},
     name: {type: String},
-    additionalClass: {type: String},
   },
   computed: {
     widgets() {
@@ -35,7 +34,7 @@ export default {
   },
   methods: {
     getWidgetAdditionalClass(widget) {
-      const classes = this.additionalClass ? [this.additionalClass] : [];
+      const classes = this.$vnode.data.staticClass ? [this.$vnode.data.staticClass] : [];
       if ((widget.class_name === 'MainthemFooterInfoMenu') &&
         (this.widgets.filter(iteratedWidget => iteratedWidget.class_name === 'MainthemFooterInfoMenu').indexOf(widget) > 0)
       ) {

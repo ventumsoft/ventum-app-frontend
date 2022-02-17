@@ -7539,7 +7539,7 @@ body.stretched #header.full-header .container {
 
 #primary-menu ul ul > li.sub-menu > a,
 #primary-menu ul ul > li.sub-menu:hover > a {
-  background-image: url("/images/site/icons/submenu.png");
+  background-image: url("/images/icons/submenu.png");
   background-position: right center;
   background-repeat: no-repeat;
 }
@@ -20517,7 +20517,7 @@ body:not(.device-touch) .tagcloud a {
 .widget_pages li a,
 .widget_rss li a,
 .widget_recent_comments li a {
-  background: url("/images/site/icons/widget-link.png") left top no-repeat;
+  background: url("/images/icons/widget-link.png") left top no-repeat;
   border: none !important;
   color: #444;
   font-size: 14px;
@@ -22834,7 +22834,7 @@ body.top-search-open .dark #header-wrap:not(.not-dark) #top-search a,
 .dark #primary-menu:not(.not-dark) ul ul > li.sub-menu > a,
 .dark #primary-menu:not(.not-dark) ul ul > li.sub-menu:hover > a,
 #primary-menu.dark ul ul > li.sub-menu > a,
-#primary-menu.dark ul ul > li.sub-menu:hover > a { background-image: url("/images/site/icons/submenu-dark.png"); }
+#primary-menu.dark ul ul > li.sub-menu:hover > a { background-image: url("/images/icons/submenu-dark.png"); }
 
 .dark #primary-menu:not(.not-dark) ul li .mega-menu-content.col-2 > ul,
 .dark #primary-menu:not(.not-dark) ul li .mega-menu-content.col-3 > ul,
@@ -23709,7 +23709,7 @@ body #side-panel.dark #side-panel-trigger-close a {
 .dark .widget_pages li a,
 .dark .widget_rss li a {
   color: #CCC;
-  background-image: url("/images/site/icons/widget-link-dark.png");
+  background-image: url("/images/icons/widget-link-dark.png");
 }
 
 .dark .widget_nav_menu li a:hover,
@@ -24323,7 +24323,7 @@ body #side-panel.dark #side-panel-trigger-close a {
   .dark #primary-menu:not(.not-dark) ul li .mega-menu-content.style-2 li { border-top-color: rgba(255,255,255,0.1) !important; }
 
   .dark #primary-menu:not(.not-dark) > ul > li.sub-menu > a,
-  .dark #primary-menu:not(.not-dark) > .container > ul > li.sub-menu > a { background-image: url("/images/site/icons/submenu-dark.png"); }
+  .dark #primary-menu:not(.not-dark) > .container > ul > li.sub-menu > a { background-image: url("/images/icons/submenu-dark.png"); }
 
   body:not(.dark) #header:not(.dark) #header-wrap:not(.dark) #primary-menu ul li,
   body:not(.dark) #header:not(.dark) #header-wrap:not(.dark) #primary-menu ul ul,
@@ -28415,7 +28415,7 @@ Copyright (c) 2014 Daniel Eden
 
   #primary-menu > ul > li.sub-menu > a,
   #primary-menu > .container > ul > li.sub-menu > a {
-    background-image: url("/images/site/icons/submenu.png");
+    background-image: url("/images/icons/submenu.png");
     background-position: right center;
     background-repeat: no-repeat;
   }
@@ -30056,7 +30056,7 @@ only screen and (                min-resolution: 2dppx) {
   .widget_pages li a,
   .widget_rss li a,
   .widget_recent_comments li a {
-    background-image: url("/images/site/icons/widget-link@2x.png");
+    background-image: url("/images/icons/widget-link@2x.png");
     background-size: 4px 20px;
   }
 
@@ -30070,7 +30070,7 @@ only screen and (                min-resolution: 2dppx) {
   .dark .widget_categories li a,
   .dark .widget_pages li a,
   .dark .widget_rss li a,
-  .dark .widget_recent_comments li a { background-image: url("/images/site/icons/widget-link-dark@2x.png"); }
+  .dark .widget_recent_comments li a { background-image: url("/images/icons/widget-link-dark@2x.png"); }
 
 }
 

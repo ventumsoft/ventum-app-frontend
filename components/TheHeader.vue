@@ -12,7 +12,7 @@
                 <template v-else><i class="icon-signin"></i> site/header.login</template>
               </a>
             </li>
-            <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" additionalClass="hidden-md hidden-lg" />
+            <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" class="hidden-md hidden-lg" />
             <LanguagesMenu class="hidden-md hidden-lg" />
             <ContentWidgetsOnPage type="header" location="top" name="MainthemPhones" />
             <ContentWidgetsOnPage type="header" location="middle" />
@@ -24,7 +24,10 @@
               <i class="icon-line-cross"></i>
             </a>
             <template v-if="true">
-              <a href="#" id="top-search-trigger"></a>
+              <a href="#" id="top-search-trigger" @click.prevent>
+                <i class="icon-search3"></i>
+                <i class="icon-line-cross"></i>
+              </a>
               <form class="header-search-form">
                 <input
                   type="text"

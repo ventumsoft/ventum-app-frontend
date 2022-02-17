@@ -1,8 +1,8 @@
 <template>
   <Fragment>
     <slot v-if="withoutLinkIfEmpty && (!to || (to === '#'))"></slot>
-    <NuxtLink v-else-if="to && !to?.includes('://')" :to="to"><slot></slot></NuxtLink>
-    <a v-else :href="to"><slot></slot></a>
+    <NuxtLink v-else-if="to && !to?.includes('://')" :to="to" :class="$vnode.data.staticClass"><slot></slot></NuxtLink>
+    <a v-else :href="to" :class="$vnode.data.staticClass"><slot></slot></a>
   </Fragment>
 </template>
 

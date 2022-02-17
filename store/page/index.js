@@ -1,9 +1,10 @@
 export const state = () => ({
   path: null,
-  type: null,
   language: null,
   languages: null,
   widgets: null,
+  type: null,
+  entity: null,
 });
 
 export const mutations = {
@@ -13,11 +14,13 @@ export const mutations = {
     language,
     languages,
     widgets,
+    entity,
   }) {
     state.path = path;
-    state.type = type;
     state.language = language;
     state.languages = languages;
     state.widgets = widgets;
+    state.type = type;
+    state.entity = entity;
   }
 }
