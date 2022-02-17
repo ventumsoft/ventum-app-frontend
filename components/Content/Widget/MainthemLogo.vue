@@ -1,19 +1,19 @@
 <template>
   <div id="logo" class="showcase-widget" data-widget="MainthemLogo">
-    <NuxtLink :to="link" class="universal-logo hidden-xs">
+    <TheLink :to="link" class="universal-logo hidden-xs">
       <img
         :src="image || '/images/no-logo.png'"
         :srcset="(image || '/images/no-logo.png') + ', ' + (image2x || '/images/no-logo.png') + ' 2x'"
         :alt="alt"
       >
-    </NuxtLink>
-    <NuxtLink :to="link" class="universal-logo hidden-sm hidden-md hidden-lg">
+    </TheLink>
+    <TheLink :to="link" class="universal-logo hidden-sm hidden-md hidden-lg">
       <img
         :src="mobileImage || '/images/no-logo.png'"
         :srcset="(mobileImage || '/images/no-logo.png') + ', ' + (mobileImage2x || '/images/no-logo.png') + ' 2x'"
         :alt="alt"
       >
-    </NuxtLink>
+    </TheLink>
   </div>
 </template>
 

@@ -3,6 +3,7 @@
     <a href="#" @click.prevent>
       <i class="icon-flag2"></i>
       {{ language.name }}
+      <i class="icon-angle-down"></i>
     </a>
     <ul>
       <li

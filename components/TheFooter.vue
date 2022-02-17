@@ -10,7 +10,7 @@
         <div class="col_full">
           <div class="widget clearfix">
             <div class="row">
-              <ContentWidgetsOnPage type="footer" location="middle" name="MainthemFooterInfoMenu" />
+              <ContentWidgetsOnPage type="footer" location="middle" />
             </div>
           </div>
         </div>
@@ -20,7 +20,7 @@
       <div class="container clearfix">
         <ContentWidgetsOnPage type="footer" location="bottom" />
         <div class="col_half col_last tright">
-          Powered by <a href="super-company-url" target="_blank">super-company-name</a>
+          Powered by <a :href="$store.state.site.platform.link" target="_blank">{{ $store.state.site.platform.name }}</a>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@
       :key="widget.id"
       :name="widget.class_name"
       :data="widget.data"
-      :class="additionalClass"
+      :class="getWidgetAdditionalClass(widget)"
     ></ContentWidgetWrapper>
   </Fragment>
 </template>
@@ -31,6 +31,17 @@ export default {
         return widget ? [widget] : [];
       }
       return widgets?.length ? widgets : [];
+    },
+  },
+  methods: {
+    getWidgetAdditionalClass(widget) {
+      const classes = this.additionalClass ? [this.additionalClass] : [];
+      if ((widget.class_name === 'MainthemFooterInfoMenu') &&
+        (this.widgets.filter(iteratedWidget => iteratedWidget.class_name === 'MainthemFooterInfoMenu').indexOf(widget) > 0)
+      ) {
+        classes.push('hidden-xs');
+      }
+      return classes.join(' ');
     },
   },
 }

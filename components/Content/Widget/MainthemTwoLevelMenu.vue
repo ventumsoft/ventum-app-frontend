@@ -5,12 +5,9 @@
     </a>
     <ul v-if="items?.length">
       <li v-for="item of items">
-        <NuxtLink v-if="item?.link && !item.link?.includes('://')" :to="item.link">
+        <TheLink :to="item.link">
           <div>{{ item?.title }}</div>
-        </NuxtLink>
-        <a v-else :href="item.link">
-          <div>{{ item?.title }}</div>
-        </a>
+        </TheLink>
       </li>
     </ul>
   </li>

@@ -1,11 +1,8 @@
 <template>
   <li class="showcase-widget" data-widget="MainthemOneLevelMenu">
-    <NuxtLink v-if="link && !link?.includes('://')" :to="link">
+    <TheLink :to="link">
       <div>{{ title }}</div>
-    </NuxtLink>
-    <a v-else :href="link">
-      <div>{{ title }}</div>
-    </a>
+    </TheLink>
   </li>
 </template>
 

@@ -4,7 +4,7 @@
       <div>{{ title }}</div>
     </a>
     <ContentWidgetMainthemProductMenuBranch
-      v-if="tree?.length"
+      v-if="tree[0]"
       :branch="tree[0]"
       :tree="tree"
     />
@@ -15,7 +15,7 @@
 export default {
   props: {
     title: {type: String},
-    tree: {type: Array},
+    tree: {type: Object},
   },
 }
 </script>

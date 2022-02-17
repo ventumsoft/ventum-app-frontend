@@ -16,6 +16,7 @@
       <a href="#" @click.prevent>
         <i class="icon-phone3"></i>
         site/header.phones
+        <i class="icon-angle-down"></i>
       </a>
         <ul>
           <li
