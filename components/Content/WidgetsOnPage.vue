@@ -11,12 +11,7 @@
 </template>
 
 <script>
-import {Fragment} from 'vue-frag';
-
 export default {
-  components: {
-    Fragment,
-  },
   props: {
     type: {type: String, required: true},
     location: {type: String, required: true},

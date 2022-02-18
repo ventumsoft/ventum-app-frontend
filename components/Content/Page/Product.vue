@@ -1,3 +1,16 @@
 <template>
-  <div class="container clearfix">Product page content</div>
+  <Fragment>
+    <div class="container clearfix product-calculator">
+      <ContentPageProductImages />
+      <ContentPageProductCalculator />
+    </div>
+    <ContentPageProductCreators />
+    <ContentPageProductTabs />
+  </Fragment>
 </template>
+
+<script>
+export default {
+  //
+}
+</script>

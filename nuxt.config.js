@@ -26,6 +26,7 @@ export default {
     '~/assets/css/google-fonts.scss',
     '~/assets/css/main.scss',
     '~/assets/css/font-icons.scss',
+    '~/assets/css/common.scss',
     '~/assets/css/widgets.scss',
     '~/assets/css/blog.scss',
     '~/assets/css/product.scss',
@@ -33,6 +34,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/fragment',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

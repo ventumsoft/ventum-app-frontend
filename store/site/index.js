@@ -4,4 +4,5 @@ export const state = () => ({
     link: 'https://super-company-url'
   },
   name: 'Site display name',
+  config: null,
 });

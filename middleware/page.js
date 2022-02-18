@@ -1,5 +1,6 @@
 export default async function ({$axios, route, store, redirect}) {
-  const path = route.fullPath;
+  const path = route.path;
+  const query = route.query;
 
   const {data: {
     redirect: redirectUri,
@@ -8,7 +9,7 @@ export default async function ({$axios, route, store, redirect}) {
     widgets,
     type,
     entity,
-  }} = await $axios.get('page/data', {params: {path}});
+  }} = await $axios.get('page/data', {params: {path, ...query}});
 
   if (redirectUri) {
     return redirect(redirectUri);

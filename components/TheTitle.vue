@@ -1,8 +1,8 @@
 <template>
   <section id="page-title">
     <div class="container clearfix">
-      <h1 class="nobottommargin">
-        {{ h1 }}
+      <h1 v-if="title" class="nobottommargin">
+        {{ title }}
       </h1>
       <ol
         v-if="breadcrumbs?.length"
@@ -13,18 +13,15 @@
         <li
           v-for="(breadcrumb, index) in breadcrumbs"
           :key="index"
+          :class="{active: index === breadcrumbs.length - 1}"
           itemprop="itemListElement"
           itemscope
           itemtype="https://schema.org/ListItem"
         >
-          <NuxtLink v-if="breadcrumb.url" :to="breadcrumb.url">
+          <TheLink :to="breadcrumb.url" :without-link-if-empty="true">
             <span itemprop="name">{{ breadcrumb.title }}</span>
             <meta itemprop="position" :content="index + 1">
-          </NuxtLink>
-          <template v-else>
-            <span itemprop="name">{{ breadcrumb.title }}</span>
-            <meta itemprop="position" :content="index + 1">
-          </template>
+          </TheLink>
         </li>
       </ol>
     </div>
@@ -34,7 +31,7 @@
 <script>
 export default {
   props: {
-    h1: {type: String, required: true},
+    title: {type: String},
     breadcrumbs: {type: Array},
   },
 }

@@ -34,12 +34,7 @@
 </template>
 
 <script>
-import {Fragment} from 'vue-frag';
-
 export default {
-  components: {
-    Fragment,
-  },
   props: {
     phones: {type: Array},
   },

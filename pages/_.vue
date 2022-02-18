@@ -2,7 +2,7 @@
   <Fragment>
     <TheTitle
       v-if="page.entity && ((page.type !== 'Static') || (page.entity.type !== 'main'))"
-      :h1="page.entity.h1"
+      :title="page.entity.title"
       :breadcrumbs="page.entity.breadcrumbs"
     />
     <ContentWidgetsOnPage type="page" location="top" />
@@ -29,12 +29,13 @@
 </template>
 
 <script>
-import {Fragment} from 'vue-frag';
 import {mapState} from "vuex";
 
 export default {
-  components: {
-    Fragment,
+  async asyncData({store, res}) {
+    if ((store.state.page.type === 'Error') && res) {
+      res.statusCode = 404;
+    }
   },
   computed: {
     ...mapState(['page']),

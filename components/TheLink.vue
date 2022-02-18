@@ -7,12 +7,7 @@
 </template>
 
 <script>
-import {Fragment} from 'vue-frag';
-
 export default {
-  components: {
-    Fragment,
-  },
   props: {
     to: {type: String},
     withoutLinkIfEmpty: {type: Boolean, default: false},
