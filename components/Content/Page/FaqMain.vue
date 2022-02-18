@@ -1,14 +1,9 @@
 <template>
   <div class="container clearfix">
-    <ContentPageFaqMenu
-      :categories="$store.state.page.entity.faqCategories"
-    />
+    <ContentPageFaqMenu />
     <div class="postcontent nobottomborder col_last clearfix">
       <div id="portfolio" class="faqs">
-        <ContentPageFaqList
-          v-if="$store.state.page.entity?.faqItems?.length"
-          :faq-items="$store.state.page.entity.faqItems"
-        ></ContentPageFaqList>
+        <ContentPageFaqList />
       </div>
     </div>
   </div>

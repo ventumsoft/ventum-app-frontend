@@ -1,7 +1,7 @@
 <template>
   <div class="container clearfix">
     <div id="shop" class="product-3 clearfix">
-      <div v-for="category of $store.state.page.entity.categories" class="product clearfix">
+      <div v-for="category of productCategory.categories" class="product clearfix">
         <div class="product-image">
           <TheLink :to="category.link">
             <img
@@ -38,7 +38,7 @@
           <i class="icon-angle-right"></i>
         </TheLink>
       </div>
-      <div v-for="product of $store.state.page.entity.products" class="product clearfix">
+      <div v-for="product of productCategory.products" class="product clearfix">
         <div class="product-image">
           <TheLink :to="product.link">
             <img
@@ -77,3 +77,13 @@
     </div>
   </div>
 </template>
+
+<script>
+import {mapState} from 'vuex';
+
+export default {
+  computed: {
+    ...mapState('page', ['productCategory']),
+  },
+}
+</script>

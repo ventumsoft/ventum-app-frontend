@@ -29,7 +29,7 @@ import {mapState} from 'vuex';
 export default {
   computed: {
     ...mapState('page', ['language']),
-    ...mapState('page', {product: 'entity'}),
+    ...mapState('page', ['product']),
   },
 }
 </script>

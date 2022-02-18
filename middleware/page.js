@@ -7,20 +7,18 @@ export default async function ({$axios, route, store, redirect}) {
     language,
     languages,
     widgets,
-    type,
-    entity,
+    data,
   }} = await $axios.get('page/data', {params: {path, ...query}});
 
   if (redirectUri) {
     return redirect(redirectUri);
   }
 
-  store.commit('page/set', {
-    path,
+  store.commit('site/set', {
     language,
     languages,
     widgets,
-    type,
-    entity,
   });
+
+  store.commit('page/set', data);
 }

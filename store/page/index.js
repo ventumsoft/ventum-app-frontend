@@ -1,26 +1,35 @@
 export const state = () => ({
-  path: null,
-  language: null,
-  languages: null,
-  widgets: null,
   type: null,
-  entity: null,
+  page: null,
+  productCategory: null,
+  product: null,
+  blogCategory: null,
+  blogArticle: null,
+  faqCategory: null,
+  faqItem: null,
+  faqCategories: null,
+  faqItems: null,
 });
 
 export const mutations = {
-  set(state, {
-    path,
-    type,
-    language,
-    languages,
-    widgets,
-    entity,
-  }) {
-    state.path = path;
-    state.language = language;
-    state.languages = languages;
-    state.widgets = widgets;
-    state.type = type;
-    state.entity = entity;
+  set(state, data) {
+    for (const key in state) {
+      state[key] = data[key];
+    }
   }
+}
+
+export const getters = {
+  entity: state => ({
+    Static: state.page,
+    Custom: state.page,
+    ProductCategory: state.productCategory,
+    Product: state.product,
+    BlogMain: state.page,
+    BlogCategory: state.blogCategory,
+    BlogArticle: state.blogArticle,
+    FaqMain: state.page,
+    FaqCategory: state.faqCategory,
+    FaqItem: state.faqItem,
+  }[state.type]),
 }

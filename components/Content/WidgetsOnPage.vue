@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     widgets() {
-      const widgets = this.$store.state.page.widgets?.[this.type]?.[this.location];
+      const widgets = this.$store.state.site.widgets?.[this.type]?.[this.location];
       if (this.name) {
         const widget = widgets?.find(widget => widget.class_name === this.name);
         return widget ? [widget] : [];

@@ -16,10 +16,14 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
-  props: {
-    faqCategory: {type: Object},
-    faqItems: {type: Array},
+  computed: {
+    ...mapState('page', [
+      'faqCategory',
+      'faqItems',
+    ]),
   },
 }
 </script>

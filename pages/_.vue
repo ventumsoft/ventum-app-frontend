@@ -1,25 +1,25 @@
 <template>
   <Fragment>
     <TheTitle
-      v-if="page.entity && ((page.type !== 'Static') || (page.entity.type !== 'main'))"
-      :title="page.entity.title"
-      :breadcrumbs="page.entity.breadcrumbs"
+      v-if="pageEntity && ((pageType !== 'Static') || (pageEntity.type !== 'main'))"
+      :title="pageEntity.title"
+      :breadcrumbs="pageEntity.breadcrumbs"
     />
     <ContentWidgetsOnPage type="page" location="top" />
-    <section id="content" :class="{'no-top-widgets': !$store.state.page.widgets.page?.top?.length}">
+    <section id="content" :class="{'no-top-widgets': !$store.state.site.widgets.page?.top?.length}">
       <div
         class="content-wrap"
         :class="{
-          'showcase-widget-container': (page.type === 'Page') && page.entity && ((page.entity.type === 'main') || (page.entity.type === 'contacts')),
-          'category-widget-container': page.type === 'ProductCategory',
-          'product-widget-container': page.type === 'Product',
-          'blog-widget-container': page.type === 'BlogArticle',
-          'custom-page-widget-container': page.type === 'Custom',
+          'showcase-widget-container': (pageType === 'Static') && pageEntity && ((pageEntity.type === 'main') || (pageEntity.type === 'contacts')),
+          'category-widget-container': pageType === 'ProductCategory',
+          'product-widget-container': pageType === 'Product',
+          'blog-widget-container': pageType === 'BlogArticle',
+          'custom-page-widget-container': pageType === 'Custom',
         }"
       >
         <component
-          v-if="page.type !== 'Static'"
-          :is="'ContentPage' + page.type"
+          v-if="pageType !== 'Static'"
+          :is="'ContentPage' + pageType"
         ></component>
         <ContentWidgetsOnPage type="page" location="middle" />
       </div>
@@ -29,16 +29,17 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapState, mapGetters} from "vuex";
 
 export default {
   async asyncData({store, res}) {
-    if ((store.state.page.type === 'Error') && res) {
+    if ((store.state.pageType === 'Error') && res) {
       res.statusCode = 404;
     }
   },
   computed: {
-    ...mapState(['page']),
+    ...mapState('page', {pageType: 'type'}),
+    ...mapGetters('page', {pageEntity: 'entity'}),
   },
 }
 </script>
