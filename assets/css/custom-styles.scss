@@ -1,0 +1,396 @@
+:root {
+  --custom-main-color: #59BA40;
+  --custom-main-color-alpha12: var(--custom-main-color)12;
+  --custom-secondary-color: #ff9e36;
+}
+
+::selection { background: var(--custom-main-color); }
+
+::-moz-selection { background: var(--custom-main-color); }
+
+::-webkit-selection { background: var(--custom-main-color); }
+
+a,
+h1 > span:not(.nocolor),
+h2 > span:not(.nocolor),
+h3 > span:not(.nocolor),
+h4 > span:not(.nocolor),
+h5 > span:not(.nocolor),
+h6 > span:not(.nocolor),
+.header-extras li .he-text span,
+#primary-menu > ul > li:hover a,
+#primary-menu > ul > li.current a,
+#primary-menu > div > ul > li:hover a,
+#primary-menu > div > ul > li.current a,
+#top-cart a:hover,
+.top-cart-action span.top-checkout-price,
+.breadcrumb a:hover,
+#portfolio-filter li a:hover,
+.portfolio-desc h3 a:hover,
+.portfolio-overlay a:hover,
+#portfolio-navigation a:hover,
+.entry-title h2 a:hover,
+.entry-meta li a:hover,
+.post-timeline .entry:hover .entry-timeline,
+.post-timeline .entry:hover .timeline-divider,
+.ipost .entry-title h3 a:hover,
+.ipost .entry-title h4 a:hover,
+.spost .entry-title h4 a:hover,
+.mpost .entry-title h4 a:hover,
+.comment-content .comment-author a:hover,
+.product-title h3 a:hover,
+.single-product .product-title h2 a:hover,
+.product-price ins,
+.single-product .product-price,
+.feature-box.fbox-border .fbox-icon i,
+.feature-box.fbox-border .fbox-icon img,
+.feature-box.fbox-plain .fbox-icon i,
+.feature-box.fbox-plain .fbox-icon img,
+.process-steps li.active h5,
+.process-steps li.ui-tabs-active h5,
+.team-title span,
+.pricing-box.best-price .pricing-price,
+.btn-link,
+.pagination > li > a, .pagination > li > span,
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus,
+#shipping-select span.lowercase,
+#payment-select span.lowercase,
+.dark .post-timeline .entry:hover .entry-timeline,
+.dark .post-timeline .entry:hover .timeline-divider { color: var(--custom-main-color); }
+
+.color,
+#primary-menu ul ul li:hover > a,
+#primary-menu ul li .mega-menu-content.style-2 > ul > li.mega-menu-title > a:hover,
+.faqlist li a:hover,
+.tagcloud a:hover,
+.dark .top-cart-item-desc a:hover,
+.iconlist-color li i,
+.iconlist-color .prod-spec-col-name i,
+.dark.overlay-menu #header-wrap:not(.not-dark) #primary-menu > ul > li:hover > a,
+.dark.overlay-menu #header-wrap:not(.not-dark) #primary-menu > ul > li.current > a,
+.overlay-menu #primary-menu.dark > ul > li:hover > a,
+.overlay-menu #primary-menu.dark > ul > li.current > a,
+.nav-tree li:hover > a,
+.nav-tree li.current > a,
+.nav-tree li.active > a { color: var(--custom-main-color) !important; }
+
+#primary-menu.style-3 > ul > li.current > a,
+#primary-menu.sub-title > ul > li:hover > a,
+#primary-menu.sub-title > ul > li.current > a,
+#primary-menu.sub-title > div > ul > li:hover > a,
+#primary-menu.sub-title > div > ul > li.current > a,
+#top-cart > a > span,
+#page-menu-wrap,
+#page-menu ul ul,
+#page-menu.dots-menu nav li.current a,
+#page-menu.dots-menu nav li .dots-menu-caption,
+#portfolio-filter li.activeFilter a,
+#portfolio-shuffle:hover,
+.entry-link:hover,
+.sale-flash,
+.button:not(.button-white):not(.button-dark):not(.button-border):not(.button-black):not(.button-red):not(.button-teal):not(.button-yellow):not(.button-green):not(.button-brown):not(.button-aqua):not(.button-purple):not(.button-leaf):not(.button-pink):not(.button-blue):not(.button-dirtygreen):not(.button-amber):not(.button-lime),
+.button.button-dark:hover,
+.promo.promo-flat,
+.feature-box .fbox-icon i,
+.feature-box .fbox-icon img,
+.fbox-effect.fbox-dark .fbox-icon i:hover,
+.fbox-effect.fbox-dark:hover .fbox-icon i,
+.fbox-border.fbox-effect.fbox-dark .fbox-icon i:after,
+.i-rounded:hover,
+.i-circled:hover,
+ul.tab-nav.tab-nav2 li.ui-state-active a,
+.testimonial .flex-control-nav li a,
+.skills li .progress,
+.owl-theme .owl-dots .owl-dot span,
+#gotoTop:hover,
+.dark .button-dark:hover,
+.dark .fbox-effect.fbox-dark .fbox-icon i:hover,
+.dark .fbox-effect.fbox-dark:hover .fbox-icon i,
+.dark .fbox-border.fbox-effect.fbox-dark .fbox-icon i:after,
+.dark .i-rounded:hover,
+.dark .i-circled:hover,
+.dark ul.tab-nav.tab-nav2 li.ui-state-active a,
+.dark .tagcloud a:hover,
+.ei-slider-thumbs li.ei-slider-element,
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus,
+.bootstrap-switch-handle-on.bootstrap-switch-primary { background-color: var(--custom-main-color) !important; }
+
+.bgcolor,
+.button.button-3d:not(.button-white):not(.button-dark):not(.button-border):not(.button-black):not(.button-red):not(.button-teal):not(.button-yellow):not(.button-green):not(.button-brown):not(.button-aqua):not(.button-purple):not(.button-leaf):not(.button-pink):not(.button-blue):not(.button-dirtygreen):not(.button-amber):not(.button-lime):hover,
+.process-steps li.active a,
+.process-steps li.ui-tabs-active a,
+.sidenav > .ui-tabs-active > a,
+.sidenav > .ui-tabs-active > a:hover,
+.owl-theme .owl-controls .owl-nav [class*=owl-]:hover,
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus { background-color: var(--custom-main-color) !important; }
+
+#primary-menu.style-4 > ul > li:hover > a,
+#primary-menu.style-4 > ul > li.current > a,
+.post-timeline .entry:hover .entry-timeline,
+.post-timeline .entry:hover .timeline-divider,
+.cart-product-thumbnail img:hover,
+.feature-box.fbox-outline .fbox-icon,
+.feature-box.fbox-border .fbox-icon,
+.dark .top-cart-item-image:hover,
+.dark .post-timeline .entry:hover .entry-timeline,
+.dark .post-timeline .entry:hover .timeline-divider,
+.dark .cart-product-thumbnail img:hover,
+.heading-block.border-color:after { border-color: var(--custom-main-color); }
+
+.top-links ul ul,
+.top-links ul div.top-link-section,
+#primary-menu ul ul,
+#primary-menu ul li .mega-menu-content,
+#primary-menu.style-6 > ul > li > a:after,
+#primary-menu.style-6 > ul > li.current > a:after,
+#top-cart .top-cart-content,
+.fancy-title.title-border-color:before,
+.dark #primary-menu:not(.not-dark) ul ul,
+.dark #primary-menu:not(.not-dark) ul li .mega-menu-content,
+#primary-menu.dark ul ul,
+#primary-menu.dark ul li .mega-menu-content,
+.dark #primary-menu:not(.not-dark) ul li .mega-menu-content.style-2,
+#primary-menu.dark ul li .mega-menu-content.style-2,
+.dark #top-cart .top-cart-content,
+.tabs.tabs-tb ul.tab-nav li.ui-tabs-active a { border-top-color: var(--custom-main-color); }
+
+#page-menu.dots-menu nav li .dots-menu-caption:after,
+.title-block { border-left-color: var(--custom-main-color); }
+
+.title-block-right { border-right-color: var(--custom-main-color); }
+
+.fancy-title.title-bottom-border h1,
+.fancy-title.title-bottom-border h2,
+.fancy-title.title-bottom-border h3,
+.fancy-title.title-bottom-border h4,
+.fancy-title.title-bottom-border h5,
+.fancy-title.title-bottom-border h6,
+.more-link,
+.component-name.bottom-border,
+.tabs.tabs-bb ul.tab-nav li.ui-tabs-active a { border-bottom-color: var(--custom-main-color); }
+
+.border-color,
+.process-steps li.active a,
+.process-steps li.ui-tabs-active a,
+.tagcloud a:hover,
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus { border-color: var(--custom-main-color) !important; }
+
+.fbox-effect.fbox-dark .fbox-icon i:after,
+.dark .fbox-effect.fbox-dark .fbox-icon i:after { box-shadow: 0 0 0 2px var(--custom-main-color); }
+
+.fbox-border.fbox-effect.fbox-dark .fbox-icon i:hover,
+.fbox-border.fbox-effect.fbox-dark:hover .fbox-icon i,
+.dark .fbox-border.fbox-effect.fbox-dark .fbox-icon i:hover,
+.dark .fbox-border.fbox-effect.fbox-dark:hover .fbox-icon i { box-shadow: 0 0 0 1px var(--custom-main-color); }
+
+@media only screen and (max-width: 991px) {
+    body:not(.dark) #header:not(.dark) #header-wrap:not(.dark) #primary-menu > ul > li:hover a,
+    body:not(.dark) #header:not(.dark) #header-wrap:not(.dark) #primary-menu > ul > li.current a,
+    body:not(.dark) #header:not(.dark) #header-wrap:not(.dark) #primary-menu > div > ul > li:hover a,
+    body:not(.dark) #header:not(.dark) #header-wrap:not(.dark) #primary-menu > div > ul > li.current a,
+    #primary-menu ul ul li:hover > a,
+    #primary-menu ul li .mega-menu-content.style-2 > ul > li.mega-menu-title:hover > a,
+    #primary-menu ul li .mega-menu-content.style-2 > ul > li.mega-menu-title > a:hover { color: var(--custom-main-color) !important; }
+    #page-menu nav { background-color: var(--custom-main-color); }
+}
+
+@media only screen and (max-width: 767px) {
+    #portfolio-filter li a:hover { color: var(--custom-main-color); }
+}
+
+.btn-warning {
+    background-color: var(--custom-secondary-color) !important;
+    border-color: var(--custom-secondary-color) !important;
+}
+
+.sale-flash.new {
+    background-color: var(--custom-secondary-color) !important;
+}
+
+.button-amber {
+    background-color: var(--custom-secondary-color) !important;
+}
+
+.button-3d.button-amber:hover,
+.button-reveal.button-amber:hover {
+    background-color: var(--custom-secondary-color) !important;
+}
+
+.selectMockupModal.design i {
+    background-color: var(--custom-secondary-color) !important;
+}
+
+.canvas__message.upload__warning {
+    border: solid 2px var(--custom-secondary-color) !important;
+    color: var(--custom-secondary-color) !important;
+}
+
+.button.button-border.design-btn {
+    border: 2px solid var(--custom-secondary-color) !important;
+    color: var(--custom-secondary-color) !important;
+}
+
+.button.button-border.design-btn:hover {
+    background-color: var(--custom-secondary-color) !important;
+}
+
+.product-rating i {
+    color: var(--custom-main-color) !important;
+}
+
+.btn-success {
+    background-color: var(--custom-main-color) !important;
+    border-color: var(--custom-main-color) !important;
+}
+
+.feature-box.fbox-plain.fbox-dark .fbox-icon i, .feature-box.fbox-plain.fbox-dark .fbox-icon img {
+    color: var(--custom-main-color) !important;
+}
+
+.i-rounded, .i-plain, .i-circled, .i-bordered {
+    color: var(--custom-main-color);
+}
+
+.counter.counter-small + h5 {
+    color: var(--custom-main-color) !important;
+}
+
+.button.button-border {
+    border: 2px solid var(--custom-main-color) !important;
+    color: var(--custom-main-color) !important;
+}
+
+.button.button-border:hover {
+    background-color: var(--custom-main-color) !important;
+    color: #FFF !important;
+}
+
+.dark .footer-widgets-wrap a:hover { color: var(--custom-main-color); }
+
+.dark .widget_nav_menu li a:hover,
+.dark .widget_links li a:hover,
+.dark .widget_meta li a:hover,
+.dark .widget_archive li a:hover,
+.dark .widget_recent_comments li a:hover,
+.dark .widget_recent_entries li a:hover,
+.dark .widget_categories li a:hover,
+.dark .widget_pages li a:hover,
+.dark .widget_rss li a:hover { color: var(--custom-main-color); }
+
+.widget_links li a.active,
+.widget_links li a:hover { color: var(--custom-main-color); }
+
+a.blog-announcement-link:hover { color: var(--custom-main-color); }
+
+.breadcrumb > .active { color: var(--custom-main-color); }
+
+.label-success { background-color: var(--custom-main-color); }
+
+.radio-style:checked + .radio-style-2-label:before { background: var(--custom-main-color); }
+
+.stat-new-messages-orders { background-color: var(--custom-main-color) !important; }
+
+.phones a:hover { color: var(--custom-main-color); }
+
+.demos-filter li a:hover,
+.faq-filter li a:hover,
+.demos-filter li.activeFilter a,
+.faq-filter li.activeFilter a {
+    color: var(--custom-main-color);
+}
+
+.irs-from, .irs-to, .irs-single { background: var(--custom-main-color); }
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    color: white;
+    background: var(--custom-main-color) !important;
+}
+
+.acctitle:hover { color: var(--custom-main-color); }
+.faqtitle:hover { color: var(--custom-main-color); }
+
+#chat .panel-heading { background-color: var(--custom-main-color); }
+
+.swiper-active-switch {
+    background: var(--custom-main-color);
+    border-color: var(--custom-main-color);
+}
+
+.portfolio-3 .portfolio-item a:hover { color: var(--custom-main-color); }
+
+.checkbox-style:checked + .checkbox-style-2-label:before { background: var(--custom-main-color); }
+
+.dark .footer-widgets-wrap .checkbox-small a {color: var(--custom-main-color);}
+
+#chat a { color: var(--custom-main-color); }
+
+#chat .chat-block-closed .messengers-block .chat-block-closed-social-account-button { background-color: var(--custom-main-color); }
+
+#call-me { background-color: var(--custom-main-color) }
+
+.reversed .chat-message-content,
+.reversed .order-message-content
+{
+    background-color: var(--custom-main-color-alpha12) !important;
+    border-color: var(--custom-main-color-alpha12) !important;
+}
+
+.irs-slider:hover::before {
+    background-color: var(--custom-main-color);
+}
+
+.portfolio-item:hover .portfolio-image {
+    outline: solid 1px var(--custom-main-color) !important;
+}
+
+.persephone .tp-bullet:hover, .persephone .tp-bullet.selected {
+    background: var(--custom-secondary-color) !important;
+}
+
+.product-creator-embedded-form .form-progress .progress .progress-bar {
+    background-color: var(--custom-main-color) !important;
+}
+
+.main-home-slider .owl-nav .owl-prev:hover{
+    background-color:var(--custom-main-color) !important;
+}
+
+.main-home-slider .owl-nav .owl-next:hover{
+    background-color:var(--custom-main-color) !important;
+}
+
+.site-search-sections .site-search-section-item .badge {
+    border: 1px solid var(--custom-main-color);
+    background-color: #ffffff;
+    color: var(--custom-main-color);
+}
+
+.site-search-sections .site-search-section-item:hover .badge,
+.site-search-sections .site-search-section-item.current .badge {
+    border: 1px solid transparent;
+    background-color: var(--custom-main-color);
+    color: #ffffff;
+}
+
+.site-search-sections .site-search-section-item:hover .badge {
+    background-image: linear-gradient(0deg, #ffffff7f, #ffffff7f);
+}
+
+.site-search-results .site-search-result-item:hover a {
+    color: var(--custom-main-color);
+}
