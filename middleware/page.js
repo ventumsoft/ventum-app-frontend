@@ -4,6 +4,7 @@ export default async function ({$axios, route, store, redirect}) {
 
   const {data: {
     redirect: redirectUri,
+    settings,
     language,
     languages,
     widgets,
@@ -15,6 +16,7 @@ export default async function ({$axios, route, store, redirect}) {
   }
 
   store.commit('site/set', {
+    settings,
     language,
     languages,
     widgets,

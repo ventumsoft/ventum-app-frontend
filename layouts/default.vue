@@ -1,5 +1,6 @@
 <template>
   <div id="wrapper" class="clearfix">
+    <CustomStyles />
     <div class="wrapper-content">
       <TopBar />
       <TheHeader />
@@ -30,6 +31,9 @@ export default {
         display: block;
       }
     }
+  }
+  .__nuxt-error-page {
+    position: relative;
   }
 }
 </style>

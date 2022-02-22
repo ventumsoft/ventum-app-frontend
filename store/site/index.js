@@ -1,10 +1,5 @@
 export const state = () => ({
-  platform: {
-    name: 'Super company name',
-    link: 'https://super-company-url'
-  },
-  name: 'Site display name',
-  config: null,
+  settings: null,
   languages: null,
   language: null,
   widgets: null,
@@ -12,10 +7,12 @@ export const state = () => ({
 
 export const mutations = {
   set(state, {
+    settings,
     language,
     languages,
     widgets,
   }) {
+    state.settings = settings;
     state.language = language;
     state.languages = languages;
     state.widgets = widgets;

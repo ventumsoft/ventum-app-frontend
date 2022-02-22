@@ -7,9 +7,9 @@
       <p v-html="product.description"></p>
     </div>
     <div class="product-calculator-block" style="/*visibility: hidden;*/">
-      <div v-if="product.calculatorWithTitle" class="fancy-title title-bottom-border" :style="{'margin-bottom': $store.state.site.config?.['e-commerce:products:show-product-id'] ? '20px' : ''}">
+      <div v-if="product.calculatorWithTitle" class="fancy-title title-bottom-border" :style="{'margin-bottom': $store.state.site.settings?.['e-commerce:products:show-product-id'] ? '20px' : ''}">
         <h2>site/product.calculator.name</h2>
-        <div v-if="$store.state.site.config?.['e-commerce:products:show-product-id']" class="product-id-block">
+        <div v-if="$store.state.site.settings?.['e-commerce:products:show-product-id']" class="product-id-block">
           <label>site/product.calculator.product-id-label:</label>
           <span class="product-id-block-value">{{ product.id }}</span>
         </div>

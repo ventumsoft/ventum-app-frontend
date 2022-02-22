@@ -6,10 +6,10 @@
     <div class="col_half nobottommargin col_last topmargin">
       <div class="heading-block nobottomborder">
         <h4 v-html="'site/errors.' + code + '.caption'"></h4>
-        <span>{{ 'site/errors.' + code + '.text' + ($store.state.site.config?.['general:search:enabled'] ? '-with-search' : '-without-search') }}</span>
+        <span>{{ 'site/errors.' + code + '.text' + ($store.state.site.settings?.['general:search:enabled'] ? '-with-search' : '-without-search') }}</span>
       </div>
-      <ContentPageErrorSerach
-        v-if="$store.state.site.config?.['general:search:enabled']"
+      <ContentPageErrorSearch
+        v-if="$store.state.site.settings?.['general:search:enabled']"
       />
     </div>
   </div>

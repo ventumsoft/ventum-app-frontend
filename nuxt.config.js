@@ -1,3 +1,5 @@
+import webpack from 'webpack';
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -23,6 +25,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    'magnific-popup/dist/magnific-popup.css',
     '~/assets/css/google-fonts.scss',
     '~/assets/css/main.scss',
     '~/assets/css/font-icons.scss',
@@ -30,6 +33,8 @@ export default {
     '~/assets/css/widgets.scss',
     '~/assets/css/blog.scss',
     '~/assets/css/product.scss',
+    '~/assets/css/templates.scss',
+    '~/assets/css/custom-styles.scss',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -62,11 +67,21 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extractCSS: {
+      allChunks: true,
+    },
     loaders: {
       vue: {
         compiler: require('vue-template-babel-compiler'),
       },
     },
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+      }),
+    ],
   },
 
   // Router property -  https://nuxtjs.org/docs/2.x/features/file-system-routing#the-router-property

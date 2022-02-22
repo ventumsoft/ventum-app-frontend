@@ -1,7 +1,7 @@
 <template>
   <div class="showcase-widget col-md-3 col-sm-4 col-xs-6  widget_links" data-widget="MainthemAddress" itemscope itemtype="https://schema.org/Organization">
     <div class="widget widget_links clearfix">
-      <meta itemprop="name" :content="$store.state.site.name">
+      <meta itemprop="name" :content="$store.state.site.settings?.['general:display-site-name']">
       <h4 v-if="title">{{ title }}</h4>
       <template v-if="subtitle && address"><strong>{{ subtitle }}</strong><br></template>
       <div itemscope itemprop="address" itemtype="http://schema.org/PostalAddress">
