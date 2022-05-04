@@ -1,5 +1,6 @@
 <template>
   <section
+    v-if="items?.length"
     id="owl-carousel-widget"
     class="showcase-widget container main-home-slider owl-carousel owl-theme owl-loaded clearfix prevent-transition"
     data-widget="MainthemOwlSlider"
@@ -58,6 +59,9 @@ export default {
     items: {type: Array},
   },
   async mounted() {
+    if (!this.items?.length) {
+      return;
+    }
     if (!$.fn.owlCarousel) {
       await import('owl.carousel/dist/owl.carousel');
     }

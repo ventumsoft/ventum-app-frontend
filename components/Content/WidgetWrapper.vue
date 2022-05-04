@@ -1,15 +1,21 @@
 <template>
   <component
-    :is="'ContentWidget' + name"
-    v-bind="data"
+    :is="'ContentWidget' + widget.name"
+    v-bind="widget.data"
   ></component>
 </template>
 
 <script>
 export default {
   props: {
-    name: {type: String, required: true},
-    data: {type: Object},
+    widget: {
+      type: Object,
+      props: {
+        name: {type: String, required: true},
+        id: {type: Number, required: true},
+        data: {type: Object},
+      },
+    }
   },
 }
 </script>

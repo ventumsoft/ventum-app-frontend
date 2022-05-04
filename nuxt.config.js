@@ -40,6 +40,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/fragment',
+    '~/plugins/fitvids.client',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -67,8 +68,18 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extractCSS: {
-      allChunks: true,
+    extractCSS: true,
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          styles: {
+            name: 'styles',
+            test: /\.(css|scss|vue)$/,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      },
     },
     loaders: {
       vue: {
