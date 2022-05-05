@@ -4,15 +4,15 @@
       <h3 class="uppercase center nobottommargin" v-html="title"></h3>
       <span v-if="is_show_rating">
         <div style="margin-top: 10px" class="center bottommargin-sm" id="product-rating" itemscope itemtype="http://schema.org/AggregateRating">
-          site/widgets.clients_reviews.average_rating
+          {{ $trans('widgets.clients_reviews.average_rating') }}
           <span itemscope itemprop="itemReviewed" itemtype="http://schema.org/Organization"><span itemprop="name" v-html="company"></span></span>:
           <span itemprop="ratingValue">{{ averageRating }}</span>
-          site/widgets.clients_reviews.of
+          {{ $trans('widgets.clients_reviews.of') }}
           <span itemprop="bestRating">5</span>
-          site/widgets.clients_reviews.based
+          {{ $trans('widgets.clients_reviews.based') }}
           <span itemprop="reviewCount">{{ reviews_all }}</span>
-          site/widgets.clients_reviews.reviews
-          <TheLink :to="'#'" class="more-link">site/widgets.clients_reviews.show_all_reviews</TheLink>
+          {{ $trans('widgets.clients_reviews.reviews') }}
+          <TheLink :to="'#'" class="more-link">{{ $trans('widgets.clients_reviews.show_all_reviews') }}</TheLink>
         </div>
       </span>
       <div class="fslider testimonial" data-animation="fade" slideshowspeed="10000" data-arrows="false">
@@ -22,7 +22,7 @@
               <div v-if="review.avatar" class="testi-image">
                 <img
                   :src="review.avatar || '/images/placeholder.jpg'"
-                  alt="site/widgets.clients_reviews.alt_reviews"
+                  :alt="$trans('widgets.clients_reviews.alt_reviews')"
                   loading="lazy"
                   style="object-fit: cover"
                 >

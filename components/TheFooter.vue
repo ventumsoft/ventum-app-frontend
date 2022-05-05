@@ -10,7 +10,7 @@
     <div class="container">
       <div v-if="void 'isShowFrontTaxSwitch'" class="col_full text-center" style="padding-top: 15px;">
         <div class="col_two_third nobottommargin">
-          site/footer.tax-switcher-text-default
+          {{ $trans('footer.tax-switcher-text-default') }}
         </div>
       </div>
       <div class="footer-widgets-wrap clearfix">

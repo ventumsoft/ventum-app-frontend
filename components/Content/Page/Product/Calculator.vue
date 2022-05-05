@@ -2,15 +2,15 @@
   <div class="col_one_third portfolio-single-content col_last nobottommargin product-price-calculation-block">
     <div v-if="product.description" class="product-description-block">
       <div class="fancy-title title-bottom-border" >
-        <h2>site/product.product_description.label</h2>
+        <h2>{{ $trans('product.product_description.label') }}</h2>
       </div>
       <p v-html="product.description"></p>
     </div>
     <div class="product-calculator-block" style="/*visibility: hidden;*/">
       <div v-if="product.calculatorWithTitle" class="fancy-title title-bottom-border" :style="{'margin-bottom': $store.state.site.settings?.['e-commerce:products:show-product-id'] ? '20px' : ''}">
-        <h2>site/product.calculator.name</h2>
+        <h2>{{ $trans('product.calculator.name') }}</h2>
         <div v-if="$store.state.site.settings?.['e-commerce:products:show-product-id']" class="product-id-block">
-          <label>site/product.calculator.product-id-label:</label>
+          <label>{{ $trans('product.calculator.product-id-label') }}:</label>
           <span class="product-id-block-value">{{ product.id }}</span>
         </div>
       </div>
@@ -32,7 +32,7 @@
         type="button"
         class="button button-reveal button-rounded tright fright nomargin product-calculator-order-button hidden-xs hidden-sm hidden-md hidden-lg"
       >
-        <span>site/product.button.order</span>
+        <span>{{ $trans('product.button.order') }}</span>
         <i class="icon-angle-right"></i>
       </button>
     </div>

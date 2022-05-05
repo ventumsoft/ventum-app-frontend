@@ -6,7 +6,7 @@
       <p class="block-text-align-j" v-html="faqItem.answer"></p>
       <template v-if="faqItem.faqItems?.length">
         <div id="faqs-list" class="fancy-title title-border-color"></div>
-        <h2 class="faq-another-questions topmargin nobottommargin">site/faq.other_questions</h2>
+        <h2 class="faq-another-questions topmargin nobottommargin">{{ $trans('faq.other_questions') }}</h2>
         <ContentPageFaqList />
       </template>
     </div>

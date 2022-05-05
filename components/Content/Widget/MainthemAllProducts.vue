@@ -13,7 +13,7 @@
               :alt="item.name"
             >
           </TheLink>
-          <div v-if="item.new" class="sale-flash new">site/widgets.all_category.novelty</div>
+          <div v-if="item.new" class="sale-flash new">{{ $trans('widgets.all_category.novelty') }}</div>
           <div v-if="item.sale" class="sale-flash" :style="{'margin-top': item.new ? '42px' : ''}">- {{ item.sale }}%</div>
         </div>
         <div class="product-desc">

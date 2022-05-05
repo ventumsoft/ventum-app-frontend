@@ -13,10 +13,10 @@
           </TheLink>
           <div class="sale-flash-container text-nowrap">
             <div v-if="category.is_new" class="sale-flash new">
-              site/product.new!
+              {{ $trans('product.new') }}!
             </div>
             <div v-if="category.discount" class="sale-flash">
-              site/product.discount - {{ category.discount * 1 }}%
+              {{ $trans('product.discount') }} - {{ category.discount * 1 }}%
             </div>
             <div v-if="category.totalDiscountLabel" class="sale-flash">
               - {{ category.totalDiscountLabel }}
@@ -31,10 +31,10 @@
               </TheLink>
             </h3>
           </div>
-          <div class="product-category">site/product.category</div>
+          <div class="product-category">{{ $trans('product.category') }}</div>
         </div>
         <TheLink :to="category.link" class="button button-border button button-rounded nomargin">
-          <span>site/product.button.browse</span>
+          <span>{{ $trans('product.button.browse') }}</span>
           <i class="icon-angle-right"></i>
         </TheLink>
       </div>
@@ -50,10 +50,10 @@
           </TheLink>
           <div class="sale-flash-container text-nowrap">
             <div v-if="product.is_new" class="sale-flash new">
-              site/product.new!
+              {{ $trans('product.new') }}!
             </div>
             <div v-if="product.discount" class="sale-flash">
-              site/product.discount - {{ product.discount * 1 }}%
+              {{ $trans('product.discount') }} - {{ product.discount * 1 }}%
             </div>
             <div v-if="product.totalDiscountLabel" class="sale-flash">
               - {{ product.totalDiscountLabel }}
@@ -64,14 +64,14 @@
           <div class="product-title">
             <h3>
               <TheLink :to="product.link">
-                {{ product.name || 'site/product.label.product' }}
+                {{ product.name || $trans('product.label.product') }}
               </TheLink>
             </h3>
           </div>
           <div class="product-price" v-html="product.promoPrice"></div>
         </div>
         <TheLink :to="product.link" class="button button-border button button-rounded nomargin">
-          <span>site/product.button.order</span> <i class="icon-angle-right"></i>
+          <span>{{ $trans('product.button.order') }}</span> <i class="icon-angle-right"></i>
         </TheLink>
       </div>
     </div>

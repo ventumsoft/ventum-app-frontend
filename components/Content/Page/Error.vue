@@ -5,8 +5,8 @@
     </div>
     <div class="col_half nobottommargin col_last topmargin">
       <div class="heading-block nobottomborder">
-        <h4 v-html="'site/errors.' + code + '.caption'"></h4>
-        <span>{{ 'site/errors.' + code + '.text' + ($store.state.site.settings?.['general:search:enabled'] ? '-with-search' : '-without-search') }}</span>
+        <h4 v-html="$trans('errors.' + code + '.caption')"></h4>
+        <span>{{ $trans('errors.' + code + '.text' + ($store.state.site.settings?.['general:search:enabled'] ? '-with-search' : '-without-search')) }}</span>
       </div>
       <ContentPageErrorSearch
         v-if="$store.state.site.settings?.['general:search:enabled']"

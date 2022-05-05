@@ -1,8 +1,8 @@
 <template>
   <div class="col_two_third portfolio-single-image nobottommargin product-images-block">
     <div class="sale-flash-container" style="z-index: 3;">
-      <div v-if="product.is_new" class="sale-flash new">site/product.new!</div>
-      <div v-if="product.discount" class="sale-flash">site/product.discount - {{ product.discount * 1 }}%</div>
+      <div v-if="product.is_new" class="sale-flash new">{{ $trans('product.new') }}!</div>
+      <div v-if="product.discount" class="sale-flash">{{ $trans('product.discount') }} - {{ product.discount * 1 }}%</div>
       <div v-if="product.totalDiscountLabel" class="sale-flash">- {{ totalDiscountLabel }}</div>
     </div>
     <div class="fslider product-images-slider" :data-slideshow="product.is_images_slider_enabled">

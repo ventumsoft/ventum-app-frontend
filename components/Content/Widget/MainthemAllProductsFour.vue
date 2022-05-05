@@ -7,7 +7,7 @@
       <li v-for="item of items">
         <div class="category">
           <TheLink :to="item.link">
-            <div v-if="item.new" class="sale-flash-container"><div class="sale-flash new">site/widgets.all_category.novelty</div></div>
+            <div v-if="item.new" class="sale-flash-container"><div class="sale-flash new">{{ $trans('widgets.all_category.novelty') }}</div></div>
             <div v-if="item.sale" class="sale-flash-container"><div class="sale-flash" :style="{'margin-top': item.new ? '42px' : ''}">- {{ item.sale }}%</div></div>
             <img
               class="category-icon"

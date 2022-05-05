@@ -16,7 +16,7 @@ export const mutations = {
     for (const key in state) {
       state[key] = data[key];
     }
-  }
+  },
 }
 
 export const getters = {

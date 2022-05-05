@@ -12,7 +12,7 @@
         <div class="acc_content clearfix block-text-align-j" v-html="item.answer"></div>
       </template>
       <TheLink :to="link" class="more-link fright">
-        site/widgets.mainthem_main_faq.all_questions
+        {{ $trans('widgets.mainthem_main_faq.all_questions') }}
       </TheLink>
     </div>
   </div>

@@ -10,7 +10,7 @@
           <div v-if="review.avatar" class="testi-image">
             <img
               :src="review.avatar || '/images/placeholder.jpg'"
-              alt="site/widgets.clients_reviews.alt_reviews"
+              :alt="$trans('widgets.clients_reviews.alt_reviews')"
               loading="lazy"
               style="object-fit: cover"
             >
@@ -41,15 +41,15 @@
     </div>
     <span v-if="is_show_rating">
       <div class="center" itemscope itemtype="http://schema.org/AggregateRating">
-        site/widgets.clients_reviews.average_rating
+        {{ $trans('widgets.clients_reviews.average_rating') }}
         <span itemscope itemprop="itemReviewed" itemtype="http://schema.org/Organization"><span itemprop="name" v-html="company"></span></span>:
         <span itemprop="ratingValue">{{ averageRating }}</span>
-        site/widgets.clients_reviews.of
+        {{ $trans('widgets.clients_reviews.of') }}
         <span itemprop="bestRating">5</span>
-        site/widgets.clients_reviews.based
+        {{ $trans('widgets.clients_reviews.based') }}
         <span itemprop="reviewCount">{{ reviews_all }}</span>
-        site/widgets.clients_reviews.reviews
-        <a href="#" class="more-link fright" @click.prevent>site/widgets.clients_reviews.show_all_reviews</a>
+        {{ $trans('widgets.clients_reviews.reviews') }}
+        <a href="#" class="more-link fright" @click.prevent>{{ $trans('widgets.clients_reviews.show_all_reviews') }}</a>
       </div>
     </span>
   </div>

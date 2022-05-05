@@ -15,7 +15,7 @@
     <li class="hidden-md hidden-lg" data-widget="MainthemPhones">
       <a href="#" @click.prevent>
         <i class="icon-phone3"></i>
-        site/header.phones
+        {{ $trans('header.phones') }}
         <i class="icon-angle-down"></i>
       </a>
         <ul>

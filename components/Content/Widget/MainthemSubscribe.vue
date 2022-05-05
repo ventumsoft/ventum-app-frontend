@@ -10,9 +10,9 @@
         <div class="divcenter" style="max-width:600px;">
           <div class="input-group input-group-lg">
             <span class="input-group-addon"><i class="icon-email3"></i></span>
-            <input type="email" name="widget-subscribe-form-email" class="form-control required email" placeholder="site/widgets.subscribe.input_email">
+            <input type="email" name="widget-subscribe-form-email" class="form-control required email" :placeholder="$trans('widgets.subscribe.input_email')">
             <span class="input-group-btn">
-              <button class="btn btn-success" type="submit">site/widgets.subscribe.btn</button>
+              <button class="btn btn-success" type="submit">{{ $trans('widgets.subscribe.btn') }}</button>
             </span>
           </div>
           <label class="widget-subscribe-form-email-error hidden"></label>
@@ -28,7 +28,7 @@
           <div class="modal-body">
             <div class="panel panel-default nobottommargin noborder">
               <div class="panel-body notoppadding">
-                <div class="subscribe-form-result" data-notify-type="success" data-notify-msg="<i class=icon-ok-sign></i> site/widgets.subscribe.success"></div>
+                <div class="subscribe-form-result" data-notify-type="success" :data-notify-msg="'<i class=icon-ok-sign></i>' + $trans('widgets.subscribe.success')"></div>
                 <form
                   class="subscribe-form nobottommargin"
                   data-result-target=".subscribe-form-result"
@@ -37,11 +37,11 @@
                   <input type="hidden" name="_token">
                   <input type="hidden" name="email">
                   <div class="col_full">
-                    <label>site/widgets.subscribe.modal_name</label>
+                    <label>{{ $trans('widgets.subscribe.modal_name') }}</label>
                     <input type="text" class="form-control" name="name" required aria-required="true">
                   </div>
                   <div class="col_full">
-                    <label>site/widgets.subscribe.modal_surname</label>
+                    <label>{{ $trans('widgets.subscribe.modal_surname') }}</label>
                     <input type="text" class="form-control" name="surname" required aria-required="true">
                   </div>
                   <div v-if="$store.state.site.settings?.['general:is-terms-message-enabled']" class="input-group check-control" style="margin-top: 20px;">
@@ -63,9 +63,9 @@
                     type="submit"
                     class="button button-rounded nomargin fright"
                     value="submit"
-                    data-loading-text="site/chat.sending"
+                    :data-loading-text="$trans('chat.sending')"
                   >
-                    <span>site/widgets.subscribe.btn</span>
+                    <span>{{ $trans('widgets.subscribe.btn') }}</span>
                   </button>
                 </form>
               </div>

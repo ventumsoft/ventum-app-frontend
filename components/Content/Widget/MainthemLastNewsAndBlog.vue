@@ -96,7 +96,7 @@
         </div>
 
         <TheLink v-if="blog_items.length" :to="blog_url" class="more-link fright">
-          site/widgets.last_news_and_blog_preview.read_blog
+          {{ $trans('widgets.last_news_and_blog_preview.read_blog') }}
         </TheLink>
       </div>
     </div>

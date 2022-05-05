@@ -5,7 +5,7 @@
       <div
         class="footer-contacts-form-result"
         data-notify-type="success"
-        data-notify-msg="<i class=icon-ok-sign></i> site/contacts.form.success"
+        :data-notify-msg="'<i class=icon-ok-sign></i>' + $trans('contacts.form.success')"
       ></div>
       <form
         class="nobottommargin"
@@ -21,7 +21,7 @@
             class="required form-control input-block-level"
             name="name"
             value="auth.user.name"
-            placeholder="site/forms.all_forms.input_name"
+            :placeholder="$trans('forms.all_forms.input_name')"
           >
         </div>
         <div class="input-group divcenter">
@@ -31,7 +31,7 @@
             class="required form-control email input-block-level"
             name="email"
             value="auth.user.email"
-            placeholder="site/forms.all_forms.input_email"
+            :placeholder="$trans('forms.all_forms.input_email')"
           >
         </div>
         <textarea
@@ -39,7 +39,7 @@
           name="message"
           rows="4"
           cols="30"
-          placeholder="site/forms.all_forms.input_massage"
+          :placeholder="$trans('forms.all_forms.input_massage')"
         ></textarea>
 
         <div v-if="$store.state.site.settings?.['general:is-terms-message-enabled']" class="input-group check-control">
@@ -63,9 +63,9 @@
           type="submit"
           class="button button-rounded button-reveal tright nomargin fright btn-status-write-to-us"
           value="submit"
-          data-loading-text="site/chat.sending"
+          :data-loading-text="$trans('chat.sending')"
         >
-          <i class="icon-email2"></i><span>site/forms.all_forms.btn</span>
+          <i class="icon-email2"></i><span>{{ $trans('forms.all_forms.btn') }}</span>
         </button>
       </form>
     </div>

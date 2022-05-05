@@ -9,7 +9,7 @@
             <li class="hidden-md hidden-lg">
               <a href="#">
                 <template v-if="false">user</template>
-                <template v-else><i class="icon-signin"></i> site/header.login</template>
+                <template v-else><i class="icon-signin"></i> {{ $trans('header.login') }}</template>
               </a>
             </li>
             <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" class="hidden-md hidden-lg" />
@@ -33,13 +33,13 @@
                   type="text"
                   class="form-control hidden-xs search-form-input"
                   value=""
-                  placeholder="site/header.search_placeholder'"
+                  :placeholder="$trans('header.search_placeholder')"
                 >
                 <input
                   type="text"
                   class="form-control hidden-sm hidden-md hidden-lg search-form-input"
                   value=""
-                  placeholder="site/header.search_placeholder_short"
+                  :placeholder="$trans('header.search_placeholder_short')"
                 >
                 <button type="submit" class="hidden"></button>
               </form>

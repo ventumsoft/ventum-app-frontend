@@ -11,7 +11,7 @@
             <li class="hidden-xs hidden-sm">
               <a href="#">
                 <template v-if="false">user</template>
-                <template v-else><i class="icon-signin"></i> site/header.login</template>
+                <template v-else><i class="icon-signin"></i> {{ $trans('header.login') }}</template>
               </a>
             </li>
           </ul>
