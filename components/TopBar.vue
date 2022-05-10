@@ -1,12 +1,12 @@
 <template>
   <div id="top-bar" class="hidden-xs">
     <div class="container clearfix">
-      <ContentWidgetsOnPage type="header" location="top" name="MainthemPhones" />
-      <ContentWidgetsOnPage type="header" location="top" name="MainthemHeaderCustomHtml" />
+      <ContentWidgetsOnPage type="header" location="top" name="Phones" />
+      <ContentWidgetsOnPage type="header" location="top" name="HeaderCustomHtml" />
       <div class="col_half col_last nobottommargin">
         <div class="fright top-links">
           <ul class="clearfix">
-            <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" class="hidden-xs hidden-sm" />
+            <ContentWidgetsOnPage type="header" location="top" name="SitesList" class="hidden-xs hidden-sm" />
             <LanguagesMenu class="hidden-xs hidden-sm" />
             <li class="hidden-xs hidden-sm">
               <a href="#">

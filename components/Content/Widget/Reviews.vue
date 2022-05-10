@@ -49,7 +49,7 @@
         {{ $trans('widgets.clients_reviews.based') }}
         <span itemprop="reviewCount">{{ reviews_all }}</span>
         {{ $trans('widgets.clients_reviews.reviews') }}
-        <a href="#" class="more-link fright" @click.prevent>{{ $trans('widgets.clients_reviews.show_all_reviews') }}</a>
+        <a href="#" class="more-link fright" @click.prevent v-html="$trans('widgets.clients_reviews.show_all_reviews')"></a>
       </div>
     </span>
   </div>

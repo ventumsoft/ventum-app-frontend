@@ -3,7 +3,7 @@
     <div id="header-wrap">
       <div class="container clearfix">
         <div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
-        <ContentWidgetsOnPage type="header" location="top" name="MainthemLogo" />
+        <ContentWidgetsOnPage type="header" location="top" name="Logo" />
         <nav id="primary-menu">
           <ul class="clearfix">
             <li class="hidden-md hidden-lg">
@@ -12,9 +12,9 @@
                 <template v-else><i class="icon-signin"></i> {{ $trans('header.login') }}</template>
               </a>
             </li>
-            <ContentWidgetsOnPage type="header" location="top" name="MainthemSitesList" class="hidden-md hidden-lg" />
+            <ContentWidgetsOnPage type="header" location="top" name="SitesList" class="hidden-md hidden-lg" />
             <LanguagesMenu class="hidden-md hidden-lg" />
-            <ContentWidgetsOnPage type="header" location="top" name="MainthemPhones" />
+            <ContentWidgetsOnPage type="header" location="top" name="Phones" />
             <ContentWidgetsOnPage type="header" location="middle" />
           </ul>
           <ShoppingCart />

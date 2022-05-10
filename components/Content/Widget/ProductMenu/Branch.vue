@@ -5,7 +5,7 @@
         <TheLink :to="category.link">
           <div>{{ category.name }}</div>
         </TheLink>
-        <ContentWidgetMainthemProductMenuBranch
+        <ContentWidgetProductMenuBranch
           v-if="tree[category.id]"
           :branch="tree[category.id]"
           :tree="tree"

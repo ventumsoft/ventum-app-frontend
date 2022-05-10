@@ -50,11 +50,11 @@
 
         <template v-if="is_captcha_enabled">
           <div v-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V2" class="col_full has-error">
-            <div align="center" class="g-recaptcha" data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']"  style="display: none;"></div>
+            <div align="center" class="g-recaptcha" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']" style="display: none;"></div>
             <div id="form-captcha-error" style="color: red;"></div>
           </div>
           <template v-else-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3">
-            <input type="hidden" class="g-recaptcha-v3" name="g-recaptcha-response" data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key'] ">
+            <input type="hidden" class="g-recaptcha-v3" name="g-recaptcha-response" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']">
             <div id="form-captcha-error" style="color: red;"></div>
           </template>
         </template>

@@ -29,8 +29,8 @@ export default {
   methods: {
     getWidgetAdditionalClass(widget) {
       const classes = this.$vnode.data.staticClass ? [this.$vnode.data.staticClass] : [];
-      if ((widget.name === 'MainthemFooterInfoMenu') &&
-        (this.widgets.filter(iteratedWidget => iteratedWidget.name === 'MainthemFooterInfoMenu').indexOf(widget) > 0)
+      if ((widget.name === 'FooterInfoMenu') &&
+        (this.widgets.filter(iteratedWidget => iteratedWidget.name === 'FooterInfoMenu').indexOf(widget) > 0)
       ) {
         classes.push('hidden-xs');
       }

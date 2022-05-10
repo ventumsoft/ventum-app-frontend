@@ -27,6 +27,7 @@ export default {
   css: [
     'magnific-popup/dist/magnific-popup.css',
     '~/assets/css/google-fonts.scss',
+    '~/assets/css/back-font-icons.scss',
     '~/assets/css/main.scss',
     '~/assets/css/font-icons.scss',
     '~/assets/css/common.scss',
@@ -40,6 +41,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/fragment',
+    '~/plugins/nl2br',
     '~/plugins/trans',
     '~/plugins/fitvids.client',
   ],
@@ -87,6 +89,7 @@ export default {
         compiler: require('vue-template-babel-compiler'),
       },
     },
+    parallel: true,
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',

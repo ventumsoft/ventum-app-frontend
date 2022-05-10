@@ -3,7 +3,7 @@
     <a href="#" @click.prevent>
       <div>{{ title }}</div>
     </a>
-    <ContentWidgetMainthemProductMenuBranch
+    <ContentWidgetProductMenuBranch
       v-if="tree[0]"
       :branch="tree[0]"
       :tree="tree"
