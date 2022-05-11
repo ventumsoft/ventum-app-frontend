@@ -6,7 +6,7 @@
           <i class="i-large i-plain" :class="'icon-' + item.icon"></i>
           <div class="clear"></div>
           <div class="counter counter-small">
-          <span :data-from="0" :data-to="item.value" :data-refresh-interval="10" :data-speed="3000">{{ item.value }}</span>
+            <span :data-from="0" :data-to="item.value" :data-refresh-interval="10" :data-speed="3000">{{ item.value }}</span>
           </div>
           <h5 v-html="item.text"></h5>
           <div class="visible-sm bottommargin-sm"></div>
@@ -20,6 +20,18 @@
 export default {
   props: {
     items: {type: Array},
+  },
+  async mounted() {
+    await import('jquery.appear/jquery.appear');
+    await import('jquery-countto/jquery.countTo');
+
+    const $el = $(this.$el);
+
+    $el.appear(
+      () => void $el.find('.counter span').countTo(),
+      {accX: 0, accY: -120},
+      'easeInCubic'
+    );
   },
 }
 </script>

@@ -12,7 +12,7 @@
           </span>
         </p>
     </div>
-    <li class="hidden-md hidden-lg" data-widget="MainthemPhones">
+    <li class="hidden-md hidden-lg sub-menu" data-widget="MainthemPhones">
       <a href="#" @click.prevent>
         <i class="icon-phone3"></i>
         {{ $trans('header.phones') }}

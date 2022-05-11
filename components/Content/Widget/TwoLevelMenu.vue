@@ -1,5 +1,5 @@
 <template>
-  <li class="showcase-widget" data-widget="MainthemTwoLevelMenu">
+  <li class="showcase-widget sub-menu" data-widget="MainthemTwoLevelMenu">
     <a href="#" @click.prevent>
       <div>{{ title }}</div>
     </a>

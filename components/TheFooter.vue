@@ -3,7 +3,8 @@
     id="footer"
     class="dark"
     :style="{
-      background: ($store.state.site.settings?.['footer_bg_type'] === 'color') ? ($store.state.site.settings?.['footer_bg_color'] || '#fff') : ('url(' + $store.state.site.settings?.['footer_bg_image'] || '/images/no-image.png' + ')'),
+      backgroundColor: ($store.state.site.settings?.['footer_bg_type'] === 'color') && ($store.state.site.settings?.['footer_bg_color'] || '#fff'),
+      backgroundImage: ($store.state.site.settings?.['footer_bg_type'] !== 'color') && ('url(' + ($store.state.site.settings?.['footer_bg_image'] || '/images/no-image.png') + ')'),
       backgroundSize: ($store.state.site.settings?.['footer_bg_type'] !== 'color') ? 'cover' : '',
     }"
   >

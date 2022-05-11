@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li class="sub-menu">
     <a href="#" @click.prevent>
       <div>{{ title }}</div>
     </a>

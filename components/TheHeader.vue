@@ -1,8 +1,8 @@
 <template>
   <header id="header" class="without-bottom-border">
-    <div id="header-wrap">
+    <div ref="headerWrap" id="header-wrap">
       <div class="container clearfix">
-        <div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
+        <div id="primary-menu-trigger" @click="togglePrimaryMenu"><i class="icon-reorder"></i></div>
         <ContentWidgetsOnPage type="header" location="top" name="Logo" />
         <nav id="primary-menu">
           <ul class="clearfix">
@@ -57,6 +57,52 @@ import {mapState} from 'vuex';
 export default {
   computed: {
     ...mapState('page', ['widgets']),
+  },
+  mounted() {
+    ['load', 'scroll'].forEach(eventType => window.addEventListener(eventType, event => {
+      this.stickyMenu();
+    }))
+  },
+  methods: {
+    stickyMenu() {
+      if (window.scrollY > this.$refs.headerWrap.offsetTop) {
+        if (document.body.classList.contains('device-lg') || document.body.classList.contains('device-md') ) {
+          document.querySelector('body:not(.side-header) #header:not(.no-sticky)')?.classList?.add('sticky-header');
+          if (!this.$refs.headerWrap.classList.contains('force-not-dark') ) {
+            this.$refs.headerWrap.classList.remove('not-dark');
+          }
+          //SEMICOLON.header.stickyMenuClass();
+        } else if(document.body.classList.contains('device-xs') || document.body.classList.contains('device-xxs') || document.body.classList.contains('device-sm') ) {
+          if (document.body.classList.contains('sticky-responsive-menu')) {
+            document.querySelector('#header:not(.no-sticky)')?.classList?.add('responsive-sticky-header');
+            //SEMICOLON.header.stickyMenuClass();
+          }
+        }
+      } else {
+        this.removeStickyness();
+      }
+    },
+    removeStickyness() {
+      if (this.$el.classList.contains('sticky-header') ){
+        document.querySelector('body:not(.side-header) #header:not(.no-sticky)')?.classList?.remove('sticky-header');
+        if(!this.$refs.headerWrap.classList.contains('force-not-dark') ) {
+          this.$refs.headerWrap.classList.remove('not-dark');
+        }
+        //SEMICOLON.slider.swiperSliderMenu();
+        //SEMICOLON.slider.revolutionSliderMenu();
+      }
+      if (this.$el.classList.contains('responsive-sticky-header') ){
+        document.querySelector('body.sticky-responsive-menu #header')?.classList?.remove('responsive-sticky-header');
+      }
+      if ((document.body.classList.contains('device-xs') || document.body.classList.contains('device-xxs') || document.body.classList.contains('device-sm')) && (typeof responsiveMenuClasses === 'undefined')) {
+        if (!this.$refs.headerWrap.classList.contains('force-not-dark') ) {
+          this.$refs.headerWrap.classList.remove('not-dark');
+        }
+      }
+    },
+    togglePrimaryMenu() {
+      $('#primary-menu > ul, #primary-menu > div > ul').toggleClass('show');
+    },
   },
 }
 </script>

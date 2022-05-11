@@ -991,3 +991,13 @@ ul>div[data-widget="MainthemPhones"] {
     }
   }
 }
+
+@media (max-width: 767px) {
+  #footer {
+    .footer-widgets-wrap {
+      .showcase-widget:nth-child(n+3) {
+        display: none;
+      }
+    }
+  }
+}

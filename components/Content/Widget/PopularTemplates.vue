@@ -36,7 +36,7 @@
                   <i v-if="index === 0" class="icon-line-plus"></i>
                 </a>
               </template>
-              <a v-else :href="templateData.previewImage" class="center-icon" data-lightbox="image">
+              <a v-else :href="templateData.previewImageFull" class="center-icon" data-lightbox="image">
                 <i class="icon-line-plus"></i>
               </a>
             </div>
@@ -64,8 +64,6 @@
 </template>
 
 <script>
-import $ from 'jquery';
-
 export default {
   props: {
     title: {type: String},
@@ -73,12 +71,9 @@ export default {
     templatesProductsMap: {type: Object},
   },
   async mounted() {
-    if (!$.fn.owlCarousel) {
-      await import('owl.carousel/dist/owl.carousel');
-    }
-    if (!$.fn.magnificPopup) {
-      await import('magnific-popup');
-    }
+    await import('owl.carousel/dist/owl.carousel');
+    await import('magnific-popup');
+
     const $carousel = $(this.$refs.carousel);
     $carousel.owlCarousel({
       margin: 2,
@@ -124,7 +119,7 @@ export default {
             enabled: true,
             navigateByImgClick: true,
             preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
-          }
+          },
         });
       });
     },

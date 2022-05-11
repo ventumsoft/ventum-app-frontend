@@ -44,17 +44,13 @@
 </template>
 
 <script>
-import $ from 'jquery';
-
 export default {
   props: {
     title: {type: String},
     products: {type: Array},
   },
   async mounted() {
-    if (!$.fn.owlCarousel) {
-      await import('owl.carousel/dist/owl.carousel');
-    }
+    await import('owl.carousel/dist/owl.carousel');
     const $carousel = $(this.$refs.carousel);
     $carousel.owlCarousel({
       margin: 20,

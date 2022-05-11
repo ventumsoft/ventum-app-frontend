@@ -51,8 +51,6 @@
 </template>
 
 <script>
-import $ from 'jquery';
-
 export default {
   props: {
     slide_time: {type: Number},
@@ -62,9 +60,7 @@ export default {
     if (!this.items?.length) {
       return;
     }
-    if (!$.fn.owlCarousel) {
-      await import('owl.carousel/dist/owl.carousel');
-    }
+    await import('owl.carousel/dist/owl.carousel');
     const $owlCarousel = $(this.$el);
     $owlCarousel.owlCarousel({
       margin: 10,

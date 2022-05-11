@@ -16,6 +16,10 @@
           'blog-widget-container': pageType === 'BlogArticle',
           'custom-page-widget-container': pageType === 'Custom',
         }"
+        :style="{
+          padding: (pageType === 'BlogMain') && '60px 0' || '',
+          fontSize: (pageType === 'BlogMain') && '15px' || '',
+        }"
       >
         <component
           v-if="pageType !== 'Static'"

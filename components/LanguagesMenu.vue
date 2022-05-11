@@ -1,5 +1,5 @@
 <template>
-  <li v-if="languages?.length > 1">
+  <li v-if="languages?.length > 1" class="sub-menu">
     <a href="#" @click.prevent>
       <i class="icon-flag2"></i>
       {{ language.name }}
