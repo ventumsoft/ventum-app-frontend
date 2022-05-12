@@ -41,6 +41,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/fragment',
+    '~/plugins/images-loaded.client',
+    '~/plugins/isotope.client',
     '~/plugins/nl2br',
     '~/plugins/trans',
     '~/plugins/fitvids.client',
@@ -101,6 +103,8 @@ export default {
 
   // Router property -  https://nuxtjs.org/docs/2.x/features/file-system-routing#the-router-property
   router: {
+    scrollBehavior: (to, from, savedPosition) =>
+      ({x: 0, y: 0}),
     middleware: [
       'page',
     ],

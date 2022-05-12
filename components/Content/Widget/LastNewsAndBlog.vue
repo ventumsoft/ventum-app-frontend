@@ -5,44 +5,44 @@
         <h3 v-html="news_title"></h3>
       </div>
       <div
-        v-for="(blog_item, index) of blog_items"
+        v-for="(article, index) of blog_items"
         class="col_half nobottommargin"
         :class="{col_last: index % 2 === 1}"
-        :data-id="blog_item.id"
+        :data-id="article.id"
       >
         <div class="ipost clearfix">
-          <div v-if="(blog_item.img_or_video === 'img') && blog_item.image" class="entry-image">
-            <TheLink :to="blog_item.url">
+          <div v-if="(article.img_or_video === 'img') && article.image" class="entry-image">
+            <TheLink :to="article.url">
               <img
-                :src="blog_item.image || '/images/no-image.png'"
-                :srcset="(blog_item.image || '/images/no-image.png') + ', ' + (blog_item.image2x || '/images/no-image.png') + ' 2x'"
+                :src="article.image"
+                :srcset="article.image2x && (article.image + ', ' + article.image2x + ' 2x')"
                 loading="lazy"
-                :alt="blog_item.meta_title"
+                :alt="article.meta_title"
               >
             </TheLink>
           </div>
-          <div v-else-if="(blog_item.img_or_video === 'video') && blog_item.video" class="entry-image entry-video">
+          <div v-else-if="(article.img_or_video === 'video') && article.video" class="entry-image entry-video">
             <iframe
-              v-if="blog_item.video.includes('youtu')"
+              v-if="article.video.includes('youtu')"
               class="image_fade alignleft"
               width="357" height="210"
               frameborder="0" allowfullscreen
-              :src="blog_item.video"
+              :src="article.video"
             >
             </iframe>
             <video v-else width="357" height="210" autoplay>
-              <source :src="blog_item.video">
+              <source :src="article.video">
             </video>
           </div>
           <div class="entry-title">
-            <h3><TheLink :to="blog_item.url">{{ blog_item.display_title }}</TheLink></h3>
+            <h3><TheLink :to="article.url">{{ article.display_title }}</TheLink></h3>
           </div>
           <ul class="entry-meta">
-            <li class="content-date"><i class="icon-calendar3"></i> {{ blog_item.created_at }}</li>
+            <li class="content-date"><i class="icon-calendar3"></i> {{ article.created_at }}</li>
           </ul>
           <br/>
           <div class="entry-content clear-both">
-            <TheLink :to="blog_item.url" class="blog-announcement-link"><p v-html="blog_item.announcement_text"></p></TheLink>
+            <TheLink :to="article.url" class="blog-announcement-link"><p v-html="article.announcement_text"></p></TheLink>
           </div>
         </div>
       </div>
@@ -54,43 +54,43 @@
       </div>
       <div id="home-recent-news">
         <div
-          v-for="popular_item of popular_items"
+          v-for="article of popular_items"
           class="spost clearfix"
-          :data-id="popular_item.id"
+          :data-id="article.id"
         >
-          <div v-if="(popular_item.img_or_video === 'img') && popular_item.image" class="entry-image">
+          <div v-if="(article.img_or_video === 'img') && article.image" class="entry-image">
             <div class="entry-image">
-              <TheLink :to="popular_item.url">
+              <TheLink :to="article.url">
                 <img
-                  :src="popular_item.image || '/images/no-image.png'"
-                  :srcset="(popular_item.image || '/images/no-image.png') + ', ' + (popular_item.image2x || '/images/no-image.png') + ' 2x'"
-                  :alt="popular_item.meta_title"
+                  :src="article.image"
+                  :srcset="article.image2x && (article.image + ', ' + article.image2x + ' 2x')"
+                  :alt="article.meta_title"
                   loading="lazy"
                   style="object-fit: contain;"
                 >
               </TheLink>
             </div>
           </div>
-          <div v-if="(popular_item.img_or_video === 'video') && popular_item.video" class="entry-image entry-video">
+          <div v-if="(article.img_or_video === 'video') && article.video" class="entry-image entry-video">
             <iframe
-              v-if="popular_item.video.includes('youtu')"
+              v-if="article.video.includes('youtu')"
               class="image_fade alignleft" width="500" height="281"
               frameborder="0" allowfullscreen
-              :src="popular_item.video"
+              :src="article.video"
             >
             </iframe>
             <video v-else width="500" height="281" autoplay>
-              <source :src="popular_item.video">
+              <source :src="article.video">
             </video>
           </div>
           <div class="entry-c">
             <div class="entry-title">
               <h4>
-                <TheLink :to="popular_item.url">{{ popular_item.display_title }}</TheLink>
+                <TheLink :to="article.url">{{ article.display_title }}</TheLink>
               </h4>
             </div>
             <ul class="entry-meta">
-              <li class="content-date"><i class="icon-calendar3"></i> {{ popular_item.created_at }}</li>
+              <li class="content-date"><i class="icon-calendar3"></i> {{ article.created_at }}</li>
             </ul>
           </div>
         </div>

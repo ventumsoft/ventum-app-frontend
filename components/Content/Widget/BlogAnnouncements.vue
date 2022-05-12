@@ -14,8 +14,8 @@
           <TheLink :to="article.url" :style="{height: imgHeight + 'px'}">
             <img
               class="image_fade"
-              :src="article.image || '/images/no-image.png'"
-              :srcset="(article.image || '/images/no-image.png') + ', ' + (article.image2x || '/images/no-image.png') + ' 2x'"
+              :src="article.image"
+              :srcset="article.image2x && (article.image + ', ' + article.image2x + ' 2x')"
               :alt="article.meta_title"
               :style="{maxHeight: imgHeight + 'px'}"
             >

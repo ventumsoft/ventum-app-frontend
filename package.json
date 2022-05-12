@@ -24,8 +24,10 @@
     "owl.carousel": "git+https://github.com/i-galetsky-gs-by/OwlCarousel2.git#b623c767486e77ed349cf5c1fd67d6547f8a0b24",
     "vue": "^2.6.14",
     "vue-frag": "^1.4.0",
+    "vue-images-loaded": "^1.1.2",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
+    "vueisotope": "^3.1.2",
     "webpack": "^4.46.0"
   },
   "devDependencies": {

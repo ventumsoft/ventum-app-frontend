@@ -2,6 +2,10 @@ export default async function ({$axios, route, store, redirect}) {
   const path = route.path;
   const query = route.query;
 
+  if (path === store.state.page.path) {
+    return;
+  }
+
   const {data: {
     redirect: redirectUri,
     trans,
@@ -24,5 +28,5 @@ export default async function ({$axios, route, store, redirect}) {
     widgets,
   });
 
-  store.commit('page/set', data);
+  store.commit('page/set', {path, ...data});
 }

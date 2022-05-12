@@ -19,6 +19,7 @@ export default {
     return {
       htmlAttrs: {
         lang: this.$store.state.page.language?.slug,
+        class: 'flex-footer',
       },
     };
   },

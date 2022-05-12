@@ -25,7 +25,7 @@ export const mutations = {
 
 export const actions = {
   async fetch({commit, rootState}, {
-    page = 1,
+    page = Number(this.$router.currentRoute.query.page) || 1,
     append = false,
   } = {}) {
     commit('loading', true);

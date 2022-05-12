@@ -30,5 +30,11 @@ export default {
   async fetch() {
     await this.$store.dispatch('blog/fetch');
   },
+  watch: {
+    '$route.query.page'() {
+      this.$store.dispatch('blog/fetch');
+      //window.scrollTo(0, 0);
+    },
+  },
 }
 </script>
