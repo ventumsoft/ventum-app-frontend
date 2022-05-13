@@ -8,7 +8,7 @@
             d{{ article.created_at }}<span>M{{ article.created_at }}</span>
             <div class="timeline-divider"></div>
           </div>
-          <ContentPageBlogListPartPreview v-bind="{article}" />
+          <ContentPageBlogPartPreview v-bind="{article}" />
           <div class="entry-c">
             <div class="entry-title">
               <h2>
@@ -29,9 +29,9 @@
           </div>
         </div>
       </div>
-      <ContentPageBlogListPartPagination />
+      <ContentPageBlogPartPagination />
     </div>
-    <ContentPageBlogListPartSidebar />
+    <ContentPageBlogPartSidebar />
   </fragment>
 </template>
 

@@ -26,11 +26,11 @@
               </TheLink>
             </div>
             <div v-else-if="(article.img_or_video === 'video') && article.video" class="entry-image entry-video">
-              <ContentPageBlogListPartYoutube
+              <ContentPageBlogPartYoutube
                 v-if="article.video.includes('youtu')"
                 v-bind="{article}"
               />
-              <ContentPageBlogListPartVideo
+              <ContentPageBlogPartVideo
                 v-else
                 v-bind="{article}"
               />

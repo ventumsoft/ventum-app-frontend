@@ -12,7 +12,7 @@
           <div class="entry-timeline">
             <div class="timeline-divider"></div>
           </div>
-          <ContentPageBlogListPartPreview v-bind="{article}" />
+          <ContentPageBlogPartPreview v-bind="{article}" />
           <div class="entry-title">
             <h2>
               <TheLink :to="article.url">
@@ -43,7 +43,7 @@
         </div>
       </Isotope>
     </div>
-    <ContentPageBlogListPartPagination />
+    <ContentPageBlogPartPagination />
   </fragment>
 </template>
 

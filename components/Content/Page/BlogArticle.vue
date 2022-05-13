@@ -15,18 +15,18 @@
               <i class="icon-folder-open"></i>
               <template v-for="(category, index) of article.categories">
                 <TheLink :to="category.link">
-                  {{ category.public_name }}
+                  {{ category.title }}
                 </TheLink>{{ (index < article.categories.length - 1) ? ',' : '' }}
               </template>
             </li>
           </ul>
           <div class="entry-content notopmargin">
             <div v-if="(article.img_or_video === 'img') && article.image" class="entry-image alignleft">
-              <ContentPageBlogListPartImage v-bind="{article}" />
+              <ContentPageBlogPartImage v-bind="{article}" />
             </div>
             <div v-else-if="(article.img_or_video === 'video') && article.video" class="entry-image entry-video">
-              <ContentPageBlogListPartYoutube v-if="article.video.includes('youtu')" v-bind="{article}" />
-              <ContentPageBlogListPartVideo v-else v-bind="{article}" />
+              <ContentPageBlogPartYoutube v-if="article.video.includes('youtu')" v-bind="{article}" />
+              <ContentPageBlogPartVideo v-else v-bind="{article}" />
             </div>
             <div class="no-fv" v-html="article.content"></div>
             <div class="clear"></div>
@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <ContentPageBlogListPartSidebar />
+    <ContentPageBlogPartSidebar />
   </div>
 </template>
 
@@ -62,13 +62,6 @@ import {mapState} from 'vuex';
 export default {
   computed: {
     ...mapState('page', {article: 'blogArticle'}),
-  },
-
-  async fetch() {
-    await Promise.all([
-      !this.$store.state.blog.categories && this.$store.dispatch('blog/fetchCategories'),
-      !this.$store.state.blog.recentArticles && this.$store.dispatch('blog/fetchRecentArticles'),
-    ].filter(v => v));
   },
 }
 </script>

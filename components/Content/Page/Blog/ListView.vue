@@ -3,7 +3,7 @@
     <div class="postcontent nobottommargin clearfix">
       <div id="posts" class="small-thumbs record-timeline">
         <div v-for="article of articles" class="entry clearfix">
-          <ContentPageBlogListPartPreview v-bind="{article}" />
+          <ContentPageBlogPartPreview v-bind="{article}" />
           <div class="entry-c">
             <div class="entry-title">
               <h2>
@@ -36,9 +36,9 @@
           </div>
         </div>
       </div>
-      <ContentPageBlogListPartPagination />
+      <ContentPageBlogPartPagination />
     </div>
-    <ContentPageBlogListPartSidebar />
+    <ContentPageBlogPartSidebar />
   </fragment>
 </template>
 

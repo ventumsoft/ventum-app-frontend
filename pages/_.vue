@@ -41,6 +41,22 @@ export default {
       res.statusCode = 404;
     }
   },
+  head() {
+    const meta = this.pageEntity?.meta;
+    return {
+      title: meta?.title,
+      meta: meta && [
+        meta.description && {
+          name: 'description',
+          content: meta.description,
+        },
+        meta.keywords && {
+          name: 'keywords',
+          content: meta.keywords,
+        },
+      ].filter(v => v),
+    };
+  },
   computed: {
     ...mapState('page', {pageType: 'type'}),
     ...mapGetters('page', {pageEntity: 'entity'}),

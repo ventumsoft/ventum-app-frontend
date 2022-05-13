@@ -7,9 +7,9 @@
 <script>
 import BlogTypeViewEnum from '@/enums/BlogTypeViewEnum';
 
-import ListView from './BlogList/ListView';
-import TimelineLeft from './BlogList/TimelineLeft';
-import TimelineCenter from './BlogList/TimelineCenter';
+import ListView from './Blog/ListView';
+import TimelineLeft from './Blog/TimelineLeft';
+import TimelineCenter from './Blog/TimelineCenter';
 
 export default {
   computed: {
@@ -25,13 +25,6 @@ export default {
         [BlogTypeViewEnum.WITH_TIMELINE_CENTER]: TimelineCenter,
       }[this.blogDisplayType];
     },
-  },
-  async fetch() {
-    await Promise.all([
-      this.$store.dispatch('blog/fetchArticles'),
-      !this.$store.state.blog.categories && this.$store.dispatch('blog/fetchCategories'),
-      !this.$store.state.blog.recentArticles && this.$store.dispatch('blog/fetchRecentArticles'),
-    ].filter(v => v));
   },
   watch: {
     '$route.query.page'() {
