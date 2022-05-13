@@ -4,8 +4,6 @@ export const state = () => ({
   page: null,
   productCategory: null,
   product: null,
-  blogCategories: null,
-  blogRecentArticles: null,
   blogCategory: null,
   blogArticle: null,
   faqCategory: null,

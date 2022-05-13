@@ -1,9 +1,14 @@
 <template>
   <fragment>
     <div class="postcontent nobottommargin clearfix">
-      <div id="posts" class="small-thumbs record-timeline">
+      <div id="posts" class="post-timeline small-thumbs clearfix record-timeline">
+        <div class="timeline-border" style="height:99%;"></div>
         <div v-for="article of articles" class="entry clearfix">
-          <ContentPageBlogMainPartPreview v-bind="{article}" />
+          <div class="entry-timeline">
+            d{{ article.created_at }}<span>M{{ article.created_at }}</span>
+            <div class="timeline-divider"></div>
+          </div>
+          <ContentPageBlogListPartPreview v-bind="{article}" />
           <div class="entry-c">
             <div class="entry-title">
               <h2>
@@ -13,21 +18,9 @@
               </h2>
             </div>
             <ul class="entry-meta clearfix">
-              <li class="content-date">
-                <i class="icon-calendar3"></i>
-                {{ article.created_at }}
-              </li>
-              <li v-if="article.categories?.length">
-                <i class="icon-folder-open"></i>
-                <template v-for="(category, index) in article.categories">
-                  <TheLink :to="category.link">
-                    {{ category.title }}
-                  </TheLink><template v-if="index < article.categories.length - 1">,</template>
-                </template>
-              </li>
+              <li class="content-date"><i class="icon-calendar3"></i> {{ article.created_at }}</li>
             </ul>
-            <br/>
-            <div class="entry-content clear-none">
+            <div class="entry-content">
               <p v-html="article.announcement_text"></p>
               <TheLink :to="article.url" class="more-link">
                 {{ $trans('blog.more_link') }}
@@ -36,9 +29,9 @@
           </div>
         </div>
       </div>
-      <ContentPageBlogMainPartPagination />
+      <ContentPageBlogListPartPagination />
     </div>
-    <ContentPageBlogMainPartSidebar />
+    <ContentPageBlogListPartSidebar />
   </fragment>
 </template>
 

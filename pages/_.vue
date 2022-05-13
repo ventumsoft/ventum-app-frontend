@@ -17,7 +17,7 @@
           'custom-page-widget-container': pageType === 'Custom',
         }"
         :style="{
-          padding: (pageType === 'BlogMain') && '60px 0' || '',
+          padding: ((pageType === 'BlogMain') || (pageType === 'BlogCategory')) && '60px 0' || '',
           fontSize: (pageType === 'BlogMain') && '15px' || '',
         }"
       >

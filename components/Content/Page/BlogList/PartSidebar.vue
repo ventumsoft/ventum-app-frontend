@@ -1,20 +1,20 @@
 <template>
   <div class="sidebar nobottommargin col_last clearfix">
     <div class="sidebar-widgets-wrap">
-        <div v-if="blogCategories?.length" class="widget widget_links clearfix">
+        <div v-if="categories?.length" class="widget widget_links clearfix">
         <h4>{{ $trans('blog.categories') }}</h4>
         <ul>
-          <li v-for="category of blogCategories">
-            <TheLink :to="category.link" :class="{active: false}">
+          <li v-for="category of categories">
+            <TheLink :to="category.link" :class="{active: $store.state.page.blogCategory?.id === category.id}">
               {{ category.title }}
             </TheLink>
           </li>
         </ul>
       </div>
-      <div v-if="blogRecentArticles?.length" class="widget clearfix">
+      <div v-if="recentArticles?.length" class="widget clearfix">
         <h4>{{ $trans('blog.last_blogs') }}</h4>
         <div id="post-list-footer">
-          <div v-for="article of blogRecentArticles" class="spost clearfix">
+          <div v-for="article of recentArticles" class="spost clearfix">
             <div v-if="(article.img_or_video === 'img') && article.image" class="entry-image">
               <TheLink :to="article.url" class="nobg">
                 <img
@@ -26,11 +26,11 @@
               </TheLink>
             </div>
             <div v-else-if="(article.img_or_video === 'video') && article.video" class="entry-image entry-video">
-              <ContentPageBlogMainPartYoutube
+              <ContentPageBlogListPartYoutube
                 v-if="article.video.includes('youtu')"
                 v-bind="{article}"
               />
-              <ContentPageBlogMainPartVideo
+              <ContentPageBlogListPartVideo
                 v-else
                 v-bind="{article}"
               />
@@ -59,7 +59,7 @@ import {mapState} from 'vuex';
 
 export default {
   computed: {
-    ...mapState('page', ['blogCategories', 'blogRecentArticles']),
+    ...mapState('blog', ['categories', 'recentArticles']),
   },
 }
 </script>

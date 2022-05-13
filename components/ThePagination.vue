@@ -1,5 +1,5 @@
 <template>
-  <ul v-if="pagesCount" class="pagination">
+  <ul v-if="pagesCount > 1" class="pagination">
     <li v-if="currentPage > 1"><TheLink :to="routeBuilder(currentPage - 1)">←</TheLink></li>
     <li v-else class="disabled"><a href="#" @click.prevent>←</a></li>
     <template v-for="element of elements">

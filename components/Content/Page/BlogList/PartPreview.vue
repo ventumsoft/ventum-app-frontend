@@ -1,16 +1,16 @@
 <template>
   <div v-if="(article.img_or_video === 'img') && article.image || (article.img_or_video === 'video') && article.video" class="entry-image">
     <TheLink :to="article.url">
-      <ContentPageBlogMainPartImage
+      <ContentPageBlogListPartImage
         v-if="(article.img_or_video === 'img') && article.image"
         v-bind="{article}"
       />
       <template v-else-if="(article.img_or_video === 'video') && article.video">
-        <ContentPageBlogMainPartYoutube
+        <ContentPageBlogListPartYoutube
           v-if="article.video.includes('youtu')"
           v-bind="{article}"
         />
-        <ContentPageBlogMainPartVideo
+        <ContentPageBlogListPartVideo
           v-else
           v-bind="{article}"
         />

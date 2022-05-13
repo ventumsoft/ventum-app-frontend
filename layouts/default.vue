@@ -98,4 +98,9 @@ body {
     }
   }
 }
+html.flex-footer {
+  #__nuxt, #__layout {
+    height: 100%;
+  }
+}
 </style>
