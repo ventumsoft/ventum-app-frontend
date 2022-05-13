@@ -4,7 +4,7 @@
       <a
         href="#"
         class="button button-large pagination-download-more-button"
-        @click.prevent="$store.dispatch('blog/fetch', {page: page + 1, append: true});"
+        @click.prevent="$store.dispatch('blog/fetchArticles', {page: page + 1, append: true});"
       >
         <div class="form-process" style="left: 0;" :style="{display: loading ? 'block' : 'none'}"></div>
         {{ $trans('blog.pagination.button.download_more_news') }}

@@ -12,7 +12,7 @@
           {{ $trans('widgets.clients_reviews.based') }}
           <span itemprop="reviewCount">{{ reviews_all }}</span>
           {{ $trans('widgets.clients_reviews.reviews') }}
-          <TheLink :to="'#'" class="more-link" v-html="$trans('widgets.clients_reviews.show_all_reviews')"></TheLink>
+          <TheLink :to="'#'" class="more-link"><fragment v-html="$trans('widgets.clients_reviews.show_all_reviews')"></fragment></TheLink>
         </div>
       </span>
       <div class="fslider testimonial" data-animation="fade" slideshowspeed="10000" data-arrows="false">
