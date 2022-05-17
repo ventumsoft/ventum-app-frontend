@@ -49,12 +49,17 @@ export default async function ({$axios, route, store, redirect}) {
   if ((store.state.page.type === 'FaqMain') ||
     (store.state.page.type === 'FaqCategory')
   ) {
-    await store.dispatch('faq/fetchItems');
+    await store.dispatch('faq/fetchItems', {
+      favorite: (store.state.page.type === 'FaqMain') || undefined,
+      categoryId: (store.state.page.type === 'FaqCategory') && store.state.page.faqCategory?.id || undefined,
+    });
   }
 
   if (store.state.page.type === 'FaqItem') {
     if (query.category_id) {
-      await store.dispatch('faq/fetchItems');
+      await store.dispatch('faq/fetchItems', {
+        categoryId: query.category_id || undefined,
+      });
     } else {
       store.commit('faq/setItems', null);
     }

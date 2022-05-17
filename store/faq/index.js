@@ -11,10 +11,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchItems({commit, rootState}, {
-    favorite = (rootState.page.type === 'FaqMain') || undefined,
-    categoryId = (rootState.page.type === 'FaqCategory') && rootState.page.faqCategory?.id || (rootState.page.type === 'FaqItem') && Number(this.$router.currentRoute.query.category_id) || undefined,
-  } = {}) {
+  async fetchItems({commit, rootState}, {favorite, categoryId} = {}) {
     let items;
     try {
       items = (await this.$axios.get('faq/items', {
