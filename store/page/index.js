@@ -1,5 +1,5 @@
 export const state = () => ({
-  path: null,
+  slug: null,
   type: null,
   page: null,
   productCategory: null,

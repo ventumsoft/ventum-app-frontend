@@ -1,8 +1,11 @@
 export default async function ({$axios, route, store, redirect}) {
-  const path = route.path;
-  const query = route.query;
+  const locale = route.params.locale || store.state.site.language?.slug || null;
+  const slug = (route.name === 'slug') ? (route.params.slug || '') : null;
 
-  if (path === store.state.page.path) {
+  if (locale &&
+    (locale === (store.state.site.language?.slug || null)) &&
+    (slug === store.state.page.slug)
+  ) {
     return;
   }
 
@@ -14,7 +17,7 @@ export default async function ({$axios, route, store, redirect}) {
     languages,
     widgets,
     data,
-  }} = await $axios.get('page/data', {params: {path, ...query}});
+  }} = await $axios.get('page/data', {params: {locale, slug, ...route.query}});
 
   if (redirectUri) {
     return redirect(redirectUri);
@@ -28,7 +31,7 @@ export default async function ({$axios, route, store, redirect}) {
     widgets,
   });
 
-  store.commit('page/set', {path, ...data});
+  store.commit('page/set', {slug, ...data});
 
   if ((store.state.page.type === 'BlogMain') ||
     (store.state.page.type === 'BlogCategory')
@@ -56,9 +59,9 @@ export default async function ({$axios, route, store, redirect}) {
   }
 
   if (store.state.page.type === 'FaqItem') {
-    if (query.category_id) {
+    if (route.query.category_id) {
       await store.dispatch('faq/fetchItems', {
-        categoryId: query.category_id || undefined,
+        categoryId: route.query.category_id || undefined,
       });
     } else {
       store.commit('faq/setItems', null);
@@ -72,5 +75,13 @@ export default async function ({$axios, route, store, redirect}) {
     await Promise.all([
       !store.state.faq.categories && store.dispatch('faq/fetchCategories'),
     ].filter(v => v));
+  }
+
+  if (route.params.locale !== language.slug) {
+    return redirect({...route, params: {
+      ...route.params,
+        locale: language.slug,
+        slug: !route.params.slug && route.params.locale || route.params.slug,
+    }});
   }
 }

@@ -35,12 +35,14 @@ export default {
     '~/assets/css/blog.scss',
     '~/assets/css/product.scss',
     '~/assets/css/templates.scss',
+    '~/assets/css/reviews.scss',
     '~/assets/css/custom-styles.scss',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/fragment',
+    '~/plugins/page',
     '~/plugins/images-loaded.client',
     '~/plugins/isotope.client',
     '~/plugins/nl2br',
@@ -104,6 +106,14 @@ export default {
 
   // Router property -  https://nuxtjs.org/docs/2.x/features/file-system-routing#the-router-property
   router: {
+    extendRoutes: (routes, resolve) => {
+      for (const route of routes) {
+        if (route.name.startsWith('locale/')) {
+          route.name = route.name.substr('locale/'.length);
+        }
+      }
+    },
+    routeNameSplitter: '/',
     scrollBehavior: (to, from, savedPosition) =>
       ({x: 0, y: 0}),
     middleware: [

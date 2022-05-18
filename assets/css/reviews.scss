@@ -1,0 +1,98 @@
+
+.review-date {
+  font-size: 12px;
+  font-family: 'Roboto',serif;
+  //font-style: italic;
+  i {
+    color: #999;
+  }
+}
+
+.testi-reply {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+}
+#modal-review-add, #modal-review-edit{
+  .image-editor {
+    position:relative;
+    width: 250px;
+    margin: 0px auto 0 auto;
+    .cropit-preview {
+      /* You can specify preview size in CSS */
+      height: 100%;
+      width: 100%;
+      .cropit-preview-image-container, .cropit-preview-default{
+        padding-top: 250px;
+        border-radius: 50%;
+        position: absolute;
+        overflow: hidden;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        &:hover{
+          cursor: move;
+        }
+        img{
+          object-fit: cover;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+    input.cropit-image-input {
+      visibility: hidden;
+    }
+    .select-image-btn{
+        //margin-top:250px;
+    }
+    .cropit-image-zoom-input{
+      margin-bottom:20px;
+    }
+  }
+}
+#writeTestimonialModal{
+  .image-editor {
+    position:relative;
+    width: 180px;
+    .cropit-preview {
+      height: 100%;
+      width: 100%;
+      .cropit-preview-image-container, .cropit-preview-default{
+        padding-top: 180px;
+        border-radius: 50%;
+        position: absolute;
+        overflow: hidden;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        &:hover{
+          cursor: move;
+        }
+        img{
+          object-fit: cover;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+    input.cropit-image-input {
+      visibility: hidden;
+    }
+    .cropit-image-zoom-input{
+      margin-bottom:20px;
+    }
+  }
+}
+
+.site-review-scroll-to {
+  .testimonial_guestbook {
+    border: 1px solid #555;
+  }
+}

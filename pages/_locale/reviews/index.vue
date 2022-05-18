@@ -1,0 +1,159 @@
+<template>
+  <Fragment>
+    <TheTitle
+      :title="$trans('reviews.page_title')"
+      :breadcrumbs="[
+        {title: $trans('default.breadcrumbs.main'), url: ''},
+        {title: $trans('reviews.page_title')},
+      ]"
+    />
+    <section id="content">
+      <div class="content-wrap" style="min-height: 125px;">
+        <div class="container clearfix">
+          <div id="reviews-timeline" class="post-grid grid-container post-masonry post-timeline grid-2 clearfix" style="position: relative;">
+            <div class="timeline-border"></div>
+
+            <div class="entry entry-date-section notopmargin" style="float: none; margin-bottom: 25px;">
+              <span>
+                <button class="button btn-success nomargin fright add-review-button">
+                  {{ $trans('reviews.leave_review') }}
+                </button>
+              </span>
+            </div>
+
+            <Isotope
+              ref="isotope"
+              class="post-grid grid-container post-masonry post-timeline grid-2 clearfix"
+              :list="reviews"
+              :options="{itemSelector: '.entry', masonry: {columnWidth: '.entry:not(.entry-date-section)'}}"
+              v-images-loaded:on.progress="() => $refs.isotope.iso.layout()"
+            >
+              <div
+                ref="entries"
+                v-for="review of reviews"
+                :key="review.id"
+                class="entry entry_guestbook clearfix"
+                :class="{'site-review-scroll-to': void '$review->id == Request::input(\'toReviewId\')'}"
+              >
+                <div class="entry-timeline"><div class="timeline-divider"></div></div>
+
+                <div class="testimonial testimonial_guestbook" style="overflow: hidden;">
+                  <div v-if="review.avatar" class="testi-image">
+                    <img
+                      style="object-fit: cover"
+                      :src="review.avatar"
+                      :alt="review.customer_name"
+                    >
+                  </div>
+                  <div class="testi-content">
+                    <p v-html="review.review"></p>
+
+                    <div class="testi-meta">
+                      {{ review.customer_name }}
+                      <div class="product-rating" style="float: right;">
+                        <i
+                          v-for="ratingStar of review.ratingStars"
+                          :class="(ratingStar.icon === 'icon-star-full2') ? 'icon-star3' : 'icon-star-empty'"
+                        ></i>
+                        <span class="content-date">{{ review.created_at }}</span>
+                      </div>
+                      <span class="product-rating-info" v-html="$nl2br(review.company_position_etc) || '&nbsp;'"></span>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div v-if="review.reply" class="testi-reply" v-html="review.reply"></div>
+                  </div>
+                </div>
+              </div>
+            </Isotope>
+          </div>
+
+          <div v-if="page < pages" id="load-next-posts" class="center timeline-link">
+            <a
+              class="button btn-success button-large timeline-add"
+              @click.prevent="$store.dispatch('reviews/fetch', {page: page + 1, append: true});"
+            >
+              <div class="form-process" style="left: 0;" :style="{display: loading ? 'block' : 'none'}"></div>
+              {{ $trans('blog.look_yet') }}
+            </a>
+          </div>
+
+          <div class="center pagination-block">
+            <ThePagination
+              :pagesCount="pages"
+              :currentPage="page"
+              :routeBuilder="page => $route.path + '?page=' + page"
+            />
+          </div>
+
+          <div v-if="reviews?.length" class="center" itemscope itemtype="http://schema.org/AggregateRating" style="margin-top: 20px;margin-bottom: 20px;">
+            <div class="hidden" itemscope itemprop="itemReviewed" itemtype="http://schema.org/Organization"><meta itemprop="name" :content="$store.state.site.settings?.['general:display-site-name']"></div>
+            <meta itemprop="ratingValue" :content="averageRating">
+            <meta itemprop="bestRating" content="5">
+            <meta itemprop="reviewCount" :content="count">
+            <template v-html="$trans('reviews.aggregate_rating', {
+              siteName: $store.state.site.settings?.['general:display-site-name'],
+              ratingValue: averageRating,
+              reviewsCount: count,
+            })"></template>
+          </div>
+        </div>
+      </div>
+    </section>
+  </Fragment>
+</template>
+
+<script>
+import {mapState} from 'vuex';
+
+export default {
+  head() {
+    return {
+      title: this.$trans('reviews.title'),
+      meta: [
+        {
+          name: 'description',
+          content: this.$trans('reviews.meta-description'),
+        },
+      ],
+    };
+  },
+  computed: {
+    ...mapState('reviews', [
+      'loading',
+      'page',
+      'pages',
+      'reviews',
+      'count',
+      'averageRating',
+    ]),
+  },
+  async fetch() {
+    await this.$store.dispatch('reviews/fetch');
+  },
+  mounted() {
+    setTimeout(() => {
+      this.$refs.isotope.iso.on('arrangeComplete', (a) => {
+        this.updateTimelineEntriesDividers();
+      });
+      this.updateTimelineEntriesDividers();
+    }, 0);
+  },
+  watch: {
+    '$route.query.page'() {
+      this.$store.dispatch('reviews/fetch');
+    },
+  },
+  methods: {
+    updateTimelineEntriesDividers() {
+      for (const element of this.$refs.entries) {
+        if (element.offsetLeft) {
+          element.classList.add('alt');
+        } else {
+          element.classList.remove('alt');
+        }
+        $(element).find('.entry-timeline').fadeIn();
+      }
+    },
+  },
+}
+</script>

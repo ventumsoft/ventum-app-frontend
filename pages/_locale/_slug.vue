@@ -6,7 +6,7 @@
       :breadcrumbs="pageEntity.breadcrumbs"
     />
     <ContentWidgetsOnPage type="page" location="top" />
-    <section id="content" :class="{'no-top-widgets': !$store.state.site.widgets.page?.top?.length}">
+    <section id="content" :class="{'no-top-widgets': !$store.state.site.widgets?.page?.top?.length}">
       <div
         class="content-wrap"
         :class="{
@@ -22,7 +22,7 @@
         }"
       >
         <component
-          v-if="pageType !== 'Static'"
+          v-if="pageType && (pageType !== 'Static')"
           :is="'ContentPage' + pageType"
         ></component>
         <ContentWidgetsOnPage type="page" location="middle" />
