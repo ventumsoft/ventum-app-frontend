@@ -41,9 +41,9 @@
 import {mapState, mapGetters} from "vuex";
 
 export default {
-  async asyncData({store, res}) {
-    if ((store.state.page.type === 'Error') && res) {
-      res.statusCode = 404;
+  async asyncData({store, error}) {
+    if (store.state.page.type === 'Error') {
+      error({statusCode: 404});
     }
   },
   head() {

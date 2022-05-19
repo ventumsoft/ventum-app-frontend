@@ -17,8 +17,8 @@
 
 <script>
 export default {
-  data: () => ({
-    code: 404,
-  }),
+  props: {
+    code: {type: Number, default: 404},
+  },
 }
 </script>

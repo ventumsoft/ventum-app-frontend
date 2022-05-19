@@ -107,11 +107,17 @@ export default {
   // Router property -  https://nuxtjs.org/docs/2.x/features/file-system-routing#the-router-property
   router: {
     extendRoutes: (routes, resolve) => {
-      for (const route of routes) {
-        if (route.name.startsWith('locale/')) {
-          route.name = route.name.substr('locale/'.length);
+      const removeLocaleFromRoutesNames = routes => {
+        for (const route of routes) {
+          if (route.name.startsWith('locale/')) {
+            route.name = route.name.substr('locale/'.length);
+            if (route.children?.length) {
+              removeLocaleFromRoutesNames(route.children);
+            }
+          }
         }
-      }
+      };
+      removeLocaleFromRoutesNames(routes)
     },
     routeNameSplitter: '/',
     scrollBehavior: (to, from, savedPosition) =>

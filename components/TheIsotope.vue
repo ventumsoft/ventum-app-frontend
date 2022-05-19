@@ -1,12 +1,17 @@
 <template>
-  <Isotope
-    ref="isotope"
-    :options="{itemSelector: '.entry', masonry: {columnWidth: '.entry:not(.entry-date-section)'}}"
-    v-bind="{list}"
-    v-images-loaded:on.progress="() => $refs.isotope.iso.layout()"
-  >
-    <slot></slot>
-  </Isotope>
+  <client-only>
+    <Isotope
+      ref="isotope"
+      :options="{itemSelector: '.entry', masonry: {columnWidth: '.entry:not(.entry-date-section)'}}"
+      v-bind="{list}"
+      v-images-loaded:on.progress="() => $refs.isotope.iso.layout()"
+    >
+      <slot></slot>
+    </Isotope>
+    <template #placeholder>
+      <slot></slot>
+    </template>
+  </client-only>
 </template>
 
 <script>

@@ -8,7 +8,7 @@
       <div v-for="(templateData, templateIndex) of templatesData" class="oc-item">
         <div class="iportfolio">
           <div class="portfolio-image">
-            <TheLink :to="'#'">
+            <TheLink :to="$page({name: 'template/id', params: {id: templateData.id}})">
               <img
                 v-if="(templateIndex < 2) || (templateIndex === templatesData.length - 1)"
                 :src="templateData.previewImage"
@@ -43,7 +43,7 @@
           </div>
           <div class="portfolio-desc">
             <h3>
-              <TheLink :to="'#'">
+              <TheLink :to="$page({name: 'template/id', params: {id: templateData.id}})">
                 {{ templateData.title }}
               </TheLink>
             </h3>
@@ -51,7 +51,7 @@
               <TheLink
                 v-for="(templateCategoryData, index) of templateData.categories"
                 :key="index"
-                :to="'#'"
+                :to="$page({name: 'slug/templates', params: {slug: 'product-slug'}, query: {categoryId: templateCategoryData.id}})"
               >
                 {{ templateCategoryData.title }}
               </TheLink>
