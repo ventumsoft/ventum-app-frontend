@@ -2,12 +2,7 @@
   <fragment>
     <div id="posts" class="post-grid grid-container post-masonry post-timeline grid-2 clearfix record-timeline timeline-with-center-line">
       <div class="timeline-border"></div>
-      <Isotope
-        ref="isotope"
-        :list="articles"
-        :options="{itemSelector: '.entry', masonry: {columnWidth: '.entry:not(.entry-date-section)'}}"
-        v-images-loaded:on.progress="() => $refs.isotope.iso.layout()"
-      >
+      <TheIsotope v-if="articles?.length" :list="articles">
         <div ref="entries" v-for="(article, index) of articles" :key="article.id" class="entry clearfix">
           <div class="entry-timeline">
             <div class="timeline-divider"></div>
@@ -41,7 +36,7 @@
             </TheLink>
           </div>
         </div>
-      </Isotope>
+      </TheIsotope>
     </div>
     <ContentPageBlogPartPagination />
   </fragment>
@@ -53,33 +48,6 @@ import {mapState} from 'vuex';
 export default {
   computed: {
     ...mapState('blog', ['page', 'articles']),
-  },
-  mounted() {
-    setTimeout(() => {
-      this.$refs.isotope.iso.on('arrangeComplete', (a) => {
-        this.updateTimelineEntriesDividers();
-      });
-      this.updateTimelineEntriesDividers();
-    }, 0);
-  },
-  watch: {
-    //articles() {
-    //  setTimeout(() => {
-    //    this.$refs.isotope.iso.layout();
-    //  }, 0);
-    //},
-  },
-  methods: {
-    updateTimelineEntriesDividers() {
-      for (const element of this.$refs.entries) {
-        if (element.offsetLeft) {
-          element.classList.add('alt');
-        } else {
-          element.classList.remove('alt');
-        }
-        $(element).find('.entry-timeline').fadeIn();
-      }
-    },
   },
 }
 </script>

@@ -6,7 +6,13 @@
       :breadcrumbs="pageEntity.breadcrumbs"
     />
     <ContentWidgetsOnPage type="page" location="top" />
-    <section id="content" :class="{'no-top-widgets': !$store.state.site.widgets?.page?.top?.length}">
+    <section
+      id="content"
+      :class="{'no-top-widgets': !$store.state.site.widgets?.page?.top?.length}"
+      :style="{
+        fontSize: ((pageType === 'BlogMain') || (pageType === 'Custom') || (pageType === 'FaqItem')) && '15px' || '',
+      }"
+    >
       <div
         class="content-wrap"
         :class="{
@@ -18,7 +24,6 @@
         }"
         :style="{
           padding: ((pageType === 'BlogMain') || (pageType === 'BlogCategory')) && '60px 0' || '',
-          fontSize: (pageType === 'BlogMain') && '15px' || '',
         }"
       >
         <component
@@ -37,7 +42,7 @@ import {mapState, mapGetters} from "vuex";
 
 export default {
   async asyncData({store, res}) {
-    if ((store.state.pageType === 'Error') && res) {
+    if ((store.state.page.type === 'Error') && res) {
       res.statusCode = 404;
     }
   },
@@ -60,6 +65,37 @@ export default {
   computed: {
     ...mapState('page', {pageType: 'type'}),
     ...mapGetters('page', {pageEntity: 'entity'}),
+  },
+  async fetch() {
+    if ((this.pageType === 'BlogMain') || (this.pageType === 'BlogCategory')) {
+      await this.$store.dispatch('blog/fetchArticles');
+    }
+    if ((this.pageType === 'BlogMain') || (this.pageType === 'BlogCategory') || (this.pageType === 'BlogArticle')) {
+      await Promise.all([
+        !this.$store.state.blog.categories && this.$store.dispatch('blog/fetchCategories'),
+        !this.$store.state.blog.recentArticles && this.$store.dispatch('blog/fetchRecentArticles'),
+      ].filter(v => v));
+    }
+    if ((this.pageType === 'FaqMain') || (this.pageType === 'FaqCategory')) {
+      await this.$store.dispatch('faq/fetchItems', {
+        favorite: (this.pageType === 'FaqMain') || undefined,
+        categoryId: (this.pageType === 'FaqCategory') && this.$store.state.page.faqCategory?.id || undefined,
+      });
+    }
+    if (this.pageType === 'FaqItem') {
+      if (this.$route.query.category_id) {
+        await this.$store.dispatch('faq/fetchItems', {
+          categoryId: this.$route.query.category_id || undefined,
+        });
+      } else {
+        this.$store.commit('faq/setItems', null);
+      }
+    }
+    if ((this.pageType === 'FaqMain') || (this.pageType === 'FaqCategory') || (this.pageType === 'FaqItem')) {
+      await Promise.all([
+        !this.$store.state.faq.categories && this.$store.dispatch('faq/fetchCategories'),
+      ].filter(v => v));
+    }
   },
 }
 </script>

@@ -21,21 +21,15 @@
               </span>
             </div>
 
-            <Isotope
-              ref="isotope"
-              class="post-grid grid-container post-masonry post-timeline grid-2 clearfix"
-              :list="reviews"
-              :options="{itemSelector: '.entry', masonry: {columnWidth: '.entry:not(.entry-date-section)'}}"
-              v-images-loaded:on.progress="() => $refs.isotope.iso.layout()"
-            >
+            <TheIsotope v-if="reviews?.length" :list="reviews">
               <div
                 ref="entries"
-                v-for="review of reviews"
+                v-for="(review, index) of reviews"
                 :key="review.id"
                 class="entry entry_guestbook clearfix"
                 :class="{'site-review-scroll-to': void '$review->id == Request::input(\'toReviewId\')'}"
               >
-                <div class="entry-timeline"><div class="timeline-divider"></div></div>
+                <div class="entry-timeline" :style="{top: (index === 0) && '70px' || ''}"><div class="timeline-divider"></div></div>
 
                 <div class="testimonial testimonial_guestbook" style="overflow: hidden;">
                   <div v-if="review.avatar" class="testi-image">
@@ -46,7 +40,7 @@
                     >
                   </div>
                   <div class="testi-content">
-                    <p v-html="review.review"></p>
+                    <p v-html="$nl2br(review.review)"></p>
 
                     <div class="testi-meta">
                       {{ review.customer_name }}
@@ -60,11 +54,11 @@
                       <span class="product-rating-info" v-html="$nl2br(review.company_position_etc) || '&nbsp;'"></span>
                       <div class="clearfix"></div>
                     </div>
-                    <div v-if="review.reply" class="testi-reply" v-html="review.reply"></div>
+                    <div v-if="review.reply" class="testi-reply" v-html="$nl2br(review.reply)"></div>
                   </div>
                 </div>
               </div>
-            </Isotope>
+            </TheIsotope>
           </div>
 
           <div v-if="page < pages" id="load-next-posts" class="center timeline-link">
@@ -130,29 +124,9 @@ export default {
   async fetch() {
     await this.$store.dispatch('reviews/fetch');
   },
-  mounted() {
-    setTimeout(() => {
-      this.$refs.isotope.iso.on('arrangeComplete', (a) => {
-        this.updateTimelineEntriesDividers();
-      });
-      this.updateTimelineEntriesDividers();
-    }, 0);
-  },
   watch: {
     '$route.query.page'() {
       this.$store.dispatch('reviews/fetch');
-    },
-  },
-  methods: {
-    updateTimelineEntriesDividers() {
-      for (const element of this.$refs.entries) {
-        if (element.offsetLeft) {
-          element.classList.add('alt');
-        } else {
-          element.classList.remove('alt');
-        }
-        $(element).find('.entry-timeline').fadeIn();
-      }
     },
   },
 }
