@@ -30,6 +30,7 @@
           v-if="pageType && (pageType !== 'Static')"
           :is="'ContentPage' + pageType"
         ></component>
+        <NuxtChild v-else />
         <ContentWidgetsOnPage type="page" location="middle" />
       </div>
     </section>

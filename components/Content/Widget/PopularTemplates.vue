@@ -51,7 +51,7 @@
               <TheLink
                 v-for="(templateCategoryData, index) of templateData.categories"
                 :key="index"
-                :to="$page({name: 'slug/templates', params: {slug: 'product-slug'}, query: {categoryId: templateCategoryData.id}})"
+                :to="$page({name: 'slug/templates', params: {slug: templateData.productSlug}, query: {categoryId: templateCategoryData.id}})"
               >
                 {{ templateCategoryData.title }}
               </TheLink>

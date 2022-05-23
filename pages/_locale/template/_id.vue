@@ -57,7 +57,7 @@
               <TheLink
                 v-for="category of template.categories"
                 :key="category.id"
-                :to="$page({name: 'slug/templates', params: {slug: 'product-slug'}, query: {categoryId: category.id}})"
+                :to="$page({name: 'slug/templates', params: {slug: template.productSlug}, query: {categoryId: category.id}})"
               >{{ category.title }}</TheLink>
               <div class="clear"></div>
             </div>
@@ -139,7 +139,7 @@
                       <TheLink
                         v-for="category of similarTemplate.categories"
                         :key="category.id"
-                        :to="$page({name: 'slug/templates', params: {slug: 'product-slug'}, query: {categoryId: category.id, productId: undefined, compilationId: undefined}})"
+                        :to="$page({name: 'slug/templates', params: {slug: template.productSlug}, query: {categoryId: category.id, productId: undefined, compilationId: undefined}})"
                       >
                         {{ category.title }}
                       </TheLink>
