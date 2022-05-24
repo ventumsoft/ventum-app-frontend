@@ -1,6 +1,6 @@
 <template>
   <fragment>
-    <TheTitle
+    <PageTitle
       :title="h1"
       :breadcrumbs="template.breadcrumbs"
     />
@@ -178,7 +178,10 @@ export default {
   head() {
     return {
       title: this.metaTitle,
-      meta: this.metaDescription,
+      meta: [{
+        name: 'description',
+        content: this.metaDescription,
+      }],
     };
   },
   computed: {

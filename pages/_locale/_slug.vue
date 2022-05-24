@@ -1,6 +1,6 @@
 <template>
   <Fragment>
-    <TheTitle
+    <template v-if="pageType"><PageTitle
       v-if="pageEntity && ((pageType !== 'Static') || (pageEntity.type !== 'main'))"
       :title="pageEntity.title"
       :breadcrumbs="pageEntity.breadcrumbs"
@@ -30,11 +30,11 @@
           v-if="pageType && (pageType !== 'Static')"
           :is="'ContentPage' + pageType"
         ></component>
-        <NuxtChild v-else />
         <ContentWidgetsOnPage type="page" location="middle" />
       </div>
     </section>
-    <ContentWidgetsOnPage type="page" location="bottom" />
+    <ContentWidgetsOnPage type="page" location="bottom" /></template>
+    <NuxtChild v-else />
   </Fragment>
 </template>
 

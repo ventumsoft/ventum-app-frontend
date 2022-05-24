@@ -45,7 +45,7 @@ export const actions = {
         },
       })).data;
       reviews = response.data;
-      pages = response.meta.last_page;
+      pages = response.pagination.pages;
       count = response.reviewsCount;
       averageRating = response.ratingValue;
     } catch (exception) {

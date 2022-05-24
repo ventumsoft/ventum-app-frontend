@@ -3,10 +3,10 @@
     <CustomStyles />
     <div class="wrapper-content">
       <TopBar />
-      <TheHeader />
+      <PageHeader />
       <Nuxt />
     </div>
-    <TheFooter />
+    <PageFooter />
     <div id="gotoTop" class="icon-angle-up"></div>
   </div>
 </template>

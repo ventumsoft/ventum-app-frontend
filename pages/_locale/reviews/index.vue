@@ -1,6 +1,6 @@
 <template>
   <Fragment>
-    <TheTitle
+    <PageTitle
       :title="$trans('reviews.page_title')"
       :breadcrumbs="[
         {title: $trans('default.breadcrumbs.main'), url: ''},

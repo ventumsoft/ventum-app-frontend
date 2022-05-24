@@ -47,7 +47,7 @@ export const actions = {
         },
       })).data;
       articles = response.data;
-      pages = response.meta.last_page;
+      pages = response.pagination.pages;
     } catch (exception) {
       console.error(exception);
       return;
