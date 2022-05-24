@@ -3,7 +3,7 @@
     <PageTitle
       :title="$trans('reviews.page_title')"
       :breadcrumbs="[
-        {title: $trans('default.breadcrumbs.main'), url: ''},
+        {title: $trans('default.breadcrumbs.main'), url: $page({name: 'locale'})},
         {title: $trans('reviews.page_title')},
       ]"
     />
@@ -75,7 +75,7 @@
             <ThePagination
               :pagesCount="pages"
               :currentPage="page"
-              :routeBuilder="page => $route.path + '?page=' + page"
+              :routeBuilder="page => $page({name: 'reviews', query: {page}})"
             />
           </div>
 
@@ -121,13 +121,9 @@ export default {
       'averageRating',
     ]),
   },
-  async fetch() {
-    await this.$store.dispatch('reviews/fetch');
+  async asyncData({store, route}) {
+    await store.dispatch('reviews/fetch', {page: Number(route.query.page) || 1});
   },
-  watch: {
-    '$route.query.page'() {
-      this.$store.dispatch('reviews/fetch');
-    },
-  },
+  watchQuery: true,
 }
 </script>

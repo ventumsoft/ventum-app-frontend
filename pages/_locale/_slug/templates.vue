@@ -48,7 +48,6 @@
             </ul>
           </div>
           <div class="postcontent nobottomborder col_last clearfix">
-            <div class="form-process" :style="{display: loading ? 'block' : 'none'}"></div>
             <div ref="templatesContainer" class="portfolio-container">
               <div id="portfolio" class="portfolio-3 portfolio-masonry clearfix">
                 {{ ' ' }}
@@ -135,13 +134,6 @@ import TemplateColorEnum from '@/enums/TemplateColorEnum';
 export default {
   data: () => ({
     TemplateColorEnum,
-    loading: null,
-    templates: null,
-    pagination: null,
-    breadcrumbs: null,
-    meta: null,
-    categories: null,
-    priceKinds: null,
   }),
   head() {
     return {
@@ -152,33 +144,38 @@ export default {
       }],
     };
   },
-  async fetch() {
-    this.loading = true;
+  async asyncData({store, route, $axios, error}) {
     try {
-      ({
-        data: this.templates,
-        pagination: this.pagination,
-        breadcrumbs: this.breadcrumbs,
-        meta: this.meta,
-        categories: this.categories,
-        priceKinds: this.priceKinds,
-      } = (await this.$axios.get('products/templates', {
+      const {
+        data: templates,
+        pagination,
+        breadcrumbs,
+        meta,
+        categories,
+        priceKinds,
+      } = (await $axios.get('products/templates', {
         params: {
-          locale: this.$store.state.site.language.slug,
-          slug: this.$route.params.slug,
-          categoryId: this.$route.query.categoryId,
-          price: this.$route.query.price,
-          color: this.$route.query.color,
-          page: this.$route.query.page,
+          locale: store.state.site.language.slug,
+          slug: route.params.slug,
+          categoryId: route.query.categoryId,
+          price: route.query.price,
+          color: route.query.color,
+          page: route.query.page,
         },
-      })).data);
+      })).data;
+      return {
+        templates,
+        pagination,
+        breadcrumbs,
+        meta,
+        categories,
+        priceKinds,
+      };
     } catch (exception) {
-      this.error({
-        statusCode: exception.response.status,
-        message: exception.response.statusText,
+      error({
+        statusCode: exception.response?.status || 503,
+        message: exception.response?.statusText || '',
       });
-    } finally {
-      this.loading = false;
     }
   },
   async mounted() {
@@ -190,10 +187,11 @@ export default {
   },
   watch: {
     async '$route.query'() {
-      await this.$fetch();
+      await this.$nextTick();
       this.magnificPopupInitialize();
     },
   },
+  watchQuery: true,
   methods: {
     magnificPopupInitialize() {
       const $container = $(this.$refs.templatesContainer);

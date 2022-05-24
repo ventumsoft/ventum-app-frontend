@@ -109,19 +109,21 @@ export default {
     extendRoutes: (routes, resolve) => {
       const removeLocaleFromRoutesNames = routes => {
         for (const route of routes) {
-          if (route.name.startsWith('locale/')) {
+          if (route.name?.startsWith('locale/')) {
             route.name = route.name.substr('locale/'.length);
-            if (route.children?.length) {
-              removeLocaleFromRoutesNames(route.children);
-            }
+          }
+          if (route.children?.length) {
+            removeLocaleFromRoutesNames(route.children);
           }
         }
       };
       removeLocaleFromRoutesNames(routes)
     },
     routeNameSplitter: '/',
-    scrollBehavior: (to, from, savedPosition) =>
-      ({x: 0, y: 0}),
+    scrollBehavior: (to, from, savedPosition) => {
+      document.activeElement?.blur();
+      return {x: 0, y: 0};
+    },
     middleware: [
       'page',
     ],
