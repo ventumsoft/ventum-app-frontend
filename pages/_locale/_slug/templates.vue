@@ -49,10 +49,10 @@
           </div>
           <div class="postcontent nobottomborder col_last clearfix">
             <div class="form-process" :style="{display: loading ? 'block' : 'none'}"></div>
-            <div class="portfolio-container">
+            <div ref="templatesContainer" class="portfolio-container">
               <div id="portfolio" class="portfolio-3 portfolio-masonry clearfix">
                 {{ ' ' }}
-                <article v-if="!$route.query.categoryId && (pagination.page === 1)" class="portfolio-item product-templates-item">
+                <article v-if="!$route.query.categoryId && !(pagination?.page > 1)" class="portfolio-item product-templates-item">
                   <div class="portfolio-image">
                     <TheLink class="product-template-thumb" :to="'#'">
                       <div class="product-templates-item-empty">
@@ -69,7 +69,7 @@
                   </div>
                 </article>
                 {{ ' ' }}
-                <template v-for="(template, index) of templates" v-if="$route.query.categoryId || (pagination.page > 1) || !(pagination.pages > 1) || (index !== templates.length - 1)">
+                <template v-for="(template, index) of templates" v-if="$route.query.categoryId || (pagination?.page > 1) || !(pagination?.pages > 1) || (index !== templates.length - 1)">
                   {{ ' ' }}
                   <article class="portfolio-item product-templates-item">
                     <div class="portfolio-image">
@@ -78,6 +78,8 @@
                         :to="'#'"
                       >
                         <img
+                          class="lazy"
+                          loading="lazy"
                           :src="template.preview"
                           :srcset="template.preview2x && (template.preview + ', ' + template.preview2x + ' 2x')"
                           :alt="template.title"
@@ -87,28 +89,28 @@
                         <a
                           class="center-icon"
                           :class="{'two-icons': !$store.state.site.settings?.['constructor:templates:disable-template-page']}"
-                          :href="template.previewFull"
-                          :data-lightbox="template.is_page_view && template.pagesImages ? 'gallery' : 'image'"
-                          :data-items="template.is_page_view && template.pagesImages ? JSON.stringify(template.pagesImages.map(templatePageImage => ({src: templatePageImage.full}))) : undefined"
+                          :href="template.image"
+                          :data-lightbox="template.pagesImages ? 'gallery' : 'image'"
+                          :data-items="template.pagesImages ? JSON.stringify(template.pagesImages.map(templatePageImage => ({src: templatePageImage.full}))) : undefined"
                         ><i class="icon-line-plus"></i></a>
                         <TheLink
                           v-if="!$store.state.site.settings?.['constructor:templates:disable-template-page']"
                           class="center-icon two-icons"
-                          :to="'#'"
+                          :to="$page({name: 'template/id', params: {id: template.id}})"
                         ><i class="icon-line-ellipsis"></i></TheLink>
                       </div>
                     </div>
                     <div v-if="!$store.state.site.settings?.['constructor:templates:hide-template-usages'] || !$store.state.site.settings?.['constructor:templates:hide-template-price']" class="portfolio-desc clearfix">
-                      <TheLink :to="'#'">
+                      <TheLink :to="$store.state.site.settings?.['constructor:templates:disable-template-page'] ? '#' : $page({name: 'template/id', params: {id: template.id}})">
                         <span v-if="!$store.state.site.settings?.['constructor:templates:hide-template-usages']"><i class="icon-line2-printer"></i> {{ template.usages }}</span>
                         <span v-if="!$store.state.site.settings?.['constructor:templates:hide-template-usages'] && !$store.state.site.settings?.['constructor:templates:hide-template-price']" class="separate-padding"> | </span>
-                        <span v-if="!$store.state.site.settings?.['constructor:templates:hide-template-price']" class="color">{{ template.price ? template.price : $trans('product.templates.freely') }}</span>
+                        <span v-if="!$store.state.site.settings?.['constructor:templates:hide-template-price']" class="color">{{ template.price }}</span>
                       </TheLink>
                     </div>
                   </article>
                   {{ ' ' }}
                 </template>
-                <div class="col_full">
+                <div v-if="pagination" class="col_full">
                   <div class="pagination-container center">
                     <ThePagination
                       class="nomargin"
@@ -143,10 +145,10 @@ export default {
   }),
   head() {
     return {
-      title: this.meta.title,
+      title: this.meta?.title,
       meta: [{
         name: 'description',
-        content: this.meta.description,
+        content: this.meta?.description,
       }],
     };
   },
@@ -179,9 +181,49 @@ export default {
       this.loading = false;
     }
   },
+  async mounted() {
+    this.TemplateColorEnum = TemplateColorEnum;
+    await import('magnific-popup');
+    await import('jquery-lazyload');
+    await this.$nextTick();
+    this.magnificPopupInitialize();
+  },
   watch: {
-    '$route.query'() {
-      this.$fetch();
+    async '$route.query'() {
+      await this.$fetch();
+      this.magnificPopupInitialize();
+    },
+  },
+  methods: {
+    magnificPopupInitialize() {
+      const $container = $(this.$refs.templatesContainer);
+      $container.find('[data-lightbox="image"]').magnificPopup({
+        type: 'image',
+        closeOnContentClick: true,
+        closeBtnInside: false,
+        fixedContentPos: true,
+        mainClass: 'mfp-no-margins mfp-fade',
+        image: {verticalFit: true},
+      });
+      $container.find('[data-lightbox="gallery"]').each(function () {
+        const $element = $(this);
+        $element.magnificPopup({
+          type: 'image',
+          items: $element.data('items'),
+          closeOnContentClick: true,
+          closeBtnInside: false,
+          fixedContentPos: true,
+          mainClass: 'mfp-no-margins mfp-fade',
+          image: {verticalFit: true},
+          gallery: {
+            enabled: true,
+            navigateByImgClick: true,
+            preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
+          },
+        });
+      });
+      $container.find('img.lazy').lazyload({event: 'turnPage'});
+      $container.find('img.lazy').lazyload({threshold: 200});
     },
   },
 }
