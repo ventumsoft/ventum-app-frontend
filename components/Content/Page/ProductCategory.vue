@@ -12,14 +12,14 @@
             >
           </TheLink>
           <div class="sale-flash-container text-nowrap">
-            <div v-if="category.is_new" class="sale-flash new">
+            <div v-if="category.info?.is_new" class="sale-flash new">
               {{ $trans('product.new') }}!
             </div>
-            <div v-if="category.discount" class="sale-flash">
-              {{ $trans('product.discount') }} - {{ category.discount * 1 }}%
+            <div v-if="category.info?.discount" class="sale-flash">
+              {{ $trans('product.discount') }} - {{ category.info.discount * 1 }}%
             </div>
-            <div v-if="category.totalDiscountLabel" class="sale-flash">
-              - {{ category.totalDiscountLabel }}
+            <div v-if="category.info?.totalDiscountLabel" class="sale-flash">
+              - {{ category.info.totalDiscountLabel }}
             </div>
           </div>
         </div>
@@ -49,15 +49,9 @@
             >
           </TheLink>
           <div class="sale-flash-container text-nowrap">
-            <div v-if="product.is_new" class="sale-flash new">
-              {{ $trans('product.new') }}!
-            </div>
-            <div v-if="product.discount" class="sale-flash">
-              {{ $trans('product.discount') }} - {{ product.discount * 1 }}%
-            </div>
-            <div v-if="product.totalDiscountLabel" class="sale-flash">
-              - {{ product.totalDiscountLabel }}
-            </div>
+            <div v-if="product.info?.is_new" class="sale-flash new">{{ $trans('product.new') }}!</div>
+            <div v-if="product.info?.discount" class="sale-flash">{{ $trans('product.discount') }} - {{ product.info.discount * 1 }}%</div>
+            <div v-if="product.info?.totalDiscountLabel" class="sale-flash">- {{ product.info.totalDiscountLabel }}</div>
           </div>
         </div>
         <div class="product-desc">

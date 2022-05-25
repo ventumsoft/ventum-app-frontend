@@ -122,7 +122,7 @@ export default {
     routeNameSplitter: '/',
     scrollBehavior: (to, from, savedPosition) => {
       document.activeElement?.blur();
-      return {x: 0, y: 0};
+      return !to.params.append && {x: 0, y: 0};
     },
     middleware: [
       //

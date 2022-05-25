@@ -2,7 +2,7 @@
   <Fragment>
     <div class="container clearfix product-calculator">
       <ContentPageProductImages />
-      <ContentPageProductCalculator />
+      <ContentPageProductCalculator v-if="product.calculator" />
     </div>
     <ContentPageProductCreators />
     <ContentPageProductTabs />
@@ -10,7 +10,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
-  //
+  computed: {
+    ...mapState('page', ['product']),
+  },
 }
 </script>

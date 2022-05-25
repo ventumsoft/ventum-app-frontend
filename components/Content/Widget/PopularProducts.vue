@@ -5,10 +5,7 @@
     data-widget="MainthemPopularProducts"
   >
     <h3 v-html="title"></h3>
-    <div
-      ref="carousel"
-      class="owl-carousel product-carousel fixed-size-image"
-    >
+    <div ref="carousel" class="owl-carousel product-carousel fixed-size-image">
       <div v-for="product of products" class="oc-item">
         <div class="product iproduct clearfix">
           <div class="product-image-wrapper">
@@ -21,9 +18,9 @@
                   loading="lazy"
                   style="object-fit: cover;"
                 >
-                <div v-if="product.is_new || product.discount" class="sale-flash-container">
-                  <div v-if="product.is_new" class="sale-flash new">{{ $trans('widgets.all_category.novelty') }}</div>
-                  <div v-if="product.discount" class="sale-flash">{{ $trans('widgets.content-widgets.popular-products.sale_text', {sale: parseInt(product.discount)}) }}</div>
+                <div v-if="product.info?.is_new || product.info?.discount" class="sale-flash-container">
+                  <div v-if="product.info?.is_new" class="sale-flash new">{{ $trans('widgets.all_category.novelty') }}</div>
+                  <div v-if="product.info?.discount" class="sale-flash">{{ $trans('widgets.content-widgets.popular-products.sale_text', {sale: parseInt(product.info.discount)}) }}</div>
                 </div>
               </TheLink>
             </div>
@@ -31,10 +28,7 @@
               <div class="product-title">
                 <h3><TheLink :to="product.link">{{ product.name || $trans('product.label.product') }}</TheLink></h3>
               </div>
-              <TheLink
-                v-if="product.promoPrice"
-                :to="product.link"
-              ><div class="product-price" v-html="product.promoPrice"></div></TheLink>
+              <TheLink v-if="product.info?.promoPrice" :to="product.link"><div class="product-price" v-html="product.info.promoPrice"></div></TheLink>
             </div>
           </div>
         </div>

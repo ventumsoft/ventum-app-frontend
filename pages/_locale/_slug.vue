@@ -2,7 +2,7 @@
   <Fragment>
     <template v-if="pageType"><PageTitle
       v-if="pageEntity && ((pageType !== 'Static') || (pageEntity.type !== 'main'))"
-      :title="pageEntity.title"
+      :title="pageEntity.meta?.h1 || pageEntity.title"
       :breadcrumbs="pageEntity.breadcrumbs"
     />
     <ContentWidgetsOnPage type="page" location="top" />
@@ -48,11 +48,9 @@ export default {
       store.commit('page/set', {slug: params.slug});
       return;
     }
-
-    if (params.slug === store.state.page.slug) {
+    if (store.state.page.type && (params.slug === store.state.page.slug)) {
       return;
     }
-
     try {
       const {data: {
         widgets,
@@ -67,10 +65,14 @@ export default {
       });
     }
   },
-  async asyncData({route, store}) {
+  async asyncData({route, params, store}) {
     const pageType = store.state.page.type;
     if ((pageType === 'BlogMain') || (pageType === 'BlogCategory')) {
-      await store.dispatch('blog/fetchArticles', {page: Number(route.query.page || 1)});
+      await store.dispatch('blog/fetchArticles', {
+        categoryId: store.state.page.blogCategory?.id || Number(route.query.category_id) || undefined,
+        page: Number(route.query.page || 1),
+        append: Boolean(params.append),
+      });
     }
     if ((pageType === 'BlogMain') || (pageType === 'BlogCategory') || (pageType === 'BlogArticle')) {
       await Promise.all([

@@ -32,7 +32,7 @@ export const mutations = {
 export const actions = {
   async fetchArticles({commit, rootState}, {
     page = 1,
-    categoryId = rootState.page.blogCategory?.id || Number(this.$router.currentRoute.query.category_id) || undefined,
+    categoryId = undefined,
     append = false,
   } = {}) {
     commit('loading', true);

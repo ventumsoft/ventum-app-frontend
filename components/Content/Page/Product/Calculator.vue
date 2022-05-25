@@ -1,13 +1,13 @@
 <template>
   <div class="col_one_third portfolio-single-content col_last nobottommargin product-price-calculation-block">
-    <div v-if="product.description" class="product-description-block">
+    <div v-if="product.calculator.description" class="product-description-block">
       <div class="fancy-title title-bottom-border" >
         <h2>{{ $trans('product.product_description.label') }}</h2>
       </div>
-      <p v-html="product.description"></p>
+      <p v-html="product.calculator.description"></p>
     </div>
     <div class="product-calculator-block" style="/*visibility: hidden;*/">
-      <div v-if="product.calculatorWithTitle" class="fancy-title title-bottom-border" :style="{'margin-bottom': $store.state.site.settings?.['e-commerce:products:show-product-id'] ? '20px' : ''}">
+      <div v-if="product.calculator.withTitle" class="fancy-title title-bottom-border" :style="{'margin-bottom': $store.state.site.settings?.['e-commerce:products:show-product-id'] ? '20px' : ''}">
         <h2>{{ $trans('product.calculator.name') }}</h2>
         <div v-if="$store.state.site.settings?.['e-commerce:products:show-product-id']" class="product-id-block">
           <label>{{ $trans('product.calculator.product-id-label') }}:</label>
@@ -17,6 +17,49 @@
       <form id="calculator" class="product-calculator-form">
         <input type="hidden" name="productId" :value="product.id">
         <input type="hidden" name="price">
+        <div v-if="(product.kind === ProductKindEnum.STANDARD) && (void 'area_enabled')">area</div>
+        <div v-else-if="(product.kind === ProductKindEnum.STANDARD) && (void 'area_fixed_settings.enabled')">area</div>
+        <div v-if="product.kind === ProductKindEnum.QUANTITY" v-show="false" class="col_full">
+          <label>{{ $trans('product.quantity.product.selection.print.run') }}</label>
+          <div>quantity product components</div>
+        </div>
+        <div v-if="(product.kind === ProductKindEnum.KIT) && (void 'components.length')">
+          <div class="col_full">
+            <label class="text-break">{{ (void 'kits_display_name') || $trans('product.kit.product.select.part') }}</label>
+            <div>kit product components</div>
+          </div>
+        </div>
+        <div v-if="(product.kind !== ProductKindEnum.KIT) && (void 'is_choose_quantity') || (product.kind === ProductKindEnum.QUANTITY)" class="col_full quantity-component">
+          <label class="text-break">
+            {{ (void 'quantity_display_name') || $trans('product.calculator.quantity') }} :
+          </label>
+          <div style="padding: 0px 5px;">quantity</div>
+        </div>
+        <template v-if="product.kind === ProductKindEnum.KIT">
+          <div>kit component area container</div>
+          <div>kit component quantity container</div>
+          <div>kit component options container</div>
+        </template>
+        <div>product options</div>
+        <div v-if="product.kind === ProductKindEnum.QUANTITY">quantity component options</div>
+        <template v-if="product.kind === ProductKindEnum.COMPOUND">
+          <div
+            v-for="component of []"
+            v-show="(void 'component.optionsNotHidden.length') || (void 'component.is_choose_quantity')"
+            class="col_full component-container"
+            :class="'compound-product-' + component.id"
+          >
+            <div class="col_full">
+              <div class="component-name bottom-border"><label class="text-break"><i>component.name</i></label></div>
+              <template v-if="void 'component.is_choose_quantity'">
+                <div class="component-quantity-name"><label class="text-break">component.quantity_name:</label></div>
+                <div style="padding:0 5px 0 20px;">compound component quantity</div>
+              </template>
+              <div v-else>compound component quantity = 1</div>
+            </div>
+            <div>compound component options</div>
+          </div>
+        </template>
       </form>
     </div>
     <div class="alert alert-danger product-price-calculator-error-message" style="display: none;"></div>
@@ -26,7 +69,7 @@
       style="font-size: xx-large; min-height: 48px;"
     >
       <span class="total-price-product" style="display: none;"></span>
-      <ins><span class="total-price-product-with-discount" style="/*display: none;*/">{{ product.formatted_calculated_basic_price }}</span></ins>
+      <ins><span class="total-price-product-with-discount" style="/*display: none;*/">{{ product.calculator.basicPrice }}</span></ins>
       <div class="discount-bonus-info"></div>
       <button
         type="button"
@@ -42,7 +85,12 @@
 <script>
 import {mapState} from 'vuex';
 
+import ProductKindEnum from '@/enums/ProductKindEnum';
+
 export default {
+  data: () => ({
+    ProductKindEnum,
+  }),
   computed: {
     ...mapState('page', ['product']),
   },

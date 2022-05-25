@@ -31,13 +31,17 @@
                     >
                   </a>
                 </template>
-                <a v-else href="#" class="center-icon" @click.prevent>
+                <TheLink
+                  v-else
+                  class="center-icon"
+                  :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id}})"
+                >
                   <img
                     :src="template.preview"
                     :srcset="template.preview2x && (template.preview + ', ' + template.preview2x + '2x')"
                     :alt="template.title"
                   >
-                </a>
+                </TheLink>
               </div>
             </div>
           </div>
@@ -76,14 +80,13 @@
               <ins v-if="template.price">
                 <span>{{ template.price }}</span>
               </ins>
-              <a
-                href="#"
+              <TheLink
                 class="button button-rounded fright nomargin"
-                @click.prevent
+                :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id}})"
               >
                 <span>{{ $trans('product.template.create_layout') }}</span>
                 <i class="icon-angle-right"></i>
-              </a>
+              </TheLink>
               <div class="clear"></div>
             </div>
           </div>

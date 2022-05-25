@@ -69,9 +69,7 @@ export default {
     if (!this.reviews?.length) {
       return;
     }
-    if (!$.fn.flexslider) {
-      await import('flexslider/jquery.flexslider');
-    }
+    await import('flexslider/jquery.flexslider');
     const $flexslider = $(this.$refs.flexslider);
     $flexslider.flexslider({
       selector: ".slider-wrap > .slide",
