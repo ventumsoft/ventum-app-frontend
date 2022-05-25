@@ -144,7 +144,7 @@ export default {
       }],
     };
   },
-  async asyncData({store, route, $axios, error}) {
+  async asyncData({route, $axios, error}) {
     try {
       const {
         data: templates,
@@ -155,7 +155,7 @@ export default {
         priceKinds,
       } = (await $axios.get('products/templates', {
         params: {
-          locale: store.state.site.language.slug,
+          locale: route.params.locale,
           slug: route.params.slug,
           categoryId: route.query.categoryId,
           price: route.query.price,
@@ -173,8 +173,8 @@ export default {
       };
     } catch (exception) {
       error({
-        statusCode: exception.response?.status || 503,
-        message: exception.response?.statusText || '',
+        statusCode: exception.response.status,
+        message: exception.response.statusText,
       });
     }
   },

@@ -157,23 +157,21 @@
 
 <script>
 export default {
-  async asyncData({params, store, error, $axios}) {
-    let template;
+  async asyncData({params, error, $axios}) {
     try {
-      template = (await $axios.get('products/template', {
+      const {data: template} = (await $axios.get('products/template', {
         params: {
-          locale: store.state.site.language.slug,
+          locale: params.locale,
           templateId: params.id,
         },
-      })).data;
+      }));
+      return {template};
     } catch (exception) {
       error({
         statusCode: exception.response.status,
         message: exception.response.statusText,
       });
-      return;
     }
-    return {template};
   },
   head() {
     return {

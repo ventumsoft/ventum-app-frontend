@@ -8,7 +8,7 @@
     <ContentWidgetsOnPage type="page" location="top" />
     <section
       id="content"
-      :class="{'no-top-widgets': !$store.state.site.widgets?.page?.top?.length}"
+      :class="{'no-top-widgets': !$store.state.widgets.page.top?.length}"
       :style="{
         fontSize: ((pageType === 'BlogMain') || (pageType === 'Custom') || (pageType === 'FaqItem')) && '15px' || '',
       }"
@@ -42,17 +42,35 @@
 import {mapState, mapGetters} from "vuex";
 
 export default {
-  async asyncData({route, store, error}) {
-    console.log('slug asyncData, route: ' + route.name);
+  async middleware({route, params, store, $axios, error}) {
     if (route.name !== 'slug') {
+      store.commit('widgets/update', {page: null});
+      store.commit('page/set', {slug: params.slug});
       return;
     }
-    const pageType = store.state.page.type;
-    if (pageType === 'Error') {
-      error({statusCode: 404});
+
+    if (params.slug === store.state.page.slug) {
+      return;
     }
+
+    try {
+      const {data: {
+        widgets,
+        ...data
+      }} = await $axios.get('page/data', {params: {locale: params.locale, slug: params.slug}});
+      store.commit('widgets/update', {page: widgets});
+      store.commit('page/set', {slug: params.slug, ...data});
+    } catch (exception) {
+      error({
+        statusCode: exception.response.status,
+        message: exception.response.statusText,
+      });
+    }
+  },
+  async asyncData({route, store}) {
+    const pageType = store.state.page.type;
     if ((pageType === 'BlogMain') || (pageType === 'BlogCategory')) {
-      await store.dispatch('blog/fetchArticles');
+      await store.dispatch('blog/fetchArticles', {page: Number(route.query.page || 1)});
     }
     if ((pageType === 'BlogMain') || (pageType === 'BlogCategory') || (pageType === 'BlogArticle')) {
       await Promise.all([
@@ -101,5 +119,6 @@ export default {
     ...mapState('page', {pageType: 'type'}),
     ...mapGetters('page', {pageEntity: 'entity'}),
   },
+  watchQuery: true,
 }
 </script>

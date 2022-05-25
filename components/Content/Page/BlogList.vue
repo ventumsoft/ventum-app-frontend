@@ -26,10 +26,5 @@ export default {
       }[this.blogDisplayType];
     },
   },
-  watch: {
-    '$route.query.page'() {
-      this.$store.dispatch('blog/fetchArticles');
-    },
-  },
 }
 </script>

@@ -1,17 +1,17 @@
 <template>
   <div id="logo" class="showcase-widget" data-widget="MainthemLogo">
-    <TheLink :to="link" class="universal-logo hidden-xs">
+    <TheLink :to="$page({name: 'locale'})" class="universal-logo hidden-xs">
       <img
         :src="image || '/images/no-logo.png'"
         :srcset="(image || '/images/no-logo.png') + ', ' + (image2x || '/images/no-logo.png') + ' 2x'"
-        :alt="alt"
+        :alt="$trans('widgets.content-widgets.logo.big-logo-img-alt')"
       >
     </TheLink>
-    <TheLink :to="link" class="universal-logo hidden-sm hidden-md hidden-lg">
+    <TheLink :to="$page({name: 'locale'})" class="universal-logo hidden-sm hidden-md hidden-lg">
       <img
         :src="mobileImage || '/images/no-logo.png'"
         :srcset="(mobileImage || '/images/no-logo.png') + ', ' + (mobileImage2x || '/images/no-logo.png') + ' 2x'"
-        :alt="alt"
+        :alt="$trans('widgets.content-widgets.logo.big-logo-img-alt')"
       >
     </TheLink>
   </div>
@@ -20,12 +20,10 @@
 <script>
 export default {
   props: {
-    link: {type: String},
     image: {type: String},
     image2x: {type: String},
     mobileImage: {type: String},
     mobileImage2x: {type: String},
-    alt: {type: String},
   },
 }
 </script>

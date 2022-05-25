@@ -1,8 +1,7 @@
 export const state = () => ({
-  trans: null,
-  settings: null,
-  languages: null,
-  language: null,
+  header: null,
+  page: null,
+  footer: null,
 });
 
 export const mutations = {

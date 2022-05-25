@@ -31,7 +31,7 @@ export const mutations = {
 
 export const actions = {
   async fetchArticles({commit, rootState}, {
-    page = Number(this.$router.currentRoute.query.page) || 1,
+    page = 1,
     categoryId = rootState.page.blogCategory?.id || Number(this.$router.currentRoute.query.category_id) || undefined,
     append = false,
   } = {}) {
