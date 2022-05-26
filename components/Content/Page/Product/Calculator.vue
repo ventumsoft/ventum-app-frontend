@@ -6,7 +6,7 @@
       </div>
       <p v-html="product.calculator.description"></p>
     </div>
-    <div class="product-calculator-block" style="/*visibility: hidden;*/">
+    <div class="product-calculator-block" :style="{visibility: preventing && 'hidden' || ''}">
       <div v-if="product.calculator.withTitle" class="fancy-title title-bottom-border" :style="{'margin-bottom': $store.state.site.settings?.['e-commerce:products:show-product-id'] ? '20px' : ''}">
         <h2>{{ $trans('product.calculator.name') }}</h2>
         <div v-if="$store.state.site.settings?.['e-commerce:products:show-product-id']" class="product-id-block">
@@ -14,11 +14,11 @@
           <span class="product-id-block-value">{{ product.id }}</span>
         </div>
       </div>
-      <form id="calculator" class="product-calculator-form">
+      <form ref="form" id="calculator" class="product-calculator-form" @input="handleFormChange" @change="handleFormChange">
         <input type="hidden" name="productId" :value="product.id">
         <input type="hidden" name="price">
-        <div v-if="(product.kind === ProductKindEnum.STANDARD) && (void 'area_enabled')">area</div>
-        <div v-else-if="(product.kind === ProductKindEnum.STANDARD) && (void 'area_fixed_settings.enabled')">area</div>
+        <ContentPageProductCalculatorArea v-if="product.calculator.areaSettings" v-bind="product.calculator.areaSettings" />
+        <ContentPageProductCalculatorAreaFixed v-else-if="product.calculator.areaFixedSettings" v-bind="product.calculator.areaFixedSettings" />
         <div v-if="product.kind === ProductKindEnum.QUANTITY" v-show="false" class="col_full">
           <label>{{ $trans('product.quantity.product.selection.print.run') }}</label>
           <div>quantity product components</div>
@@ -29,18 +29,13 @@
             <div>kit product components</div>
           </div>
         </div>
-        <div v-if="(product.kind !== ProductKindEnum.KIT) && (void 'is_choose_quantity') || (product.kind === ProductKindEnum.QUANTITY)" class="col_full quantity-component">
-          <label class="text-break">
-            {{ (void 'quantity_display_name') || $trans('product.calculator.quantity') }} :
-          </label>
-          <div style="padding: 0px 5px;">quantity</div>
-        </div>
+        <ContentPageProductCalculatorQuantity v-if="product.calculator.quantitySettings" inputName="params[quantity]" v-bind="product.calculator.quantitySettings" />
         <template v-if="product.kind === ProductKindEnum.KIT">
           <div>kit component area container</div>
           <div>kit component quantity container</div>
           <div>kit component options container</div>
         </template>
-        <div>product options</div>
+        <ContentPageProductCalculatorOptions v-if="product.calculator.options" :options="product.calculator.options" />
         <div v-if="product.kind === ProductKindEnum.QUANTITY">quantity component options</div>
         <template v-if="product.kind === ProductKindEnum.COMPOUND">
           <div
@@ -90,9 +85,20 @@ import ProductKindEnum from '@/enums/ProductKindEnum';
 export default {
   data: () => ({
     ProductKindEnum,
+    preventing: true,
   }),
   computed: {
     ...mapState('page', ['product']),
+  },
+  async mounted() {
+    await this.$nextTick();
+    this.preventing = false;
+  },
+  methods: {
+    handleFormChange(event) {
+      console.log('handleFormChange', event);
+      console.log(this.$refs.form);
+    },
   },
 }
 </script>

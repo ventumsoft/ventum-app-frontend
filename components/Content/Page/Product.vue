@@ -2,7 +2,7 @@
   <Fragment>
     <div class="container clearfix product-calculator">
       <ContentPageProductImages />
-      <ContentPageProductCalculator v-if="product.calculator" />
+      <ContentPageProductCalculator />
     </div>
     <ContentPageProductCreators />
     <ContentPageProductTabs />

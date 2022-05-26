@@ -26,10 +26,15 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'magnific-popup/dist/magnific-popup.css',
+    'select2/dist/css/select2.css',
+    'ion-rangeslider/css/ion.rangeSlider.css',
+    'ion-rangeslider/css/ion.rangeSlider.skinNice.css',
+    '~/assets/css/ionrangeslider.scss',
     '~/assets/css/google-fonts.scss',
     '~/assets/css/back-font-icons.scss',
     '~/assets/css/main.scss',
     '~/assets/css/font-icons.scss',
+    '~/assets/css/select-boxes.scss',
     '~/assets/css/common.scss',
     '~/assets/css/widgets.scss',
     '~/assets/css/blog.scss',
@@ -47,6 +52,7 @@ export default {
     '~/plugins/isotope.client',
     '~/plugins/nl2br',
     '~/plugins/trans',
+    '~/plugins/bs.client',
     '~/plugins/fitvids.client',
   ],
 
