@@ -8,13 +8,3 @@
     <ContentPageProductTabs />
   </Fragment>
 </template>
-
-<script>
-import {mapState} from 'vuex';
-
-export default {
-  computed: {
-    ...mapState('page', ['product']),
-  },
-}
-</script>

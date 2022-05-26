@@ -20,7 +20,7 @@ export default {
       ...this.options,
       onFinish: event => {
         this.$emit('input', this.$el.value);
-        //$el.trigger('change');
+        this.$el.dispatchEvent(new Event('change', {bubbles: true}));
       },
     });
     this.$slider = $el.data('ionRangeSlider');

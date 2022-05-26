@@ -6,7 +6,7 @@
       <div v-if="product.info?.totalDiscountLabel" class="sale-flash">- {{ product.info.totalDiscountLabel }}</div>
     </div>
     <div class="fslider product-images-slider">
-      <div ref="flexslider" v-if="!preventing" class="flexslider">
+      <div ref="flexslider" class="flexslider">
         <div class="slider-wrap">
           <div
             v-for="(image, index) of ((product.images?.length) ? product.images : [null])"
@@ -38,9 +38,6 @@
 import {mapState} from 'vuex';
 
 export default {
-  data: () => ({
-    preventing: false,
-  }),
   computed: {
     ...mapState('page', ['product']),
   },
@@ -49,10 +46,6 @@ export default {
   },
   watch: {
     async product() {
-      this.preventing = true;
-      await this.$nextTick();
-      this.preventing = false;
-      await this.$nextTick();
       await this.initFlexSlider();
     },
   },

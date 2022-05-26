@@ -1,5 +1,5 @@
 <template>
-  <div class="col_full" :class="{'component-option': false, hidden: false}">
+  <div class="col_full" :class="{hidden}">
     <label class="text-break">
       <fragment v-html="name" />
       <span v-if="description" class="color"><i class="icon-question-sign option-description" v-bs.tooltip="{title: $nl2br(description)}"></i></span>
@@ -7,36 +7,27 @@
     </label>
     <Select2
       v-if="inputType === 'select'"
-      :name="'params[options][' + id + ']'"
-    >
-      <option
-        v-if="false"
-        value="0"
-        :selected="false"
-      >{{ $trans('product.calculator.select.none') }}</option>
-      <option
-        v-for="element of elements"
-        :value="element.id"
-        v-html="element.name"
-      ></option>
-    </Select2>
-    <select
-      v-if="false && (inputType === 'select')"
       class="form-control select2 product-calculator-product-option"
       :class="{'product-calculator-select-with-modal': false}"
       :name="'params[options][' + id + ']'"
+      :options="{
+        templateSelection,
+        templateResult,
+      }"
     >
       <option
-        v-if="false"
+        v-if="!required"
         value="0"
-        :selected="false"
+        :selected="(product.calculator.defaults?.options?.[id] !== undefined) && !product.calculator.defaults.options[id]"
       >{{ $trans('product.calculator.select.none') }}</option>
       <option
         v-for="element of elements"
         :value="element.id"
-        v-html="element.name"
+        :data-name="element.name"
+        :data-element-color="(viewType === ProductOptionViewTypeEnum.COLOR) && element.color"
+        :selected="product.calculator.defaults?.options?.[id] == element.id"
       ></option>
-    </select>
+    </Select2>
     <div v-else-if="inputType === 'range'" style="padding: 0 5px;">
       <IonRangeSlider
         :name="'params[options][' + id + ']'"
@@ -53,6 +44,10 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
+import ProductOptionViewTypeEnum from '@/enums/ProductOptionViewTypeEnum';
+
 export default {
   props: [
     'id',
@@ -60,8 +55,31 @@ export default {
     'description',
     'viewType',
     'inputType',
+    'hidden',
+    'required',
     'elements',
     'range',
   ],
+  data: () => ({
+    ProductOptionViewTypeEnum,
+  }),
+  computed: {
+    ...mapState('page', ['product']),
+  },
+  methods: {
+    templateSelection(selection) {
+      return $(
+        '<span>' +
+        ((selection.element && selection.element.dataset.elementColor) ? ('<span class="product-option-element-color" style="background: ' + selection.element.dataset.elementColor + '; ">&nbsp;</span> ') : '') +
+        (selection.element?.dataset?.name || selection.text) +
+        '</span>'
+      );
+    },
+    templateResult(result) {
+      const text = result.element?.dataset?.name || result.text;
+      const elementColor = $(result.element).is('[data-element-color]') ? '<span class="product-option-element-color" style="background-color: ' + $(result.element).data('element-color') + ';"></span>' : '';
+      return result.id ? $(elementColor + '<span>' + text + '</span><b class="calculator-option-element-price pull-right" data-option-element-value="' + result.id + '"><i class="icon-cog spinner"></i></b>') : text;
+    },
+  },
 }
 </script>
