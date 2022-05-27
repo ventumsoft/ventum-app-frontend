@@ -23,22 +23,14 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-
 export default {
   props: [
-    'formData',
     'displayName',
     'values',
     'from',
     'to',
     'step',
+    'value',
   ],
-  computed: {
-    ...mapState('page', ['product']),
-    value() {
-      return (this.formData?.['params[quantity]'] !== undefined) ? this.formData['params[quantity]'] : this.product.calculator.defaults?.quantity;
-    },
-  },
 }
 </script>

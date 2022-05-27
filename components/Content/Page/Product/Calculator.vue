@@ -39,8 +39,8 @@
         />
         <ContentPageProductCalculatorQuantity
           v-if="product.calculator.quantitySettings"
-          :formData="formData"
           v-bind="product.calculator.quantitySettings"
+          :value="(formData?.['params[quantity]'] !== undefined) ? formData['params[quantity]'] : product.calculator.defaults?.quantity"
         />
         <ContentPageProductCalculatorArea
           v-if="kitComponent?.calculator?.areaSettings"
@@ -54,28 +54,33 @@
         />
         <ContentPageProductCalculatorQuantity
           v-if="kitComponent?.calculator?.quantitySettings"
-          :formData="formData"
           v-bind="kitComponent.calculator.quantitySettings"
+          :value="(formData?.['params[quantity]'] !== undefined) ? formData['params[quantity]'] : kitComponent.calculator.defaults?.quantity"
         />
         <ContentPageProductCalculatorOptions
           v-if="kitComponent?.calculator?.options?.length"
           :formData="formData"
+          :defaults="kitComponent.calculator.defaults"
           :options="kitComponent.calculator.options"
         />
         <ContentPageProductCalculatorOptions
           v-if="product.calculator.options?.length"
           :formData="formData"
+          :defaults="product.calculator.defaults"
           :options="product.calculator.options"
         />
         <ContentPageProductCalculatorOptions
           v-if="quantityComponent?.calculator?.options?.length"
           :formData="formData"
+          :defaults="product.calculator.defaults"
           :options="quantityComponent.calculator.options"
         />
         <template v-if="product.calculator.compoundComponents?.length">
           <ContentPageProductCalculatorCompoundComponentParams
             v-for="component of product.calculator.compoundComponents"
             :key="component.id"
+            :formData="formData"
+            :defaults="product.calculator.defaults"
             v-bind="{component}"
           />
         </template>

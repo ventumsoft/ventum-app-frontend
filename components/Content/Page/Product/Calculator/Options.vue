@@ -4,6 +4,7 @@
       v-for="option of options"
       :key="option.id"
       :class="{'component-option': component}"
+      :defaults="defaults"
       :formData="formData"
       v-bind="option"
     />
@@ -14,6 +15,7 @@
 export default {
   props: {
     formData: {type: Object},
+    defaults: {type: Object},
     options: {type: Array, required: true},
     component: {type: Boolean},
   },

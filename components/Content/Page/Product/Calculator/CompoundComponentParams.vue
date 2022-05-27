@@ -13,7 +13,7 @@
             :name="'params[componentQuantity][' + component.id + ']'"
             :options="component.calculator.quantitySettings.values ? {
               values: component.calculator.quantitySettings.values,
-              from: component.calculator.quantitySettings.values?.indexOf(product.calculator.defaults?.componentQuantity?.[component.id]),
+              from: component.calculator.quantitySettings.values?.indexOf(defaults?.componentQuantity?.[component.id]),
               grid: true,
             } : {
               min: component.calculator.quantitySettings.from,
@@ -21,7 +21,7 @@
               step: component.calculator.quantitySettings.step,
               grid: true,
             }"
-            :value="product.calculator.defaults?.componentQuantity?.[component.id]"
+            :value="defaults?.componentQuantity?.[component.id]"
           />
         </div>
       </template>
@@ -34,6 +34,8 @@
     </div>
     <ContentPageProductCalculatorOptions
       v-if="component.calculator?.options?.length"
+      :formData="formData"
+      :defaults="defaults"
       :options="component.calculator.options"
       :component="true"
     />
@@ -41,14 +43,11 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-
 export default {
   props: [
+    'formData',
+    'defaults',
     'component',
   ],
-  computed: {
-    ...mapState('page', ['product']),
-  },
 }
 </script>

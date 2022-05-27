@@ -32,6 +32,7 @@ export default {
     '~/assets/css/ionrangeslider.scss',
     '~/assets/css/google-fonts.scss',
     '~/assets/css/back-font-icons.scss',
+    '~/assets/css/back-common.scss',
     '~/assets/css/main.scss',
     '~/assets/css/font-icons.scss',
     '~/assets/css/select-boxes.scss',
