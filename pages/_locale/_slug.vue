@@ -29,7 +29,7 @@
         <component
           v-if="pageType && (pageType !== 'Static')"
           :is="'ContentPage' + pageType"
-          :key="'ContentPage' + pageType + '#' + pageEntity.id"
+          :key="$store.state.site.language.slug + '-' + pageType + '-' + pageEntity.id"
         ></component>
         <ContentWidgetsOnPage type="page" location="middle" />
       </div>

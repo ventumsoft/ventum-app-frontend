@@ -1,5 +1,5 @@
 <template>
-  <div class="col_one_third portfolio-single-content col_last nobottommargin product-price-calculation-block">
+  <div v-if="product.calculator" class="col_one_third portfolio-single-content col_last nobottommargin product-price-calculation-block">
     <div v-if="product.calculator.description" class="product-description-block">
       <div class="fancy-title title-bottom-border" >
         <h2>{{ $trans('product.product_description.label') }}</h2>
@@ -11,7 +11,7 @@
         <h2>{{ $trans('product.calculator.name') }}</h2>
         <div v-if="$store.state.site.settings?.['e-commerce:products:show-product-id']" class="product-id-block">
           <label>{{ $trans('product.calculator.product-id-label') }}:</label>
-          <span class="product-id-block-value">{{ product.id }}</span>
+          <span class="product-id-block-value">{{ product.id + (kitComponent ? ('-' + kitComponent.id) : '') }}</span>
         </div>
       </div>
       <form ref="form" id="calculator" class="product-calculator-form" @change="updateFormData">
@@ -20,52 +20,61 @@
         <ContentPageProductCalculatorArea
           v-if="product.calculator.areaSettings"
           v-bind="product.calculator.areaSettings"
-          :widthValue="product.calculator.defaults?.width"
-          :heightValue="product.calculator.defaults?.height"
+          :widthValue="(formData?.['params[width]'] !== undefined) ? formData['params[width]'] : product.calculator.defaults?.width"
+          :heightValue="(formData?.['params[height]'] !== undefined) ? formData['params[height]'] : product.calculator.defaults?.height"
         />
         <ContentPageProductCalculatorAreaFixed
           v-else-if="product.calculator.areaFixedSettings"
           v-bind="product.calculator.areaFixedSettings"
         />
-        <div v-if="product.quantityComponents?.length" v-show="false" class="col_full">
-          <label>{{ $trans('product.quantity.product.selection.print.run') }}</label>
-          <select name="params[productComponentId]">
-            <option
-              v-if="product.quantityComponents[0].quantityRange?.from != product.calculator.quantitySettings?.from"
-              value=""
-            >{{ $trans('product.calculator.select.none') }}</option>
-            <option
-              v-for="component of product.quantityComponents"
-              :value="component.id"
-              :selected="product.calculator.defaults?.productComponentId == component.id"
-            >{{ component.name }}</option>
-          </select>
-        </div>
-        <div v-if="(product.kind === ProductKindEnum.KIT) && (void 'components.length')">
-          <div class="col_full">
-            <label class="text-break">{{ (void 'kits_display_name') || $trans('product.kit.product.select.part') }}</label>
-            <div>kit product components</div>
-          </div>
-        </div>
+        <ContentPageProductCalculatorQuantityComponentSelect
+          v-if="product.calculator.quantityComponents?.length"
+          :components="product.calculator.quantityComponents"
+          :formData="formData"
+        />
+        <ContentPageProductCalculatorKitComponentSelect
+          v-if="product.calculator.kitComponents?.length"
+          :components="product.calculator.kitComponents"
+          :formData="formData"
+        />
         <ContentPageProductCalculatorQuantity
           v-if="product.calculator.quantitySettings"
-          inputName="params[quantity]"
+          :formData="formData"
           v-bind="product.calculator.quantitySettings"
-          :value="product.calculator.defaults?.quantity"
         />
-        <template v-if="product.kind === ProductKindEnum.KIT">
-          <div>kit component area container</div>
-          <div>kit component quantity container</div>
-          <div>kit component options container</div>
-        </template>
+        <ContentPageProductCalculatorArea
+          v-if="kitComponent?.calculator?.areaSettings"
+          v-bind="kitComponent.calculator.areaSettings"
+          :widthValue="(formData?.['params[width]'] !== undefined) ? formData['params[width]'] : kitComponent.calculator.defaults?.width"
+          :heightValue="(formData?.['params[height]'] !== undefined) ? formData['params[height]'] : kitComponent.calculator.defaults?.height"
+        />
+        <ContentPageProductCalculatorAreaFixed
+          v-else-if="kitComponent?.calculator?.areaFixedSettings"
+          v-bind="kitComponent.calculator.areaFixedSettings"
+        />
+        <ContentPageProductCalculatorQuantity
+          v-if="kitComponent?.calculator?.quantitySettings"
+          :formData="formData"
+          v-bind="kitComponent.calculator.quantitySettings"
+        />
+        <ContentPageProductCalculatorOptions
+          v-if="kitComponent?.calculator?.options?.length"
+          :formData="formData"
+          :options="kitComponent.calculator.options"
+        />
         <ContentPageProductCalculatorOptions
           v-if="product.calculator.options?.length"
+          :formData="formData"
           :options="product.calculator.options"
         />
-        <div v-if="product.kind === ProductKindEnum.QUANTITY">quantity component options</div>
-        <template v-if="product.compoundComponents?.length">
-          <ContentPageProductCalculatorCompoundComponent
-            v-for="component of product.compoundComponents"
+        <ContentPageProductCalculatorOptions
+          v-if="quantityComponent?.calculator?.options?.length"
+          :formData="formData"
+          :options="quantityComponent.calculator.options"
+        />
+        <template v-if="product.calculator.compoundComponents?.length">
+          <ContentPageProductCalculatorCompoundComponentParams
+            v-for="component of product.calculator.compoundComponents"
             :key="component.id"
             v-bind="{component}"
           />
@@ -105,15 +114,26 @@ export default {
   }),
   computed: {
     ...mapState('page', ['product']),
+    quantityComponent() {
+      const componentId = Number(this.formData?.['params[productComponentId]']);
+      return this.product.calculator.quantityComponents?.find(component => component.id === componentId);
+    },
+    kitComponent() {
+      const componentId = Number(this.formData?.['params[productComponentId]']);
+      return this.product.calculator.kitComponents?.find(component => component.id === componentId);
+    },
   },
   async mounted() {
     this.updateFormData();
     await new Promise(resolve => setTimeout(() => resolve(), 0));
     this.preventing = false;
+    await new Promise(resolve => setTimeout(() => resolve(), 100));
+    this.updateFormData();
   },
   methods: {
     updateFormData() {
-      this.formData = new FormData(this.$refs.form);
+      this.formData = Object.fromEntries(new FormData(this.$refs.form));
+      console.log('updateFormData', this.$refs.form, JSON.stringify(this.formData));
     },
   },
 }

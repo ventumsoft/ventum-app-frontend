@@ -5,7 +5,7 @@
     </label>
     <div style="padding: 0px 5px;">
       <IonRangeSlider
-        :name="inputName"
+        name="params[quantity]"
         :options="values ? {
           values,
           from: values?.indexOf(value),
@@ -23,15 +23,22 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
   props: [
-    'inputName',
+    'formData',
     'displayName',
     'values',
     'from',
     'to',
     'step',
-    'value',
   ],
+  computed: {
+    ...mapState('page', ['product']),
+    value() {
+      return (this.formData?.['params[quantity]'] !== undefined) ? this.formData['params[quantity]'] : this.product.calculator.defaults?.quantity;
+    },
+  },
 }
 </script>

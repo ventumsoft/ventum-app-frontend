@@ -27,11 +27,11 @@ export default {
   },
   watch: {
     options() {
-      this.$slider.update(this.options);
+      this.$slider?.update(this.options);
     },
   },
   destroyed() {
-    this.$slider.destroy();
+    this.$slider?.destroy();
   },
 }
 </script>

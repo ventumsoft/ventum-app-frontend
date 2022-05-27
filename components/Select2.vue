@@ -18,12 +18,13 @@ export default {
     const $el = $(this.$el);
     $el.select2(this.options);
     $el.on('select2:select', event => {
+      this.$emit('input', this.$el.value);
       this.$el.dispatchEvent(new Event('change', {bubbles: true}));
     });
   },
   destroyed() {
     const $el = $(this.$el);
-    $el.select2('destroy');
+    $el?.select2('destroy');
   },
 }
 </script>

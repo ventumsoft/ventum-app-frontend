@@ -1,5 +1,5 @@
 <template>
-  <NuxtChild />
+  <NuxtChild :key="$store.state.site.language.slug" />
 </template>
 
 <script>

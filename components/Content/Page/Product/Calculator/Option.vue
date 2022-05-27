@@ -9,7 +9,7 @@
       v-if="inputType === 'select'"
       class="form-control select2 product-calculator-product-option"
       :class="{'product-calculator-select-with-modal': false}"
-      :name="'params[options][' + id + ']'"
+      :name="inputName"
       :options="{
         templateSelection,
         templateResult,
@@ -18,26 +18,26 @@
       <option
         v-if="!required"
         value="0"
-        :selected="(product.calculator.defaults?.options?.[id] !== undefined) && !product.calculator.defaults.options[id]"
+        :selected="(formData?.[inputName] !== undefined) ? !formData[inputName] : ((product.calculator.defaults?.options?.[id] !== undefined) && !product.calculator.defaults.options[id])"
       >{{ $trans('product.calculator.select.none') }}</option>
       <option
         v-for="element of elements"
         :value="element.id"
         :data-name="element.name"
         :data-element-color="(viewType === ProductOptionViewTypeEnum.COLOR) && element.color"
-        :selected="product.calculator.defaults?.options?.[id] == element.id"
+        :selected="((formData?.[inputName] !== undefined) ? formData[inputName] : product.calculator.defaults?.options?.[id]) == element.id"
       ></option>
     </Select2>
     <div v-else-if="inputType === 'range'" style="padding: 0 5px;">
       <IonRangeSlider
-        :name="'params[options][' + id + ']'"
+        :name="inputName"
         :options="{
           min: range?.from,
           max: range?.to,
           step: range?.step,
           grid: true,
         }"
-        :value="null"
+        :value="product.calculator.options?.options?.[id]"
       />
     </div>
   </div>
@@ -50,6 +50,7 @@ import ProductOptionViewTypeEnum from '@/enums/ProductOptionViewTypeEnum';
 
 export default {
   props: [
+    'formData',
     'id',
     'name',
     'description',
@@ -65,6 +66,9 @@ export default {
   }),
   computed: {
     ...mapState('page', ['product']),
+    inputName() {
+      return 'params[options][' + this.id + ']';
+    },
   },
   methods: {
     templateSelection(selection) {
