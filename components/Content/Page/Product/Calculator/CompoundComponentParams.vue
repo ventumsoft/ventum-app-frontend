@@ -10,10 +10,9 @@
         <div class="component-quantity-name"><label class="text-break">{{ component.calculator.quantitySettings.displayName }}:</label></div>
         <div style="padding:0 5px 0 20px;">
           <IonRangeSlider
-            :name="'params[componentQuantity][' + component.id + ']'"
             :options="component.calculator.quantitySettings.values ? {
               values: component.calculator.quantitySettings.values,
-              from: component.calculator.quantitySettings.values?.indexOf(defaults?.componentQuantity?.[component.id]),
+              from: component.calculator.quantitySettings.values?.indexOf(quantityValue),
               grid: true,
             } : {
               min: component.calculator.quantitySettings.from,
@@ -21,20 +20,20 @@
               step: component.calculator.quantitySettings.step,
               grid: true,
             }"
-            :value="defaults?.componentQuantity?.[component.id]"
+            :value="quantityValue"
+            @input="params.componentQuantity[component.id] = Number(component.calculator.quantitySettings.values ? component.calculator.quantitySettings.values[$event] : $event)"
           />
         </div>
       </template>
       <input
         v-else
         type="hidden"
-        :name="'params[componentQuantity][' + component.id + ']'"
         value="1"
       >
     </div>
     <ContentPageProductCalculatorOptions
       v-if="component.calculator?.options?.length"
-      :formData="formData"
+      :params="params"
       :defaults="defaults"
       :options="component.calculator.options"
       :component="true"
@@ -45,9 +44,32 @@
 <script>
 export default {
   props: [
-    'formData',
+    'params',
     'defaults',
     'component',
   ],
+  computed: {
+    quantityValue() {
+      if (!this.component.calculator?.quantitySettings) {
+        return 1;
+      }
+      if (this.params.componentQuantity?.[this.component.id] !== undefined) {
+        return this.params.componentQuantity[this.component.id];
+      }
+      if (this.defaults?.componentQuantity?.[this.component.id] !== undefined) {
+        return this.defaults.componentQuantity[this.component.id];
+      }
+      return this.component.calculator.quantitySettings.values ? 0 : this.component.calculator.quantitySettings.from;
+    },
+  },
+  mounted() {
+    if (this.params.componentQuantity === undefined) {
+      this.$set(this.params, 'componentQuantity', {});
+    }
+    this.$set(this.params.componentQuantity, this.component.id, Number(this.quantityValue));
+  },
+  destroyed() {
+    this.$delete(this.params.componentQuantity, this.component.id);
+  },
 }
 </script>

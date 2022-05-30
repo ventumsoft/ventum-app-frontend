@@ -43,20 +43,27 @@
 import {mapState, mapGetters} from "vuex";
 
 export default {
-  async middleware({route, params, store, $axios, error}) {
+  async middleware({from, route, params, store, $axios, redirect, error}) {
     if (route.name !== 'slug') {
       store.commit('widgets/update', {page: null});
       store.commit('page/set', {slug: params.slug});
       return;
     }
-    if (store.state.page.type && (params.slug === store.state.page.slug)) {
+    if (from && store.state.page.type &&
+      (params.locale === from.params.locale) &&
+      (params.slug === from.params.slug)
+    ) {
       return;
     }
     try {
       const {data: {
+        redirectSlug,
         widgets,
         ...data
       }} = await $axios.get('page/data', {params: {locale: params.locale, slug: params.slug}});
+      if (redirectSlug) {
+        return redirect({...route, params: {...params, slug: redirectSlug}});
+      }
       store.commit('widgets/update', {page: widgets});
       store.commit('page/set', {slug: params.slug, ...data});
     } catch (exception) {

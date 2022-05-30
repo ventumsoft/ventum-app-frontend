@@ -12,7 +12,7 @@
       >
         <NuxtLink
           :hreflang="iteratedLanguage.slug"
-          :to="$page({...$route, params: {...$route.params, locale: iteratedLanguage.slug, slug: iteratedLanguage.pageSlug || $route.params.slug}})"
+          :to="$page({...$route, params: {...$route.params, locale: iteratedLanguage.slug, slug: slugsByLanguages?.[iteratedLanguage.id] || $route.params.slug}})"
         >
           {{ iteratedLanguage.name }}
         </NuxtLink>
@@ -30,6 +30,7 @@ export default {
       'language',
       'languages',
     ]),
+    ...mapState('page', ['slugsByLanguages']),
   },
 }
 </script>

@@ -14,64 +14,73 @@
           <span class="product-id-block-value">{{ product.id + (kitComponent ? ('-' + kitComponent.id) : '') }}</span>
         </div>
       </div>
-      <form ref="form" id="calculator" class="product-calculator-form" @change="updateFormData">
-        <input type="hidden" name="productId" :value="product.id">
-        <input type="hidden" name="price">
+      <form id="calculator">
         <ContentPageProductCalculatorArea
           v-if="product.calculator.areaSettings"
           v-bind="product.calculator.areaSettings"
-          :widthValue="(formData?.['params[width]'] !== undefined) ? formData['params[width]'] : product.calculator.defaults?.width"
-          :heightValue="(formData?.['params[height]'] !== undefined) ? formData['params[height]'] : product.calculator.defaults?.height"
+          :params="params"
+          :defaults="product.calculator.defaults"
         />
         <ContentPageProductCalculatorAreaFixed
           v-else-if="product.calculator.areaFixedSettings"
+          :params="params"
           v-bind="product.calculator.areaFixedSettings"
         />
         <ContentPageProductCalculatorQuantityComponentSelect
           v-if="product.calculator.quantityComponents?.length"
           :components="product.calculator.quantityComponents"
-          :formData="formData"
+          :params="params"
+          :defaults="product.calculator.defaults"
         />
         <ContentPageProductCalculatorKitComponentSelect
           v-if="product.calculator.kitComponents?.length"
           :components="product.calculator.kitComponents"
-          :formData="formData"
+          :params="params"
+          :defaults="product.calculator.defaults"
         />
         <ContentPageProductCalculatorQuantity
           v-if="product.calculator.quantitySettings"
           v-bind="product.calculator.quantitySettings"
-          :value="(formData?.['params[quantity]'] !== undefined) ? formData['params[quantity]'] : product.calculator.defaults?.quantity"
+          :params="params"
+          :defaults="product.calculator.defaults"
         />
         <ContentPageProductCalculatorArea
           v-if="kitComponent?.calculator?.areaSettings"
           v-bind="kitComponent.calculator.areaSettings"
-          :widthValue="(formData?.['params[width]'] !== undefined) ? formData['params[width]'] : kitComponent.calculator.defaults?.width"
-          :heightValue="(formData?.['params[height]'] !== undefined) ? formData['params[height]'] : kitComponent.calculator.defaults?.height"
+          :key="'kit-component-' + kitComponent.id + '-area'"
+          :params="params"
+          :defaults="kitComponent.calculator.defaults"
         />
         <ContentPageProductCalculatorAreaFixed
           v-else-if="kitComponent?.calculator?.areaFixedSettings"
+          :key="'kit-component-' + kitComponent.id + '-area-fixed'"
+          :params="params"
           v-bind="kitComponent.calculator.areaFixedSettings"
         />
         <ContentPageProductCalculatorQuantity
           v-if="kitComponent?.calculator?.quantitySettings"
           v-bind="kitComponent.calculator.quantitySettings"
-          :value="(formData?.['params[quantity]'] !== undefined) ? formData['params[quantity]'] : kitComponent.calculator.defaults?.quantity"
+          :key="'kit-component-' + kitComponent.id + '-quantity'"
+          :params="params"
+          :defaults="kitComponent.calculator.defaults"
         />
         <ContentPageProductCalculatorOptions
           v-if="kitComponent?.calculator?.options?.length"
-          :formData="formData"
+          :key="'kit-component-' + kitComponent.id + '-options'"
+          :params="params"
           :defaults="kitComponent.calculator.defaults"
           :options="kitComponent.calculator.options"
         />
         <ContentPageProductCalculatorOptions
           v-if="product.calculator.options?.length"
-          :formData="formData"
+          :params="params"
           :defaults="product.calculator.defaults"
           :options="product.calculator.options"
         />
         <ContentPageProductCalculatorOptions
           v-if="quantityComponent?.calculator?.options?.length"
-          :formData="formData"
+          :key="'quantity-component-' + quantityComponent.id + '-options'"
+          :params="params"
           :defaults="product.calculator.defaults"
           :options="quantityComponent.calculator.options"
         />
@@ -79,22 +88,24 @@
           <ContentPageProductCalculatorCompoundComponentParams
             v-for="component of product.calculator.compoundComponents"
             :key="component.id"
-            :formData="formData"
+            :params="params"
             :defaults="product.calculator.defaults"
             v-bind="{component}"
           />
         </template>
       </form>
     </div>
-    <div class="alert alert-danger product-price-calculator-error-message" style="display: none;"></div>
+    <div class="alert alert-danger" v-if="priceData.error"><i class="icon-warning-sign"></i> {{ priceData.error }}</div>
     <div
       class="product-price"
       id="product-price"
       style="font-size: xx-large; min-height: 48px;"
     >
-      <span class="total-price-product" style="display: none;"></span>
-      <ins><span class="total-price-product-with-discount" style="/*display: none;*/">{{ product.calculator.basicPrice }}</span></ins>
-      <div class="discount-bonus-info"></div>
+      <Transition>
+        <span class="total-price-product" v-if="priceData.formatted && (priceData.formatted !== priceData.formattedWithDiscount)">{{ priceData.formatted }}</span>
+        <ins v-if="priceData.formattedWithDiscount"><span>{{ priceData.formattedWithDiscount || product.calculator.basicPrice }}</span></ins>
+        <div class="discount-bonus-info" v-if="priceData.discountBonusInfo">{{ priceData.discountBonusInfo }}</div>
+      </Transition>
       <button
         type="button"
         class="button button-reveal button-rounded tright fright nomargin product-calculator-order-button hidden-xs hidden-sm hidden-md hidden-lg"
@@ -107,6 +118,7 @@
 </template>
 
 <script>
+import _debounce from 'lodash/debounce';
 import {mapState} from 'vuex';
 
 import ProductKindEnum from '@/enums/ProductKindEnum';
@@ -115,31 +127,52 @@ export default {
   data: () => ({
     ProductKindEnum,
     preventing: true,
-    formData: null,
+    params: {},
+    priceData: {
+      error: null,
+      value: null,
+      formatted: null,
+      valueWithDiscount: null,
+      formattedWithDiscount: null,
+      discountBonusInfo: null,
+    },
   }),
   computed: {
     ...mapState('page', ['product']),
     quantityComponent() {
-      const componentId = Number(this.formData?.['params[productComponentId]']);
+      const componentId = Number(this.params.productComponentId);
       return this.product.calculator.quantityComponents?.find(component => component.id === componentId);
     },
     kitComponent() {
-      const componentId = Number(this.formData?.['params[productComponentId]']);
+      const componentId = Number(this.params.productComponentId);
       return this.product.calculator.kitComponents?.find(component => component.id === componentId);
     },
   },
+  beforeMount() {
+    this.params = {};
+  },
   async mounted() {
-    this.updateFormData();
-    await new Promise(resolve => setTimeout(() => resolve(), 0));
     this.preventing = false;
-    await new Promise(resolve => setTimeout(() => resolve(), 100));
-    this.updateFormData();
+    this.updatePrice();
+  },
+  watch: {
+    params: {
+      handler() {
+        this.updatePrice();
+      },
+      deep: true,
+    },
   },
   methods: {
-    updateFormData() {
-      this.formData = Object.fromEntries(new FormData(this.$refs.form));
-      console.log('updateFormData', this.$refs.form, JSON.stringify(this.formData));
-    },
+    updatePrice: _debounce(async function () {
+      for (const key in this.priceData) {
+        this.priceData[key] = null;
+      }
+      ({data: this.priceData} = await this.$axios.post('products/price', {
+        productId: this.product.id,
+        params: this.params,
+      }, {progress: false}));
+    }, 10),
   },
 }
 </script>

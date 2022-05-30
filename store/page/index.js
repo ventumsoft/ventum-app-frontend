@@ -8,6 +8,7 @@ export const state = () => ({
   blogArticle: null,
   faqCategory: null,
   faqItem: null,
+  slugsByLanguages: null,
 });
 
 export const mutations = {

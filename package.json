@@ -20,6 +20,7 @@
     "jquery-lazyload": "^1.9.7",
     "jquery.appear": "^1.0.1",
     "jrespond": "^1.0.0",
+    "lodash": "^4.17.20",
     "magnific-popup": "^1.1.0",
     "nuxt": "^2.15.8",
     "owl.carousel": "git+https://github.com/i-galetsky-gs-by/OwlCarousel2.git#b623c767486e77ed349cf5c1fd67d6547f8a0b24",

@@ -1,7 +1,7 @@
 <template>
   <div v-show="false" class="col_full">
     <label>{{ $trans('product.quantity.product.selection.print.run') }}</label>
-    <select ref="input" name="params[productComponentId]">
+    <select ref="input">
       <option
         v-if="components[0].quantityRange?.from != product.calculator.quantitySettings?.from"
         value=""
@@ -21,32 +21,40 @@ import {mapState} from 'vuex';
 
 export default {
   props: [
-    'formData',
+    'params',
+    'defaults',
     'components',
   ],
   computed: {
     ...mapState('page', ['product']),
     value() {
-      const quantity = Number(this.formData?.['params[quantity]']);
+      const quantity = Number(this.params.quantity);
       if (quantity) {
         const component = this.components.find(component =>
           (component?.calculator.quantityRange?.from <= quantity) && (quantity <= component?.calculator.quantityRange?.to));
         return component?.id || '';
       }
 
-      const componentId = this.formData?.['params[productComponentId]'];
+      const componentId = this.params.productComponentId;
       if (componentId !== undefined) {
         return componentId;
       }
 
-      return this.product.calculator.defaults?.productComponentId;
+      return this.defaults?.productComponentId;
     },
+  },
+  mounted() {
+    this.$set(this.params, 'productComponentId', this.value);
   },
   watch: {
     async value() {
       await this.$nextTick();
       this.$refs.input.dispatchEvent(new Event('change', {bubbles: true}));
+      this.params.productComponentId = this.value;
     },
+  },
+  destroyed() {
+    this.$delete(this.params, 'productComponentId');
   },
 }
 </script>
