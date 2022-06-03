@@ -22,6 +22,9 @@ export default {
       this.$el.dispatchEvent(new Event('change', {bubbles: true}));
     });
   },
+  updated() {
+    $(this.$el).data('select2')?._syncS();
+  },
   destroyed() {
     const $el = $(this.$el);
     $el?.select2('destroy');

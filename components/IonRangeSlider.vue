@@ -18,6 +18,12 @@ export default {
     const $el = $(this.$el);
     $el.ionRangeSlider({
       ...this.options,
+      onUpdate: event => {
+        if (this.value != this.$el.value) {
+          this.$emit('input', this.$el.value);
+          this.$el.dispatchEvent(new Event('change', {bubbles: true}));
+        }
+      },
       onFinish: event => {
         this.$emit('input', this.$el.value);
         this.$el.dispatchEvent(new Event('change', {bubbles: true}));

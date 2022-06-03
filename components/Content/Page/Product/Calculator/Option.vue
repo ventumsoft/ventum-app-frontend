@@ -41,6 +41,61 @@
         @input="params.options[id] = Number($event)"
       />
     </div>
+    <div
+      ref="modal"
+      v-if="(inputType === 'select') && (viewType === ProductOptionViewTypeEnum.PICTURESVIEW)"
+      class="modal fade content-modal"
+      style="top: 0px;"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title center" v-html="name"></h4>
+          </div>
+          <div class="modal-body">
+            <div class="clearfix product-option-elements">
+              <article
+                v-if="!required"
+                class="portfolio-item pf-media pf-icons"
+                data-dismiss="modal"
+                @click.prevent="params.options[id] = 0"
+              >
+                <div class="portfolio-image">
+                  <a href="#"><img src="/images/placeholder.jpg"></a>
+                </div>
+                <div class="portfolio-desc">
+                  <h3 class="text-break" v-html="$trans('product.calculator.select.none')"></h3>
+                  <span class="text-break"></span>
+                </div>
+                <div class="product-price calculator-option-element-price" data-option-element-value="0">
+                  <i class="icon-cog spinner"></i>
+                </div>
+              </article>
+              <article
+                v-for="element of elements"
+                class="portfolio-item pf-media pf-icons"
+                data-dismiss="modal"
+                @click.prevent="params.options[id] = Number(element.id)"
+              >
+                <div class="portfolio-image">
+                  <a href="#">
+                    <img :src="element.image || '/images/placeholder.jpg'">
+                  </a>
+                </div>
+                <div class="portfolio-desc">
+                  <h3 class="text-break" v-html="element.name"></h3>
+                  <span class="text-break" v-html="$nl2br(element.description)"></span>
+                </div>
+                <div class="product-price calculator-option-element-price" :data-option-element-value="element.id">
+                  <i class="icon-cog spinner"></i>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -112,6 +167,10 @@ export default {
       return result.id ? $(elementColor + '<span>' + text + '</span><b class="calculator-option-element-price pull-right" data-option-element-value="' + result.id + '"><i class="icon-cog spinner"></i></b>') : text;
     },
     async handleSelect2Opening(event) {
+      if (this.viewType === ProductOptionViewTypeEnum.PICTURESVIEW) {
+        event.preventDefault();
+        $(this.$refs.modal).modal('show');
+      }
       const {data: elementsPrices} = await this.$axios.post('products/option-elements-prices', {
         productId: this.product.id,
         params: this.params,
@@ -121,8 +180,8 @@ export default {
         optionValues: [!this.required ? 0 : undefined, ...this.elements.map(element => element.id)].filter(v => v !== undefined),
         optionsIds: Object.keys(this.params.options),
       }, {progress: false});
-      const $optionElementsPrices = //$calculatorInput.data('$modal') ?
-        //$calculatorInput.data('$modal').find('.calculator-option-element-price') :
+      const $optionElementsPrices = (this.viewType === ProductOptionViewTypeEnum.PICTURESVIEW) ?
+        $(this.$refs.modal).find('.calculator-option-element-price') :
         $(this.$refs.optionSelect2.$el).data('select2').$dropdown.find('.calculator-option-element-price');
       for (const optionElementPrice of $optionElementsPrices) {
         if (elementsPrices?.[optionElementPrice.dataset.optionElementValue] !== undefined) {

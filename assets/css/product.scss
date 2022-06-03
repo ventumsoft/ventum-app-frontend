@@ -142,6 +142,15 @@
 .product-option-elements {
   display: flex;
   flex-wrap: wrap;
+  .portfolio-image{
+    display: flex;
+    img {
+      margin: auto;
+      object-fit: scale-down;
+      max-height: 210px;
+      border: none;
+    }
+  }
 }
 
 .product-option-element-color {

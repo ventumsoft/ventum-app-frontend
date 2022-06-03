@@ -147,6 +147,15 @@ export default {
       const componentId = Number(this.params.productComponentId);
       return this.product.calculator.kitComponents?.find(component => component.id === componentId);
     },
+    productImageId() {
+      const type = this.product.imagesLinkSettings?.type || 'option';
+      if (type === 'option') {
+        return this.product.imagesLinkSettings.imageByElement?.[this.params.options?.[this.product.imagesLinkSettings.option]] ||
+          this.product.imagesLinkSettings.imageByElement?.[this.params.options?.[this.product.imagesLinkSettings.optionByComponent?.[this.params.productComponentId]]];
+      } else if (type === 'kit') {
+        return this.product.imagesLinkSettings.imageByComponent?.[this.kitComponent?.id];
+      }
+    },
   },
   beforeMount() {
     this.params = {};
@@ -161,6 +170,14 @@ export default {
         this.updatePrice();
       },
       deep: true,
+    },
+    productImageId() {
+      if (this.productImageId) {
+        const productImageSlideIndex = $('.product-images-slider .flexslider .slide[data-product-image-id="' + this.productImageId + '"]').index();
+        if (productImageSlideIndex !== -1) {
+          $('.product-images-slider .flexslider').flexslider(productImageSlideIndex);
+        }
+      }
     },
   },
   methods: {
