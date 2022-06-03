@@ -118,7 +118,7 @@ export default {
         // embedded options
         // using price
         optionId: this.id,
-        optionValues: this.elements.map(element => element.id),
+        optionValues: [!this.required ? 0 : undefined, ...this.elements.map(element => element.id)].filter(v => v !== undefined),
         optionsIds: Object.keys(this.params.options),
       }, {progress: false});
       const $optionElementsPrices = //$calculatorInput.data('$modal') ?

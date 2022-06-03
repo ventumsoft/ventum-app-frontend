@@ -62,7 +62,7 @@ export default {
       if (this.defaults?.width !== undefined) {
         return this.defaults.width;
       }
-      return 0;
+      return this.widthFrom || 0;
     },
     heightValue() {
       if (this.params.height !== undefined) {
@@ -71,7 +71,7 @@ export default {
       if (this.defaults?.height !== undefined) {
         return this.defaults.height;
       }
-      return 0;
+      return this.heightFrom || 0;
     },
   },
   mounted() {

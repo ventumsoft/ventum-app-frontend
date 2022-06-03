@@ -1,7 +1,7 @@
 <template>
   <div class="col_full quantity-component">
     <label class="text-break">
-      {{ displayName || $trans('product.calculator.quantity') }} :
+      {{ quantitySettings.displayName || $trans('product.calculator.quantity') }} :
     </label>
     <div style="padding: 0px 5px;">
       <IonRangeSlider
@@ -10,13 +10,13 @@
           from: values?.indexOf(value),
           grid: true,
         } : {
-          min: from,
-          max: to,
-          step,
+          min: range.from,
+          max: range.to,
+          step: quantitySettings.step,
           grid: true,
         }"
         :value="value"
-        @input="params.quantity = Number(values ? values[$event] : $event)"
+        @input="params.quantity = Number($event)"
       />
     </div>
   </div>
@@ -25,15 +25,36 @@
 <script>
 export default {
   props: [
+    'quantitySettings',
     'params',
     'defaults',
-    'displayName',
-    'values',
-    'from',
-    'to',
-    'step',
   ],
   computed: {
+    range() {
+      const {from, to} = this.quantitySettings;
+      if (!this.quantitySettings.values && this.quantitySettings.area) {
+        const [from, to] = calcQuantityRangeByArea(
+          this.params.width,
+          this.params.height,
+          this.quantitySettings.area,
+          this.quantitySettings.from,
+          this.quantitySettings.to
+        );
+        return {from, to};
+      }
+      return {from, to};
+    },
+    values() {
+      if (this.quantitySettings.values && this.quantitySettings.area) {
+        return filterQuantityValuesByArea(
+          this.quantitySettings.values,
+          this.params.width,
+          this.params.height,
+          this.quantitySettings.area
+        );
+      }
+      return this.quantitySettings.values;
+    },
     value() {
       if (this.params.quantity !== undefined) {
         return this.params.quantity;
@@ -41,7 +62,7 @@ export default {
       if (this.defaults?.quantity !== undefined) {
         return this.defaults.quantity;
       }
-      return this.values ? 0 : this.from;
+      return this.quantitySettings.values ? this.quantitySettings.values[0] : this.range.from;
     },
   },
   mounted() {
@@ -50,5 +71,25 @@ export default {
   destroyed() {
     this.$delete(this.params, 'quantity');
   },
+}
+
+function calcQuantityRangeByArea(width, height, areaQuantitySettings, limitFrom, limitTo) {
+  const min = Number(areaQuantitySettings.min) || 0;
+  const max = Number(areaQuantitySettings.max) || 0;
+  const bleeds = Number(areaQuantitySettings.bleeds) || 0;
+  const area = (bleeds + width + bleeds) * (bleeds + height + bleeds);
+  const from = Math.max(1, Math.ceil(min / area), limitFrom);
+  const to = Math.max(1, Math.min(Math.floor(max / area), limitTo));
+  return [from, to];
+}
+
+function filterQuantityValuesByArea(values, width, height, areaQuantitySettings) {
+  const min = Number(areaQuantitySettings.min) || 0;
+  const max = Number(areaQuantitySettings.max) || 0;
+  const bleeds = Number(areaQuantitySettings.bleeds) || 0;
+  const area = (bleeds + width + bleeds) * (bleeds + height + bleeds);
+  const from = Math.max(1, Math.ceil(min / area));
+  const to = Math.max(1, Math.floor(max / area));
+  return values.filter(value => (from <= value) && (value <= to));
 }
 </script>

@@ -40,7 +40,7 @@
         />
         <ContentPageProductCalculatorQuantity
           v-if="product.calculator.quantitySettings"
-          v-bind="product.calculator.quantitySettings"
+          :quantitySettings="product.calculator.quantitySettings"
           :params="params"
           :defaults="product.calculator.defaults"
         />
@@ -59,7 +59,7 @@
         />
         <ContentPageProductCalculatorQuantity
           v-if="kitComponent?.calculator?.quantitySettings"
-          v-bind="kitComponent.calculator.quantitySettings"
+          :quantitySettings="kitComponent.calculator.quantitySettings"
           :key="'kit-component-' + kitComponent.id + '-quantity'"
           :params="params"
           :defaults="kitComponent.calculator.defaults"
@@ -88,9 +88,9 @@
           <ContentPageProductCalculatorCompoundComponentParams
             v-for="component of product.calculator.compoundComponents"
             :key="component.id"
+            :component="component"
             :params="params"
             :defaults="product.calculator.defaults"
-            v-bind="{component}"
           />
         </template>
       </form>

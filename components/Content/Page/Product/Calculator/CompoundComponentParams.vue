@@ -21,7 +21,7 @@
               grid: true,
             }"
             :value="quantityValue"
-            @input="params.componentQuantity[component.id] = Number(component.calculator.quantitySettings.values ? component.calculator.quantitySettings.values[$event] : $event)"
+            @input="params.componentQuantity[component.id] = Number($event)"
           />
         </div>
       </template>
@@ -44,9 +44,9 @@
 <script>
 export default {
   props: [
+    'component',
     'params',
     'defaults',
-    'component',
   ],
   computed: {
     quantityValue() {
@@ -59,7 +59,7 @@ export default {
       if (this.defaults?.componentQuantity?.[this.component.id] !== undefined) {
         return this.defaults.componentQuantity[this.component.id];
       }
-      return this.component.calculator.quantitySettings.values ? 0 : this.component.calculator.quantitySettings.from;
+      return this.component.calculator.quantitySettings.values ? this.component.calculator.quantitySettings.values[0] : this.component.calculator.quantitySettings.from;
     },
   },
   mounted() {
