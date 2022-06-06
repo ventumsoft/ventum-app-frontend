@@ -38,6 +38,9 @@
 import {mapState} from 'vuex';
 
 export default {
+  props: [
+    'productImageId',
+  ],
   computed: {
     ...mapState('page', ['product']),
   },
@@ -47,6 +50,11 @@ export default {
   watch: {
     async product() {
       await this.initFlexSlider();
+    },
+    productImageId() {
+      if (this.productImageId && $.fn.flexslider && $(this.$refs.flexslider).data('flexslider')) {
+        this.goToProductImageById(this.productImageId);
+      }
     },
   },
   methods: {
@@ -76,6 +84,15 @@ export default {
         },
         after: function () {},
       });
+      if (this.productImageId) {
+        this.goToProductImageById(this.productImageId);
+      }
+    },
+    goToProductImageById(productImageId) {
+      const productImageSlideIndex = $('.product-images-slider .flexslider .slide[data-product-image-id="' + productImageId + '"]').index();
+      if (productImageSlideIndex !== -1) {
+        $('.product-images-slider .flexslider').flexslider(productImageSlideIndex);
+      }
     },
   },
 }

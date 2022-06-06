@@ -174,8 +174,8 @@ export default {
       const {data: elementsPrices} = await this.$axios.post('products/option-elements-prices', {
         productId: this.product.id,
         params: this.params,
-        // embedded options
-        // using price
+        // embedded options - will be auto considered in common params object, so no need to additionally handle that
+        // using price - ...
         optionId: this.id,
         optionValues: [!this.required ? 0 : undefined, ...this.elements.map(element => element.id)].filter(v => v !== undefined),
         optionsIds: Object.keys(this.params.options),

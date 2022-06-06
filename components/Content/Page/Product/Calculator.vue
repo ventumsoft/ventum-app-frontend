@@ -108,11 +108,29 @@
       </Transition>
       <button
         type="button"
-        class="button button-reveal button-rounded tright fright nomargin product-calculator-order-button hidden-xs hidden-sm hidden-md hidden-lg"
+        class="button button-reveal button-rounded tright fright nomargin product-calculator-order-button"
+        :class="{
+          hidden: preventing,
+          'product-calculator-order-button-disabled': false,
+          'hidden-xs': integrationsAvailableOnMobile?.length !== 1,
+          'hidden-sm hidden-md hidden-lg': integrationsAvailableOnDesktop?.length !== 1,
+        }"
+        @click.prevent="$emit('order')"
       >
         <span>{{ $trans('product.button.order') }}</span>
         <i class="icon-angle-right"></i>
       </button>
+    </div>
+    <div
+      class="alert alert-warning nobottommargin"
+      :class="{
+        hidden: preventing,
+        'hidden-xs': integrationsAvailableOnMobile?.length > 0,
+        'hidden-sm hidden-md hidden-lg': integrationsAvailableOnDesktop?.length > 0,
+      }"
+    >
+      <i class="icon-warning-sign"></i>
+      {{ $store.state.site.settings?.['e-commerce:products:not-available-message'] || $trans('product.not-available-message') }}
     </div>
   </div>
 </template>
@@ -121,13 +139,16 @@
 import _debounce from 'lodash/debounce';
 import {mapState} from 'vuex';
 
-import ProductKindEnum from '@/enums/ProductKindEnum';
-
 export default {
+  props: [
+    'params',
+    'quantityComponent',
+    'kitComponent',
+    'integrationsAvailableOnMobile',
+    'integrationsAvailableOnDesktop',
+  ],
   data: () => ({
-    ProductKindEnum,
     preventing: true,
-    params: {},
     priceData: {
       error: null,
       value: null,
@@ -139,26 +160,6 @@ export default {
   }),
   computed: {
     ...mapState('page', ['product']),
-    quantityComponent() {
-      const componentId = Number(this.params.productComponentId);
-      return this.product.calculator.quantityComponents?.find(component => component.id === componentId);
-    },
-    kitComponent() {
-      const componentId = Number(this.params.productComponentId);
-      return this.product.calculator.kitComponents?.find(component => component.id === componentId);
-    },
-    productImageId() {
-      const type = this.product.imagesLinkSettings?.type || 'option';
-      if (type === 'option') {
-        return this.product.imagesLinkSettings.imageByElement?.[this.params.options?.[this.product.imagesLinkSettings.option]] ||
-          this.product.imagesLinkSettings.imageByElement?.[this.params.options?.[this.product.imagesLinkSettings.optionByComponent?.[this.params.productComponentId]]];
-      } else if (type === 'kit') {
-        return this.product.imagesLinkSettings.imageByComponent?.[this.kitComponent?.id];
-      }
-    },
-  },
-  beforeMount() {
-    this.params = {};
   },
   async mounted() {
     this.preventing = false;
@@ -170,14 +171,6 @@ export default {
         this.updatePrice();
       },
       deep: true,
-    },
-    productImageId() {
-      if (this.productImageId) {
-        const productImageSlideIndex = $('.product-images-slider .flexslider .slide[data-product-image-id="' + this.productImageId + '"]').index();
-        if (productImageSlideIndex !== -1) {
-          $('.product-images-slider .flexslider').flexslider(productImageSlideIndex);
-        }
-      }
     },
   },
   methods: {

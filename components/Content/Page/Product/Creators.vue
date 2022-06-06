@@ -1,35 +1,54 @@
 <template>
-  <div v-if="product.integrations?.length" class="container clearfix topmargin-sm product-creators-integrations-container hidden">
+  <div
+    v-if="integrations?.length"
+    class="container clearfix topmargin-sm"
+    :class="{
+      'hidden-xs': !(integrationsAvailableOnMobile?.length > 1),
+      'hidden-sm hidden-md hidden-lg': !(integrationsAvailableOnDesktop?.length > 1),
+    }"
+  >
     <div class="product-creators-integrations">
       <div
-        v-for="integration of product.integrations"
-        class="product-creator-integration hidden"
+        v-for="integration of integrations"
+        class="product-creator-integration"
+        :class="{
+          'hidden-xs': integration.visibility === 'only-on-desktop',
+          'hidden-sm hidden-md hidden-lg': integration.visibility === 'only-on-mobile',
+        }"
+        :data-integration-visibility="integration.visibility"
+        :data-creator="integration.creator"
       >
-        <a href="#" class="product-creator-integration-button" :data-integration-id="integration.id">
+        <style type="text/css" v-html="'[data-creator=' + integration.creator + '] button.button { border-color: ' + integration.color + ' !important; color: ' + integration.color + ' !important; } '"></style>
+        <style type="text/css" v-html="'[data-creator=' + integration.creator + '] button.button:hover { background-color: ' + integration.color + ' !important; } '"></style>
+        <a
+          href="#"
+          class="product-creator-integration-button"
+          :data-integration-id="integration.id"
+          @click.prevent="$emit('order', {integration})"
+        >
           <div class="feature-box fbox-center fbox-bg fbox-effect">
             <div class="fbox-icon">
               <i
                 class="i-alt"
-                :class="void 'icon-by-creator'"
+                :class="CreatorEnum.iconByCreator[integration.creator]"
                 style="color: #ffffff;"
-                :style="{'background-color': void 'color!important'}"
+                :style="{'background-color': integration.color + '!important'}"
               ></i>
             </div>
             <h3>
-              {{ 'title' }}
+              {{ integration.title }}
               <span class="subtitle">
-                {{ 'description' }}
-                    <span
-                      class="product-creator-integration-using-price"
-                      :data-settings="integration.settings?.usingPrice"
-                    ></span>
+                {{ integration.description }}
+                <span v-if="usingPriceByIntegration[integration.id]" class="product-creator-integration-using-price">
+                  (+{{ usingPriceByIntegration[integration.id] }})
                 </span>
+              </span>
             </h3>
             <button
               type="button"
               class="button button-white button-border noshadow button-rounded noleftmargin norightmargin"
             >
-              <span>{{ 'button' }}</span>
+              <span>{{ integration.button }}</span>
             </button>
           </div>
         </a>
@@ -39,11 +58,54 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import CreatorEnum from '@/enums/CreatorEnum';
 
 export default {
+  props: [
+    'params',
+    'integrations',
+    'integrationsAvailableOnMobile',
+    'integrationsAvailableOnDesktop',
+  ],
+  data: () => ({
+    CreatorEnum,
+  }),
   computed: {
-    ...mapState('page', ['product']),
+    usingPriceByIntegration() {
+      return this.integrations.reduce((result, integration) => {
+        result[integration.id] = this.getUsingPrice(integration);
+        return result;
+      }, {});
+    },
+  },
+  methods: {
+    getUsingPrice(integration) {
+      const usingPriceSettings = integration.settings?.usingPrice || {};
+
+      const way = usingPriceSettings.way || 'manually';
+
+      let value;
+      if (way === 'manually') {
+        value = usingPriceSettings.manually
+      } else if (way === 'option-element') {
+        const optionValue = this.params?.options?.[usingPriceSettings.optionId];
+        if (integration.usingPriceOptionInputType === 'range') {
+          value = parseFloat(usingPriceSettings.unitPrice * (optionValue || integration.usingPriceOptionRange?.from || 0));
+        } else {
+          value = usingPriceSettings.optionElements && usingPriceSettings.optionElements[optionValue];
+        }
+      } else if (way === 'component') {
+        const componentQuantity = this.params.componentQuantity?.[usingPriceSettings.componentId];
+        value = parseFloat(usingPriceSettings.componentBasePrice) + parseFloat(usingPriceSettings.componentUnitPrice) * componentQuantity;
+      }
+
+      //if ($creatorEmbeddedPrice) {
+      //  $creatorEmbeddedPrice.data('using-price', value);
+      //  return;
+      //}
+
+      return value;
+    },
   },
 }
 </script>
