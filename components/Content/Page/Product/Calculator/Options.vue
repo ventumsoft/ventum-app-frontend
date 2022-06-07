@@ -8,9 +8,9 @@
       "
       :key="option.id"
       :class="{'component-option': component}"
+      :option="option"
       :params="params"
       :defaults="defaults"
-      v-bind="option"
     />
   </fragment>
 </template>

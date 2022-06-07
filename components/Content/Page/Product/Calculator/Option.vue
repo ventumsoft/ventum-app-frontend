@@ -1,49 +1,49 @@
 <template>
-  <div class="col_full" :class="{hidden, 'has-error': required && !value}">
+  <div class="col_full" :class="{hidden: option.hidden, 'has-error': option.required && !value}">
     <label class="text-break">
-      <fragment v-html="name" />
-      <span v-if="description" class="color"><i class="icon-question-sign option-description" v-bs.tooltip="{title: $nl2br(description)}"></i></span>
+      <fragment v-html="option.name" />
+      <span v-if="option.description" class="color"><i class="icon-question-sign option-description" v-bs.tooltip="{title: $nl2br(option.description)}"></i></span>
       :
     </label>
     <Select2
       ref="optionSelect2"
-      v-if="inputType === 'select'"
+      v-if="option.inputType === 'select'"
       class="form-control select2 product-calculator-product-option"
       :class="{'product-calculator-select-with-modal': false}"
       :options="{
         templateSelection,
         templateResult,
       }"
-      @input="params.options[id] = Number($event)"
+      @input="params.options[option.id] = Number($event)"
     >
       <option
-        v-if="!required"
+        v-if="!option.required"
         value="0"
         :selected="!value"
       >{{ $trans('product.calculator.select.none') }}</option>
       <option
-        v-for="element of elements"
+        v-for="element of option.elements"
         :value="element.id"
         :data-name="element.name"
-        :data-element-color="(viewType === ProductOptionViewTypeEnum.COLOR) && element.color"
+        :data-element-color="(option.viewType === ProductOptionViewTypeEnum.COLOR) && element.color"
         :selected="value == element.id"
       ></option>
     </Select2>
-    <div v-else-if="inputType === 'range'" style="padding: 0 5px;">
+    <div v-else-if="option.inputType === 'range'" style="padding: 0 5px;">
       <IonRangeSlider
         :options="{
-          min: range?.from,
-          max: range?.to,
-          step: range?.step,
+          min: option.range?.from,
+          max: option.range?.to,
+          step: option.range?.step,
           grid: true,
         }"
         :value="value"
-        @input="params.options[id] = Number($event)"
+        @input="params.options[option.id] = Number($event)"
       />
     </div>
     <div
       ref="modal"
-      v-if="(inputType === 'select') && (viewType === ProductOptionViewTypeEnum.PICTURESVIEW)"
+      v-if="(option.inputType === 'select') && (option.viewType === ProductOptionViewTypeEnum.PICTURESVIEW)"
       class="modal fade content-modal"
       style="top: 0px;"
     >
@@ -51,15 +51,15 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title center" v-html="name"></h4>
+            <h4 class="modal-title center" v-html="option.name"></h4>
           </div>
           <div class="modal-body">
             <div class="clearfix product-option-elements">
               <article
-                v-if="!required"
+                v-if="!option.required"
                 class="portfolio-item pf-media pf-icons"
                 data-dismiss="modal"
-                @click.prevent="params.options[id] = 0"
+                @click.prevent="params.options[option.id] = 0"
               >
                 <div class="portfolio-image">
                   <a href="#"><img src="/images/placeholder.jpg"></a>
@@ -73,10 +73,10 @@
                 </div>
               </article>
               <article
-                v-for="element of elements"
+                v-for="element of option.elements"
                 class="portfolio-item pf-media pf-icons"
                 data-dismiss="modal"
-                @click.prevent="params.options[id] = Number(element.id)"
+                @click.prevent="params.options[option.id] = Number(element.id)"
               >
                 <div class="portfolio-image">
                   <a href="#">
@@ -106,21 +106,9 @@ import ProductOptionViewTypeEnum from '@/enums/ProductOptionViewTypeEnum';
 
 export default {
   props: [
+    'option',
     'params',
     'defaults',
-    'id',
-    'name',
-    'description',
-    'viewType',
-    'inputType',
-    'hidden',
-    'dependOptionId',
-    'dependElementsIds',
-    'excludedOptionId',
-    'excludedElementsIds',
-    'required',
-    'elements',
-    'range',
   ],
   data: () => ({
     ProductOptionViewTypeEnum,
@@ -128,17 +116,17 @@ export default {
   computed: {
     ...mapState('page', ['product']),
     value() {
-      if (this.params.options?.[this.id] !== undefined) {
-        return this.params.options[this.id];
+      if (this.params.options?.[this.option.id] !== undefined) {
+        return this.params.options[this.option.id];
       }
-      if (this.defaults?.options?.[this.id] !== undefined) {
-        return this.defaults.options[this.id];
+      if (this.defaults?.options?.[this.option.id] !== undefined) {
+        return this.defaults.options[this.option.id];
       }
-      if ((this.inputType === 'select') && this.required && this.elements?.length) {
-        return this.elements[0].id;
+      if ((this.option.inputType === 'select') && this.option.required && this.option.elements?.length) {
+        return this.option.elements[0].id;
       }
-      if ((this.inputType === 'range') && (this.range?.from !== undefined)) {
-        return this.range.from;
+      if ((this.option.inputType === 'range') && (this.option.range?.from !== undefined)) {
+        return this.option.range.from;
       }
       return 0;
     },
@@ -147,7 +135,7 @@ export default {
     if (!this.params.options) {
       this.$set(this.params, 'options', {});
     }
-    this.$set(this.params.options, this.id, Number(this.value) || 0);
+    this.$set(this.params.options, this.option.id, Number(this.value) || 0);
     if (this.$refs.optionSelect2) {
       $(this.$refs.optionSelect2.$el).on('select2:opening', this.handleSelect2Opening);
     }
@@ -167,7 +155,7 @@ export default {
       return result.id ? $(elementColor + '<span>' + text + '</span><b class="calculator-option-element-price pull-right" data-option-element-value="' + result.id + '"><i class="icon-cog spinner"></i></b>') : text;
     },
     async handleSelect2Opening(event) {
-      if (this.viewType === ProductOptionViewTypeEnum.PICTURESVIEW) {
+      if (this.option.viewType === ProductOptionViewTypeEnum.PICTURESVIEW) {
         event.preventDefault();
         $(this.$refs.modal).modal('show');
       }
@@ -175,11 +163,11 @@ export default {
         productId: this.product.id,
         params: this.params,
         usingPrice: this.$store.state.product.currentActiveEmbeddedIntegration?.usingPrice || undefined,
-        optionId: this.id,
-        optionValues: [!this.required ? 0 : undefined, ...this.elements.map(element => element.id)].filter(v => v !== undefined),
+        optionId: this.option.id,
+        optionValues: [!this.option.required ? 0 : undefined, ...this.option.elements.map(element => element.id)].filter(v => v !== undefined),
         optionsIds: Object.keys(this.params.options),
       }, {progress: false});
-      const $optionElementsPrices = (this.viewType === ProductOptionViewTypeEnum.PICTURESVIEW) ?
+      const $optionElementsPrices = (this.option.viewType === ProductOptionViewTypeEnum.PICTURESVIEW) ?
         $(this.$refs.modal).find('.calculator-option-element-price') :
         $(this.$refs.optionSelect2.$el).data('select2').$dropdown.find('.calculator-option-element-price');
       for (const optionElementPrice of $optionElementsPrices) {
@@ -192,7 +180,7 @@ export default {
     },
   },
   destroyed() {
-    this.$delete(this.params.options, this.id);
+    this.$delete(this.params.options, this.option.id);
   },
 }
 </script>

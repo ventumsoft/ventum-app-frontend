@@ -90,7 +90,7 @@ export default {
         value = usingPriceSettings.manually
       } else if (way === 'option-element') {
         const option = this.integratable.calculator.options.find(option => option.id == usingPriceSettings.optionId);
-        const optionValue = this.params?.options?.[usingPriceSettings.optionId];
+        const optionValue = this.params.options?.[usingPriceSettings.optionId];
         if (option?.inputType === 'range') {
           value = parseFloat(usingPriceSettings.unitPrice * (optionValue || option.range?.from || 0));
         } else {
