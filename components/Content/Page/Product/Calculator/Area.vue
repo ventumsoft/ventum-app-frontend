@@ -15,7 +15,7 @@
             grid: true,
           }"
           :value="widthValue"
-          @input="$event => { params.width = Number($event); if (heightRatio) { params.height = $event * heightRatio; } }"
+          @input="$event => { $store.commit('product/setParamsValue', {key: 'width', value: Number($event)}); if (heightRatio) { $store.commit('product/setParamsValue', {key: 'quantity', value: $event * heightRatio}); } }"
         />
       </div>
     </div>
@@ -30,7 +30,7 @@
             grid: true,
           }"
           :value="heightRatio ? ((widthValue !== '') ? (widthValue * heightRatio) : '') : heightValue"
-          @input="params.height = Number($event)"
+          @input="$store.commit('product/setParamsValue', {key: 'height', value: Number($event)})"
         />
       </div>
     </div>
@@ -38,9 +38,10 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
   props: [
-    'params',
     'defaults',
     'units',
     'unitsTitle',
@@ -55,6 +56,7 @@ export default {
     'heightStep',
   ],
   computed: {
+    ...mapState('product', ['params']),
     widthValue() {
       if (this.params.width !== undefined) {
         return this.params.width;
@@ -75,14 +77,14 @@ export default {
     },
   },
   mounted() {
-    this.$set(this.params, 'area_units', this.units);
-    this.$set(this.params, 'width', Number(this.widthValue));
-    this.$set(this.params, 'height', Number(this.heightValue));
+    this.$store.commit('product/setParamsValue', {key: 'area_units', value: this.units});
+    this.$store.commit('product/setParamsValue', {key: 'width', value: Number(this.widthValue)});
+    this.$store.commit('product/setParamsValue', {key: 'height', value: Number(this.heightValue)});
   },
   destroyed() {
-    this.$delete(this.params, 'area_units');
-    this.$delete(this.params, 'width');
-    this.$delete(this.params, 'height');
+    for (const key of ['area_units', 'width', 'height']) {
+      this.$store.commit('product/setParamsValue', {key, value: undefined});
+    }
   },
 }
 </script>

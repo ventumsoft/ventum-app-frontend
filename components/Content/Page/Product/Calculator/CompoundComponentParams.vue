@@ -21,19 +21,13 @@
               grid: true,
             }"
             :value="quantityValue"
-            @input="params.componentQuantity[component.id] = Number($event)"
+            @input="$store.commit('product/setParamsValue', {key: 'componentQuantity.' + component.id, value: Number($event)})"
           />
         </div>
       </template>
-      <input
-        v-else
-        type="hidden"
-        value="1"
-      >
     </div>
     <ContentPageProductCalculatorOptions
       v-if="component.calculator?.options?.length"
-      :params="params"
       :defaults="defaults"
       :options="component.calculator.options.filter(option => !option.isOnlyForApps)"
       :component="true"
@@ -42,13 +36,15 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
   props: [
     'component',
-    'params',
     'defaults',
   ],
   computed: {
+    ...mapState('product', ['params']),
     quantityValue() {
       if (!this.component.calculator?.quantitySettings) {
         return 1;
@@ -63,13 +59,10 @@ export default {
     },
   },
   mounted() {
-    if (this.params.componentQuantity === undefined) {
-      this.$set(this.params, 'componentQuantity', {});
-    }
-    this.$set(this.params.componentQuantity, this.component.id, Number(this.quantityValue));
+    this.$store.commit('product/setParamsValue', {key: 'componentQuantity.' + this.component.id, value: Number(this.quantityValue)});
   },
   destroyed() {
-    this.$delete(this.params.componentQuantity, this.component.id);
+    this.$store.commit('product/setParamsValue', {key: 'componentQuantity.' + this.component.id, value: undefined});
   },
 }
 </script>

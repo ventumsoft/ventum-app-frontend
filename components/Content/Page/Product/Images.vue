@@ -35,14 +35,13 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import {mapGetters, mapState} from 'vuex';
 
 export default {
-  props: [
-    'params',
-  ],
   computed: {
     ...mapState('page', ['product']),
+    ...mapState('product', ['params']),
+    ...mapGetters('product', ['kitComponent']),
     productImageId() {
       const type = this.product.imagesLinkSettings?.type || 'option';
       if (type === 'option') {

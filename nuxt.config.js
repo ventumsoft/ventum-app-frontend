@@ -27,6 +27,7 @@ export default {
   css: [
     'magnific-popup/dist/magnific-popup.css',
     'select2/dist/css/select2.css',
+    'bootstrap-fileinput/css/fileinput.css',
     'ion-rangeslider/css/ion.rangeSlider.css',
     'ion-rangeslider/css/ion.rangeSlider.skinNice.css',
     '~/assets/css/ionrangeslider.scss',

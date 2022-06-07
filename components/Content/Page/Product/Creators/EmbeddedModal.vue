@@ -1,10 +1,13 @@
 <template>
-  <BsModal v-on="$listeners">
+  <BsModal
+    v-if="integration"
+    @closed="$store.commit('product/setCurrentActiveEmbeddedIntegration', null)"
+  >
     <template v-slot:title>
       {{ integration.embedded.title }}
     </template>
     <template v-slot:body>
-      <form class="product-creator-embedded-form">
+      <form class="product-creator-embedded-form" @submit.prevent>
         <div v-show="false" class="form-progress" style="display: block;">
           <div class="progress"><div class="progress-bar progress-bar-striped active"></div></div>
         </div>
@@ -39,23 +42,26 @@
             <label for="integrationEmbeddedCreatorDesignOrderFiles">
               {{ integration.embedded.files.title }}
             </label>
-            <input
+            <BsFileInput
               id="integrationEmbeddedCreatorDesignOrderFiles"
-              type="file"
               name="files[]"
               class="file-loading fileinput"
               multiple
-              data-show-upload="false"
-              data-show-caption="true"
-              data-show-preview="true"
-              data-preview-file-type="image"
-              data-main-class="input-group-md"
-              data-browse-class="btn btn-warning"
-              :data-max-file-count="integration.embedded.files.maxCount"
-              :data-max-file-size="integration.embedded.files.maxSize / 1024"
+              :options="{
+                showUpload: false,
+                showCaption: true,
+                showPreview: true,
+                previewFileType: 'image',
+                mainClass: 'input-group-md',
+                browseClass: 'btn btn-warning',
+                browseIcon: '<i class=icon-folder-open></i>',
+                swapButtonsPlacement: true,
+                maxFileCount: integration.embedded.files.maxCount,
+                maxFileSize: integration.embedded.files.maxSize / 1024,
+                allowedFileExtensions: integration.embedded.files.types,
+              }"
               :accept="integration.embedded.files.types.join(',')"
-              :data-allowed-file-extensions="integration.embedded.files.types"
-            >
+            />
           </div>
           <div v-if="integration.embedded.files.url" class="col_full">
             <label for="integrationEmbeddedCreatorDesignOrderFilesUrl">
@@ -77,6 +83,27 @@
             :defaults="product.calculator.defaults"
             :options="product.calculator.options.filter(option => option.isOnlyForApps?.length && option.isOnlyForApps.includes(integration.creator))"
           />
+          <ContentPageProductCalculatorOptions
+            v-if="kitComponent?.calculator?.options?.length"
+            :key="'integration-' + integration.id + '-kit-component-' + kitComponent.id + '-options'"
+            :defaults="kitComponent.calculator.defaults"
+            :options="kitComponent.calculator.options.filter(option => option.isOnlyForApps?.length && option.isOnlyForApps.includes(integration.creator))"
+          />
+          <ContentPageProductCalculatorOptions
+            v-if="quantityComponent?.calculator?.options?.length"
+            :key="'integration-' + integration.id + '-quantity-component-' + quantityComponent.id + '-options'"
+            :defaults="product.calculator.defaults"
+            :options="quantityComponent.calculator.options.filter(option => option.isOnlyForApps?.length && option.isOnlyForApps.includes(integration.creator))"
+          />
+          <template v-if="product.calculator.compoundComponents?.length">
+            <ContentPageProductCreatorsCompoundComponentParams
+              v-for="component of product.calculator.compoundComponents"
+              :key="component.id"
+              :integration="integration"
+              :component="component"
+              :defaults="product.calculator.defaults"
+            />
+          </template>
         </div>
         <div class="col_full">
           <div class="fleft btn-link product-creator-embedded-price">
@@ -95,14 +122,10 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import {mapGetters, mapState} from 'vuex';
 import _debounce from 'lodash/debounce';
 
 export default {
-  props: [
-    'integration',
-    'params',
-  ],
   data: () => ({
     priceData: {
       error: null,
@@ -115,13 +138,19 @@ export default {
   }),
   computed: {
     ...mapState('page', ['product']),
-  },
-  mounted() {
-    this.updatePrice();
+    ...mapState('product', ['params']),
+    ...mapGetters('product', [
+      'kitComponent',
+      'quantityComponent',
+    ]),
+    ...mapState('product', {integration: 'currentActiveEmbeddedIntegration'}),
   },
   watch: {
     params: {
       handler() {
+        if (!this.integration) {
+          return;
+        }
         this.updatePrice();
       },
       deep: true,

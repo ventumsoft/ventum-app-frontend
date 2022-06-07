@@ -24,7 +24,7 @@
           href="#"
           class="product-creator-integration-button"
           :data-integration-id="integration.id"
-          @click.prevent="$emit('order', {integration})"
+          @click.prevent="$store.dispatch('product/handleOrderCall', {integration})"
         >
           <div class="feature-box fbox-center fbox-bg fbox-effect">
             <div class="fbox-icon">
@@ -59,19 +59,20 @@
 
 <script>
 import CreatorEnum from '@/enums/CreatorEnum';
+import {mapGetters, mapState} from 'vuex';
 
 export default {
-  props: [
-    'params',
-    'integratable',
-    'integrations',
-    'integrationsAvailableOnMobile',
-    'integrationsAvailableOnDesktop',
-  ],
   data: () => ({
     CreatorEnum,
   }),
   computed: {
+    ...mapState('product', ['params']),
+    ...mapGetters('product', [
+      'integratable',
+      'integrations',
+      'integrationsAvailableOnMobile',
+      'integrationsAvailableOnDesktop',
+    ]),
     usingPriceByIntegration() {
       return this.integrations.reduce((result, integration) => {
         result[integration.id] = this.getUsingPrice(integration);

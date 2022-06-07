@@ -11,6 +11,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "bootstrap": "^3.3.7",
+    "bootstrap-fileinput": "^4.3.6",
     "core-js": "^3.19.3",
     "fitvids": "^2.1.1",
     "flexslider": "^2.7.2",

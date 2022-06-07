@@ -18,20 +18,19 @@
 <script>
 export default {
   props: [
-    'params',
     'units',
     'width',
     'height',
   ],
   mounted() {
-    this.$set(this.params, 'area_units', this.units);
-    this.$set(this.params, 'width', this.width);
-    this.$set(this.params, 'height', this.height);
+    this.$store.commit('product/setParamsValue', {key: 'area_units', value: this.units});
+    this.$store.commit('product/setParamsValue', {key: 'width', value: Number(this.width)});
+    this.$store.commit('product/setParamsValue', {key: 'height', value: Number(this.height)});
   },
   destroyed() {
-    this.$delete(this.params, 'area_units');
-    this.$delete(this.params, 'width');
-    this.$delete(this.params, 'height');
+    for (const key of ['area_units', 'width', 'height']) {
+      this.$store.commit('product/setParamsValue', {key, value: undefined});
+    }
   },
 }
 </script>

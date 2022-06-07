@@ -9,19 +9,22 @@
       :key="option.id"
       :class="{'component-option': component}"
       :option="option"
-      :params="params"
       :defaults="defaults"
     />
   </fragment>
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
   props: {
-    params: {type: Object},
     defaults: {type: Object},
     options: {type: Array, required: true},
     component: {type: Boolean},
+  },
+  computed: {
+    ...mapState('product', ['params']),
   },
 }
 </script>

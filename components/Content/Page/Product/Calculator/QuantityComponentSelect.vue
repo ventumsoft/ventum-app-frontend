@@ -21,12 +21,12 @@ import {mapState} from 'vuex';
 
 export default {
   props: [
-    'params',
     'defaults',
     'components',
   ],
   computed: {
     ...mapState('page', ['product']),
+    ...mapState('product', ['params']),
     value() {
       const quantity = Number(this.params.quantity);
       if (quantity) {
@@ -44,17 +44,17 @@ export default {
     },
   },
   mounted() {
-    this.$set(this.params, 'productComponentId', this.value);
+    this.$store.commit('product/setParamsValue', {key: 'productComponentId', value: Number(this.value)});
   },
   watch: {
     async value() {
       await this.$nextTick();
       this.$refs.input.dispatchEvent(new Event('change', {bubbles: true}));
-      this.params.productComponentId = this.value;
+      this.$store.commit('product/setParamsValue', {key: 'productComponentId', value: Number(this.value)});
     },
   },
   destroyed() {
-    this.$delete(this.params, 'productComponentId');
+    this.$store.commit('product/setParamsValue', {key: 'productComponentId', value: undefined});
   },
 }
 </script>

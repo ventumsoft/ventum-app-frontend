@@ -18,69 +18,58 @@
         <ContentPageProductCalculatorArea
           v-if="product.calculator.areaSettings"
           v-bind="product.calculator.areaSettings"
-          :params="params"
           :defaults="product.calculator.defaults"
         />
         <ContentPageProductCalculatorAreaFixed
           v-else-if="product.calculator.areaFixedSettings"
-          :params="params"
           v-bind="product.calculator.areaFixedSettings"
         />
         <ContentPageProductCalculatorQuantityComponentSelect
           v-if="product.calculator.quantityComponents?.length"
           :components="product.calculator.quantityComponents"
-          :params="params"
           :defaults="product.calculator.defaults"
         />
         <ContentPageProductCalculatorKitComponentSelect
           v-if="product.calculator.kitComponents?.length"
           :components="product.calculator.kitComponents"
-          :params="params"
           :defaults="product.calculator.defaults"
         />
         <ContentPageProductCalculatorQuantity
           v-if="product.calculator.quantitySettings"
           :quantitySettings="product.calculator.quantitySettings"
-          :params="params"
           :defaults="product.calculator.defaults"
         />
         <ContentPageProductCalculatorArea
           v-if="kitComponent?.calculator?.areaSettings"
           v-bind="kitComponent.calculator.areaSettings"
           :key="'kit-component-' + kitComponent.id + '-area'"
-          :params="params"
           :defaults="kitComponent.calculator.defaults"
         />
         <ContentPageProductCalculatorAreaFixed
           v-else-if="kitComponent?.calculator?.areaFixedSettings"
           :key="'kit-component-' + kitComponent.id + '-area-fixed'"
-          :params="params"
           v-bind="kitComponent.calculator.areaFixedSettings"
         />
         <ContentPageProductCalculatorQuantity
           v-if="kitComponent?.calculator?.quantitySettings"
           :quantitySettings="kitComponent.calculator.quantitySettings"
           :key="'kit-component-' + kitComponent.id + '-quantity'"
-          :params="params"
           :defaults="kitComponent.calculator.defaults"
         />
         <ContentPageProductCalculatorOptions
           v-if="kitComponent?.calculator?.options?.length"
           :key="'kit-component-' + kitComponent.id + '-options'"
-          :params="params"
           :defaults="kitComponent.calculator.defaults"
           :options="kitComponent.calculator.options.filter(option => !option.isOnlyForApps)"
         />
         <ContentPageProductCalculatorOptions
           v-if="product.calculator.options?.length"
-          :params="params"
           :defaults="product.calculator.defaults"
           :options="product.calculator.options.filter(option => !option.isOnlyForApps)"
         />
         <ContentPageProductCalculatorOptions
           v-if="quantityComponent?.calculator?.options?.length"
           :key="'quantity-component-' + quantityComponent.id + '-options'"
-          :params="params"
           :defaults="product.calculator.defaults"
           :options="quantityComponent.calculator.options.filter(option => !option.isOnlyForApps)"
         />
@@ -89,7 +78,6 @@
             v-for="component of product.calculator.compoundComponents"
             :key="component.id"
             :component="component"
-            :params="params"
             :defaults="product.calculator.defaults"
           />
         </template>
@@ -115,7 +103,7 @@
           'hidden-xs': integrationsAvailableOnMobile?.length !== 1,
           'hidden-sm hidden-md hidden-lg': integrationsAvailableOnDesktop?.length !== 1,
         }"
-        @click.prevent="$emit('order')"
+        @click.prevent="$store.dispatch('product/handleOrderCall')"
       >
         <span>{{ $trans('product.button.order') }}</span>
         <i class="icon-angle-right"></i>
@@ -137,16 +125,9 @@
 
 <script>
 import _debounce from 'lodash/debounce';
-import {mapState} from 'vuex';
+import {mapGetters, mapState} from 'vuex';
 
 export default {
-  props: [
-    'params',
-    'quantityComponent',
-    'kitComponent',
-    'integrationsAvailableOnMobile',
-    'integrationsAvailableOnDesktop',
-  ],
   data: () => ({
     preventing: true,
     priceData: {
@@ -160,6 +141,13 @@ export default {
   }),
   computed: {
     ...mapState('page', ['product']),
+    ...mapState('product', ['params']),
+    ...mapGetters('product', [
+      'quantityComponent',
+      'kitComponent',
+      'integrationsAvailableOnMobile',
+      'integrationsAvailableOnDesktop',
+    ]),
   },
   async mounted() {
     this.preventing = false;

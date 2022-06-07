@@ -14,7 +14,7 @@
         templateSelection,
         templateResult,
       }"
-      @input="params.options[option.id] = Number($event)"
+      @input="$store.commit('product/setParamsValue', {key: 'options.' + option.id, value: Number($event)})"
     >
       <option
         v-if="!option.required"
@@ -38,7 +38,7 @@
           grid: true,
         }"
         :value="value"
-        @input="params.options[option.id] = Number($event)"
+        @input="$store.commit('product/setParamsValue', {key: 'options.' + option.id, value: Number($event)})"
       />
     </div>
     <div
@@ -59,7 +59,7 @@
                 v-if="!option.required"
                 class="portfolio-item pf-media pf-icons"
                 data-dismiss="modal"
-                @click.prevent="params.options[option.id] = 0"
+                @click.prevent="$store.commit('product/setParamsValue', {key: 'options.' + option.id, value: 0})"
               >
                 <div class="portfolio-image">
                   <a href="#"><img src="/images/placeholder.jpg"></a>
@@ -76,7 +76,7 @@
                 v-for="element of option.elements"
                 class="portfolio-item pf-media pf-icons"
                 data-dismiss="modal"
-                @click.prevent="params.options[option.id] = Number(element.id)"
+                @click.prevent="$store.commit('product/setParamsValue', {key: 'options.' + option.id, value: Number(element.id)})"
               >
                 <div class="portfolio-image">
                   <a href="#">
@@ -107,7 +107,6 @@ import ProductOptionViewTypeEnum from '@/enums/ProductOptionViewTypeEnum';
 export default {
   props: [
     'option',
-    'params',
     'defaults',
   ],
   data: () => ({
@@ -115,6 +114,7 @@ export default {
   }),
   computed: {
     ...mapState('page', ['product']),
+    ...mapState('product', ['params']),
     value() {
       if (this.params.options?.[this.option.id] !== undefined) {
         return this.params.options[this.option.id];
@@ -132,10 +132,10 @@ export default {
     },
   },
   mounted() {
-    if (!this.params.options) {
-      this.$set(this.params, 'options', {});
-    }
-    this.$set(this.params.options, this.option.id, Number(this.value) || 0);
+    this.$store.commit('product/setParamsValue', {
+      key: 'options.' + this.option.id,
+      value: Number(this.value) || 0,
+    });
     if (this.$refs.optionSelect2) {
       $(this.$refs.optionSelect2.$el).on('select2:opening', this.handleSelect2Opening);
     }
@@ -180,7 +180,10 @@ export default {
     },
   },
   destroyed() {
-    this.$delete(this.params.options, this.option.id);
+    this.$store.commit('product/setParamsValue', {
+      key: 'options.' + this.option.id,
+      value: undefined,
+    });
   },
 }
 </script>

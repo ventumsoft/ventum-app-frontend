@@ -1,7 +1,7 @@
 <template>
   <div class="col_full">
     <label class="text-break">{{ product.calculator.kitDisplayName || $trans('product.kit.product.select.part') }}</label>
-    <Select2 @input="params.productComponentId = Number($event)">
+    <Select2 @input="$store.commit('product/setParamsValue', {key: 'productComponentId', value: Number($event)})">
       <option
         v-for="component of components"
         :value="component.id"
@@ -16,12 +16,12 @@ import {mapState} from 'vuex';
 
 export default {
   props: [
-    'params',
     'defaults',
     'components',
   ],
   computed: {
     ...mapState('page', ['product']),
+    ...mapState('product', ['params']),
     value() {
       if (this.params.productComponentId !== undefined) {
         return this.params.productComponentId;
@@ -33,10 +33,10 @@ export default {
     },
   },
   mounted() {
-    this.$set(this.params, 'productComponentId', Number(this.value));
+    this.$store.commit('product/setParamsValue', {key: 'productComponentId', value: Number(this.value)});
   },
   destroyed() {
-    this.$delete(this.params, 'productComponentId');
+    this.$store.commit('product/setParamsValue', {key: 'productComponentId', value: undefined});
   },
 }
 </script>

@@ -16,20 +16,22 @@
           grid: true,
         }"
         :value="value"
-        @input="params.quantity = Number($event)"
+        @input="$store.commit('product/setParamsValue', {key: 'quantity', value: Number($event)})"
       />
     </div>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
   props: [
     'quantitySettings',
-    'params',
     'defaults',
   ],
   computed: {
+    ...mapState('product', ['params']),
     range() {
       const {from, to} = this.quantitySettings;
       if (!this.quantitySettings.values && this.quantitySettings.area) {
@@ -66,10 +68,10 @@ export default {
     },
   },
   mounted() {
-    this.$set(this.params, 'quantity', Number(this.value));
+    this.$store.commit('product/setParamsValue', {key: 'quantity', value: Number(this.value)});
   },
   destroyed() {
-    this.$delete(this.params, 'quantity');
+    this.$store.commit('product/setParamsValue', {key: 'quantity', value: undefined});
   },
 }
 
