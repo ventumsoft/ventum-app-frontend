@@ -69,20 +69,20 @@
           :key="'kit-component-' + kitComponent.id + '-options'"
           :params="params"
           :defaults="kitComponent.calculator.defaults"
-          :options="kitComponent.calculator.options"
+          :options="kitComponent.calculator.options.filter(option => !option.isOnlyForApps)"
         />
         <ContentPageProductCalculatorOptions
           v-if="product.calculator.options?.length"
           :params="params"
           :defaults="product.calculator.defaults"
-          :options="product.calculator.options"
+          :options="product.calculator.options.filter(option => !option.isOnlyForApps)"
         />
         <ContentPageProductCalculatorOptions
           v-if="quantityComponent?.calculator?.options?.length"
           :key="'quantity-component-' + quantityComponent.id + '-options'"
           :params="params"
           :defaults="product.calculator.defaults"
-          :options="quantityComponent.calculator.options"
+          :options="quantityComponent.calculator.options.filter(option => !option.isOnlyForApps)"
         />
         <template v-if="product.calculator.compoundComponents?.length">
           <ContentPageProductCalculatorCompoundComponentParams
@@ -168,6 +168,9 @@ export default {
   watch: {
     params: {
       handler() {
+        if (this.$store.state.product.currentActiveEmbeddedIntegration) {
+          return;
+        }
         this.updatePrice();
       },
       deep: true,

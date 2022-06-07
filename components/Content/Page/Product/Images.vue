@@ -39,10 +39,19 @@ import {mapState} from 'vuex';
 
 export default {
   props: [
-    'productImageId',
+    'params',
   ],
   computed: {
     ...mapState('page', ['product']),
+    productImageId() {
+      const type = this.product.imagesLinkSettings?.type || 'option';
+      if (type === 'option') {
+        return this.product.imagesLinkSettings.imageByElement?.[this.params.options?.[this.product.imagesLinkSettings.option]] ||
+          this.product.imagesLinkSettings.imageByElement?.[this.params.options?.[this.product.imagesLinkSettings.optionByComponent?.[this.params.productComponentId]]];
+      } else if (type === 'kit') {
+        return this.product.imagesLinkSettings.imageByComponent?.[this.kitComponent?.id];
+      }
+    },
   },
   async mounted() {
     await this.initFlexSlider();

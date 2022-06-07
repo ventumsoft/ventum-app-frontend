@@ -63,6 +63,7 @@ import CreatorEnum from '@/enums/CreatorEnum';
 export default {
   props: [
     'params',
+    'integratable',
     'integrations',
     'integrationsAvailableOnMobile',
     'integrationsAvailableOnDesktop',
@@ -88,9 +89,10 @@ export default {
       if (way === 'manually') {
         value = usingPriceSettings.manually
       } else if (way === 'option-element') {
+        const option = this.integratable.calculator.options.find(option => option.id == usingPriceSettings.optionId);
         const optionValue = this.params?.options?.[usingPriceSettings.optionId];
-        if (integration.usingPriceOptionInputType === 'range') {
-          value = parseFloat(usingPriceSettings.unitPrice * (optionValue || integration.usingPriceOptionRange?.from || 0));
+        if (option?.inputType === 'range') {
+          value = parseFloat(usingPriceSettings.unitPrice * (optionValue || option.range?.from || 0));
         } else {
           value = usingPriceSettings.optionElements && usingPriceSettings.optionElements[optionValue];
         }
@@ -99,10 +101,9 @@ export default {
         value = parseFloat(usingPriceSettings.componentBasePrice) + parseFloat(usingPriceSettings.componentUnitPrice) * componentQuantity;
       }
 
-      //if ($creatorEmbeddedPrice) {
-      //  $creatorEmbeddedPrice.data('using-price', value);
-      //  return;
-      //}
+      if (this.$store.state.product.currentActiveEmbeddedIntegration?.id === integration.id) {
+        this.$store.commit('product/updateCurrentActiveEmbeddedIntegrationUsingPrice', value);
+      }
 
       return value;
     },

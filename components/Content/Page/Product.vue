@@ -2,7 +2,7 @@
   <Fragment>
     <div class="container clearfix product-calculator">
       <ContentPageProductImages
-        :productImageId="productImageId"
+        :params="params"
       />
       <ContentPageProductCalculator
         :params="params"
@@ -15,10 +15,17 @@
     </div>
     <ContentPageProductCreators
       :params="params"
+      :integratable="integratable"
       :integrations="integrations"
       :integrationsAvailableOnMobile="integrationsAvailableOnMobile"
       :integrationsAvailableOnDesktop="integrationsAvailableOnDesktop"
       @order="handleOrderCall"
+    />
+    <ContentPageProductCreatorsEmbedded
+      v-if="currentActiveEmbeddedIntegration"
+      :integration="currentActiveEmbeddedIntegration"
+      :params="params"
+      @closed="$store.commit('product/setCurrentActiveEmbeddedIntegration', null)"
     />
     <ContentPageProductTabs />
   </Fragment>
@@ -35,6 +42,7 @@ export default {
   }),
   computed: {
     ...mapState('page', ['product']),
+    ...mapState('product', ['currentActiveEmbeddedIntegration']),
     quantityComponent() {
       const componentId = Number(this.params.productComponentId);
       return this.product.calculator.quantityComponents?.find(component => component.id === componentId);
@@ -43,17 +51,11 @@ export default {
       const componentId = Number(this.params.productComponentId);
       return this.product.calculator.kitComponents?.find(component => component.id === componentId);
     },
-    productImageId() {
-      const type = this.product.imagesLinkSettings?.type || 'option';
-      if (type === 'option') {
-        return this.product.imagesLinkSettings.imageByElement?.[this.params.options?.[this.product.imagesLinkSettings.option]] ||
-          this.product.imagesLinkSettings.imageByElement?.[this.params.options?.[this.product.imagesLinkSettings.optionByComponent?.[this.params.productComponentId]]];
-      } else if (type === 'kit') {
-        return this.product.imagesLinkSettings.imageByComponent?.[this.kitComponent?.id];
-      }
+    integratable() {
+      return this.kitComponent || this.product;
     },
     integrations() {
-      return (this.kitComponent || this.product)?.integrations;
+      return this.integratable.integrations;
     },
     integrationsAvailableOnMobile() {
       return this.integrations?.filter(integration => integration.visibility !== 'only-on-desktop');
@@ -76,13 +78,13 @@ export default {
           this.integrationsAvailableOnDesktop[0];
       }
       if (integration.creator === CreatorEnum.BUY_BUTTON) {
-        this.$router.push({name: 'checkout/cart'});
+        this.$router.push(this.$page({name: 'checkout/cart'}));
       } else if (CreatorEnum.isEmbedded[integration.creator]) {
-        console.log('show integration embedded creator modal');
+        this.$store.commit('product/setCurrentActiveEmbeddedIntegration', integration);
       } else if ((integration.creator === CreatorEnum.UNIVERSAL) && !this.$store.state.site.settings?.['constructor:templates:skip-template-selection'] && !integration.settings?.skipTemplateSelection) {
-        this.$router.push({name: 'slug/templates', params: {slug: this.$route.params.slug}, query: {compilationId: undefined}});
+        this.$router.push(this.$page({name: 'slug/templates', params: {slug: this.$route.params.slug}, query: {compilationId: undefined}}));
       } else {
-        this.$router.push({name: 'creator/creator', params: {creator: integration.creator}, query: {compilationId: undefined}});
+        this.$router.push(this.$page({name: 'creator/creator', params: {creator: integration.creator}, query: {compilationId: undefined}}));
       }
     },
   },

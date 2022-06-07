@@ -35,7 +35,7 @@
       v-if="component.calculator?.options?.length"
       :params="params"
       :defaults="defaults"
-      :options="component.calculator.options"
+      :options="component.calculator.options.filter(option => !option.isOnlyForApps)"
       :component="true"
     />
   </div>
