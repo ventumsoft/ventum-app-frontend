@@ -48,6 +48,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/axios-cache.server.js',
     '~/plugins/fragment',
     '~/plugins/page',
     '~/plugins/images-loaded.client',
@@ -73,6 +74,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'vue-social-sharing/nuxt',
+    '~/modules/axios-cache',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

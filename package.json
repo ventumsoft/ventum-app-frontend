@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "axios-cache-adapter": "^2.7.3",
     "bootstrap": "^3.3.7",
     "bootstrap-fileinput": "^4.3.6",
     "core-js": "^3.19.3",
