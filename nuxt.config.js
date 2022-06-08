@@ -73,6 +73,7 @@ export default {
     // 'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
     'vue-social-sharing/nuxt',
     '~/modules/axios-cache',
   ],
@@ -82,6 +83,28 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     // baseURL: '/',
     baseURL: process.env.API_URL,
+  },
+
+  auth: {
+    strategies: {
+      'laravelJWT': {
+        provider: 'laravel/jwt',
+        url: process.env.API_URL,
+        endpoints: {
+          login: {url: 'auth/login'},
+          refresh: {url: 'auth/refresh'},
+          logout: {url: 'auth/logout'},
+          user: {url: 'auth/user'},
+        },
+        token: {
+          property: 'access_token',
+          maxAge: 60 * 60,
+        },
+        refreshToken: {
+          maxAge: 20160 * 60,
+        },
+      },
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
