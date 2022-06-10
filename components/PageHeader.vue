@@ -6,10 +6,14 @@
         <ContentWidgetsOnPage type="header" location="top" name="Logo" />
         <nav id="primary-menu">
           <ul class="clearfix">
-            <li class="hidden-md hidden-lg">
+            <li v-if="$auth.user" class="hidden-md hidden-lg">
               <a href="#">
-                <template v-if="false">user</template>
-                <template v-else><i class="icon-signin"></i> {{ $trans('header.login') }}</template>
+                user
+              </a>
+            </li>
+            <li v-else class="hidden-md hidden-lg">
+              <a href="#" @click.prevent="$emit('login')">
+                <i class="icon-signin"></i> {{ $trans('header.login') }}
               </a>
             </li>
             <ContentWidgetsOnPage type="header" location="top" name="SitesList" class="hidden-md hidden-lg" />

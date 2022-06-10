@@ -1,16 +1,18 @@
 <template>
   <div class="modal fade">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h4 class="modal-title center"><slot name="title"></slot></h4>
-        </div>
-        <div class="modal-body">
-          <slot name="body"></slot>
+    <slot>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title center"><slot name="title"></slot></h4>
+          </div>
+          <div class="modal-body">
+            <slot name="body"></slot>
+          </div>
         </div>
       </div>
-    </div>
+    </slot>
   </div>
 </template>
 

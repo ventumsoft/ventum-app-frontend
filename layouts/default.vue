@@ -2,12 +2,13 @@
   <div id="wrapper" class="clearfix">
     <CustomStyles />
     <div class="wrapper-content">
-      <TopBar />
-      <PageHeader />
+      <TopBar @login="isShowingLoginModal = true" />
+      <PageHeader @login="isShowingLoginModal = true" />
       <Nuxt />
     </div>
     <PageFooter />
     <div id="gotoTop" class="icon-angle-up"></div>
+    <AuthLoginModal v-if="isShowingLoginModal" @closed="isShowingLoginModal = false" />
   </div>
 </template>
 
@@ -23,6 +24,9 @@ export default {
       },
     };
   },
+  data: () => ({
+    isShowingLoginModal: false,
+  }),
   mounted() {
     this.responsiveClasses();
   },
