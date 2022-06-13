@@ -26,6 +26,8 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'magnific-popup/dist/magnific-popup.css',
+    'noty/src/noty.scss',
+    '~/assets/css/noty-mint-theme.scss',
     'select2/dist/css/select2.css',
     'bootstrap-fileinput/css/fileinput.css',
     'ion-rangeslider/css/ion.rangeSlider.css',
@@ -57,6 +59,7 @@ export default {
     '~/plugins/trans',
     '~/plugins/bs.client',
     '~/plugins/fitvids.client',
+    '~/plugins/noty.client',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -104,6 +107,10 @@ export default {
           maxAge: 20160 * 60,
         },
       },
+    },
+    redirect: {
+      login: '/',
+      home: false,
     },
   },
 
@@ -158,7 +165,7 @@ export default {
       return !to.params.append && {x: 0, y: 0};
     },
     middleware: [
-      //
+      'restore-password',
     ],
   },
 }

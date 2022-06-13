@@ -6,16 +6,7 @@
         <ContentWidgetsOnPage type="header" location="top" name="Logo" />
         <nav id="primary-menu">
           <ul class="clearfix">
-            <li v-if="$auth.user" class="hidden-md hidden-lg">
-              <a href="#">
-                user
-              </a>
-            </li>
-            <li v-else class="hidden-md hidden-lg">
-              <a href="#" @click.prevent="$emit('login')">
-                <i class="icon-signin"></i> {{ $trans('header.login') }}
-              </a>
-            </li>
+            <LoginMenuItems class="hidden-md hidden-lg" :subMenuClass="true" @login="$emit('login')" />
             <ContentWidgetsOnPage type="header" location="top" name="SitesList" class="hidden-md hidden-lg" />
             <LanguagesMenu class="hidden-md hidden-lg" />
             <ContentWidgetsOnPage type="header" location="top" name="Phones" />

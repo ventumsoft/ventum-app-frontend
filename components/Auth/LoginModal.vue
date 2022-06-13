@@ -28,8 +28,25 @@
                 </li>
               </ul>
               <div class="tab-container">
-                <AuthTabLoginContent />
-                <AuthTabRegisterContent v-if="!$store.state.site.settings?.['registration:disabled-registration']" />
+                <div class="tab-content clearfix" id="tab-login">
+                  <AuthTabLoginPanel
+                    v-if="!isShowingRecoveryInsteadOfLogin"
+                    @recovery="isShowingRecoveryInsteadOfLogin = true"
+                    @success="close"
+                  />
+                  <AuthTabRecoveryPanel
+                    v-if="isShowingRecoveryInsteadOfLogin"
+                    @cancel="isShowingRecoveryInsteadOfLogin = false"
+                    @success="close"
+                  />
+                </div>
+                <div
+                  v-if="!$store.state.site.settings?.['registration:disabled-registration']"
+                  class="tab-content clearfix"
+                  id="tab-register"
+                >
+                  <AuthTabRegisterPanel @success="close" />
+                </div>
               </div>
             </JqTabs>
           </div>
@@ -41,7 +58,14 @@
 
 <script>
 export default {
-  //
+  data: () => ({
+    isShowingRecoveryInsteadOfLogin: false,
+  }),
+  methods: {
+    close() {
+      $(this.$el).modal('hide');
+    },
+  },
 }
 </script>
 

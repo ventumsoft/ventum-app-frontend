@@ -9,6 +9,7 @@
     <PageFooter />
     <div id="gotoTop" class="icon-angle-up"></div>
     <AuthLoginModal v-if="isShowingLoginModal" @closed="isShowingLoginModal = false" />
+    <AuthRecoveryModal v-if="isShowingRecoveryModal" @closed="isShowingRecoveryModal = false" />
   </div>
 </template>
 
@@ -24,8 +25,9 @@ export default {
       },
     };
   },
-  data: () => ({
+  data: ({$store}) => ({
     isShowingLoginModal: false,
+    isShowingRecoveryModal: Boolean($store.state.recovery.email && $store.state.recovery.code),
   }),
   mounted() {
     this.responsiveClasses();

@@ -26,6 +26,7 @@
     "jrespond": "^1.0.0",
     "lodash": "^4.17.20",
     "magnific-popup": "^1.1.0",
+    "noty": "^3.1.0-beta",
     "nuxt": "^2.15.8",
     "owl.carousel": "git+https://github.com/i-galetsky-gs-by/OwlCarousel2.git#b623c767486e77ed349cf5c1fd67d6547f8a0b24",
     "select2": "^4.0.4",

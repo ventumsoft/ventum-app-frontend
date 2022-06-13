@@ -1,14 +1,20 @@
 <template>
   <fragment>
-    <PageTitle title="Cart Page" />
+    <PageTitle title="User personal account - Change password" />
     <section id="content">
       <div class="content-wrap">
         <div class="container clearfix">
+          <div>{{ JSON.stringify($route.name) }}</div>
           <div>{{ JSON.stringify($route.params) }}</div>
           <div>{{ JSON.stringify($route.query) }}</div>
-          <div>{{ JSON.stringify($auth.user) }}</div>
         </div>
       </div>
     </section>
   </fragment>
 </template>
+
+<script>
+export default {
+  middleware: 'auth',
+}
+</script>

@@ -1,0 +1,37 @@
+.noty_theme__mint.noty_bar {
+  margin: 4px 0;
+  overflow: hidden;
+  border-radius: 2px;
+  position: relative;
+}
+
+.noty_theme__mint.noty_bar .noty_body {
+  padding: 15px 20px;
+  font-size: 13px;
+  line-height: 1.53846;
+  text-align: left;
+}
+
+.noty_theme__mint.noty_bar .noty_buttons {
+  padding: 10px;
+}
+
+.noty_theme__mint.noty_type__alert {
+  border-radius: 3px 3px 0px 0px;
+  margin-bottom: 1px;
+  background-color: rgb(33, 150, 243);
+  color: rgb(255, 255, 255);
+  width: 310px;
+  cursor: pointer;
+  border-bottom: none;
+}
+
+.noty_theme__mint.noty_type__error {
+  overflow: hidden;
+  border-radius: 0px 0px 3px 3px;
+  margin-bottom: 1px;
+  background-color: rgb(239, 83, 80);
+  color: rgb(255, 255, 255);
+  width: 310px;
+  cursor: pointer;
+}

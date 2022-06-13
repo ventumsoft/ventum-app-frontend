@@ -29,8 +29,8 @@ export default {
       });
       if (language.slug !== params.locale) {
         return redirect(((route.name === 'locale') || (route.name === 'slug')) && !params.slug ?
-          {name: 'slug', params: {locale: language.slug, slug: params.locale}} :
-          {...route, params: {...params, locale: language.slug}});
+          {name: 'slug', params: {locale: language.slug, slug: params.locale}, query: route.query} :
+          {...route, params: {...params, locale: language.slug}, query: route.query});
       }
     } catch (exception) {
       error({
