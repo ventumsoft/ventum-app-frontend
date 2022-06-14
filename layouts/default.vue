@@ -90,6 +90,17 @@ body {
       }
     }
   }
+  .rating-container {
+    font-size: 36px;
+    .star {
+      margin: 0;
+    }
+    .filled-stars {
+      color: #59BA40;
+      text-shadow: none;
+      -webkit-text-stroke: unset;
+    }
+  }
 }
 #__nuxt .nuxt-progress + #__layout {
   #top-bar, #primary-menu {

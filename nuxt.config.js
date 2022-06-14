@@ -30,6 +30,7 @@ export default {
     '~/assets/css/noty-mint-theme.scss',
     'select2/dist/css/select2.css',
     'bootstrap-fileinput/css/fileinput.css',
+    'bootstrap-star-rating/css/star-rating.css',
     'ion-rangeslider/css/ion.rangeSlider.css',
     'ion-rangeslider/css/ion.rangeSlider.skinNice.css',
     '~/assets/css/ionrangeslider.scss',

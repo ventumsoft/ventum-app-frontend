@@ -15,7 +15,10 @@
 
             <div class="entry entry-date-section notopmargin" style="float: none; margin-bottom: 25px;">
               <span>
-                <button class="button btn-success nomargin fright add-review-button">
+                <button
+                  class="button btn-success nomargin fright add-review-button"
+                  @click="$auth.loggedIn ? (isShowingReviewModal = true) : $store.commit('site/setShowingLoginModal', true)"
+                >
                   {{ $trans('reviews.leave_review') }}
                 </button>
               </span>
@@ -93,6 +96,10 @@
         </div>
       </div>
     </section>
+    <ReviewsAddModal
+      v-if="isShowingReviewModal"
+      @closed="isShowingReviewModal = false"
+    />
   </Fragment>
 </template>
 
@@ -111,6 +118,9 @@ export default {
       ],
     };
   },
+  data: () => ({
+    isShowingReviewModal: false,
+  }),
   computed: {
     ...mapState('reviews', [
       'loading',

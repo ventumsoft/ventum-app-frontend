@@ -14,6 +14,7 @@
     "axios-cache-adapter": "^2.7.3",
     "bootstrap": "^3.3.7",
     "bootstrap-fileinput": "^4.3.6",
+    "bootstrap-star-rating": "^4.1.2",
     "core-js": "^3.19.3",
     "fitvids": "^2.1.1",
     "flexslider": "^2.7.2",
