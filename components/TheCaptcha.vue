@@ -6,10 +6,9 @@
     :class="{'has-error': error}"
   >
     <div
+      ref="recaptchaContainer"
       v-if="version === CaptchaVersionEnum.RECAPTCHA_V2"
       align="center"
-      class="g-recaptcha"
-      :data-sitekey="sitekey"
     ></div>
     <div v-if="error" align="center">
       <span id="form-captcha-error" style="color: red;" v-html="error"></span>
@@ -26,6 +25,7 @@ export default {
   ],
   data: () => ({
     CaptchaVersionEnum,
+    recaptchaWidgetId: null,
   }),
   computed: {
     enabled() {
@@ -65,19 +65,24 @@ export default {
       if (typeof grecaptcha === 'undefined') {
         return;
       }
-      if (this.version === CaptchaVersionEnum.RECAPTCHA_V2) {
-        grecaptcha.reset();
-        // @fixme: get and emit token
-      } else if (this.version === CaptchaVersionEnum.RECAPTCHA_V3) {
-        const token = await new Promise(resolve => {
-          grecaptcha.ready(() => {
-            grecaptcha.execute(this.sitekey).then(token => {
-              resolve(token);
+      grecaptcha.ready(() => {
+        if (this.version === CaptchaVersionEnum.RECAPTCHA_V2) {
+          if (this.recaptchaWidgetId) {
+            grecaptcha.reset(this.recaptchaWidgetId);
+          } else {
+            this.recaptchaWidgetId = grecaptcha.render(this.$refs.recaptchaContainer, {
+              sitekey: this.sitekey,
+              callback: token => {
+                this.$emit('input', token);
+              },
             });
-          })
-        });
-        this.$emit('input', token);
-      }
+          }
+        } else if (this.version === CaptchaVersionEnum.RECAPTCHA_V3) {
+          grecaptcha.execute(this.sitekey).then(token => {
+            this.$emit('input', token);
+          });
+        }
+      });
     },
   },
 }

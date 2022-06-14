@@ -44,7 +44,10 @@ export default {
       this.loading = true;
       let success, message;
       try {
-        ({data: {success, message}} = await this.$axios.post('recovery/request', {
+        ({data: {
+          success,
+          message,
+        }} = await this.$axios.post('recovery/request', {
           locale: this.$store.state.site.language.slug,
           email: this.email,
         }));

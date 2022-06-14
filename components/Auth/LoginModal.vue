@@ -78,9 +78,13 @@ export default {
             await this.$auth.logout();
           }
         }
-        let success, message;
+        let success, message, token;
         try {
-          ({data: {success, message}} = await this.$axios.post('register/confirm', {
+          ({data: {
+            success,
+            message,
+            token,
+          }} = await this.$axios.post('register/confirm', {
             userId,
             code,
           }));
@@ -88,7 +92,10 @@ export default {
           this.$noty(exception.response?.data?.message || exception.message, 'error');
         }
         if (message) {
-          this.$noty(message, success ? 'info' : 'error');
+          this.$noty(message, success ? 'alert' : 'error');
+        }
+        if (token) {
+          this.$auth.login({data: token});
         }
       }
       let query = querystring.parse(window.location.search.substr(1));

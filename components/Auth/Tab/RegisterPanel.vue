@@ -117,9 +117,14 @@ export default {
     async handleRegisterSubmit() {
       this.loading = true;
       this.errors = null;
-      let success, confirmed, message;
+      let success, confirmed, message, token;
       try {
-        ({data: {success, confirmed, message}} = await this.$axios.post('register/user', this.credentials));
+        ({data: {
+          success,
+          confirmed,
+          message,
+          token,
+        }} = await this.$axios.post('register/user', this.credentials));
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
           this.errors = exception.response.data.errors;
@@ -135,14 +140,11 @@ export default {
         this.$noty(message, 'error');
         return;
       }
-      if (confirmed) {
-        this.$auth.login({data: {
-          email: this.credentials.email,
-          password: this.credentials.password,
-        }});
-      }
       if (message) {
         this.$noty(message);
+      }
+      if (confirmed && token) {
+        this.$auth.login({data: token});
       }
       this.$emit('success');
     },

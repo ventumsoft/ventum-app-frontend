@@ -106,9 +106,13 @@ export default {
   methods: {
     async handleRecoverySubmit() {
       this.loading = true;
-      let success, message;
+      let success, message, token;
       try {
-        ({data: {success, message}} = await this.$axios.post('recovery/password', {
+        ({data: {
+          success,
+          message,
+          token,
+        }} = await this.$axios.post('recovery/password', {
           email: this.email,
           code: this.code,
           password: this.password,
@@ -126,17 +130,7 @@ export default {
         this.$noty(message, 'error');
         return;
       }
-      this.loading = true;
-      try {
-        await this.$auth.login({data: {
-          email: this.email,
-          password: this.password,
-        }});
-      } catch (exception) {
-        this.$noty(exception.message, 'error');
-      } finally {
-        this.loading = false;
-      }
+      this.$auth.login({data: token});
       $(this.$el).modal('hide');
     },
   },
