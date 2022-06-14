@@ -2,14 +2,14 @@
   <div id="wrapper" class="clearfix">
     <CustomStyles />
     <div class="wrapper-content">
-      <TopBar @login="isShowingLoginModal = true" />
-      <PageHeader @login="isShowingLoginModal = true" />
+      <TopBar />
+      <PageHeader />
       <Nuxt />
     </div>
     <PageFooter />
     <div id="gotoTop" class="icon-angle-up"></div>
-    <AuthLoginModal v-if="isShowingLoginModal" @closed="isShowingLoginModal = false" />
-    <AuthRecoveryModal v-if="isShowingRecoveryModal" @closed="isShowingRecoveryModal = false" />
+    <AuthLoginModal />
+    <AuthRecoveryModal />
   </div>
 </template>
 
@@ -25,10 +25,6 @@ export default {
       },
     };
   },
-  data: ({$store}) => ({
-    isShowingLoginModal: false,
-    isShowingRecoveryModal: Boolean($store.state.recovery.email && $store.state.recovery.code),
-  }),
   mounted() {
     this.responsiveClasses();
   },

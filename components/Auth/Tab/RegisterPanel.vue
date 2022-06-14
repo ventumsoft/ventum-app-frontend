@@ -1,5 +1,6 @@
 <template>
   <div class="panel panel-default nobottommargin noborder">
+    <div v-show="loading" class="form-process" style="display: block;"></div>
     <div class="panel-body">
       <form id="register-form" name="register-form" class="nobottommargin" @submit.prevent="handleRegisterSubmit">
         <div v-if="$store.state.site.settings?.['registration:use-name-surname-enabled']" class="row">
@@ -9,7 +10,7 @@
                 {{ $trans('auth.login_register_modal.register_tab.name') }}
               </label>
               <input type="text" id="register-form-name" value="" class="form-control" v-model="credentials.firstname" />
-              <label hidden id="registration-register-form-name-error" class="registration-message-error"></label>
+              <label v-if="errors?.firstname" id="registration-register-form-name-error" class="registration-message-error" v-html="errors.firstname?.join('<br/>') || errors.firstname"></label>
             </div>
           </div>
           <div class="col-md-6">
@@ -18,7 +19,7 @@
                 {{ $trans('auth.login_register_modal.register_tab.surname') }}
               </label>
               <input type="text" id="register-form-surname" value="" class="form-control" v-model="credentials.surname" />
-              <label hidden id="registration-register-form-surname-error" class="registration-message-error"></label>
+              <label v-if="errors?.surname" id="registration-register-form-surname-error" class="registration-message-error" v-html="errors.surname?.join('<br/>') || errors.surname"></label>
             </div>
           </div>
         </div>
@@ -49,7 +50,7 @@
                 {{ $trans('auth.login_register_modal.register_tab.password') }}
               </label>
               <input type="password" class="form-control" id="password" v-model="credentials.password" />
-              <label hidden id="registration-password-error" class="registration-message-error"></label>
+              <label v-if="errors?.password" id="registration-password-error" class="registration-message-error" v-html="errors.password?.join('<br/>') || errors.password"></label>
             </div>
           </div>
           <div class="col-md-6">
@@ -58,29 +59,29 @@
                 {{ $trans('auth.login_register_modal.register_tab.repassword') }}
               </label>
               <input type="password" class="form-control" id="password_confirmation" v-model="credentials.password_confirmation" />
-              <label hidden id="registration-password_confirmation-error" class="registration-message-error"></label>
+              <label v-if="errors?.password_confirmation" id="registration-password_confirmation-error" class="registration-message-error" v-html="errors.password_confirmation?.join('<br/>') || errors.password_confirmation"></label>
             </div>
           </div>
-          <template v-if="$store.state.site.settings?.['seo-integration:captcha:enabled'] && $store.state.site.settings?.['registration:use-google-captcha-enabled']">
-            <div v-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V2" class="col_full has-error">
-              <div align="center" class="g-recaptcha" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']"></div>
-              <div align="center">
-                <span id="form-captcha-error" style="color:red"></span>
-              </div>
-            </div>
-            <div v-else-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3" class="col_full" style="display: none;">
-              <input type="hidden" class="g-recaptcha-v3" name="g-recaptcha-response" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']" />
-              <div align="center">
-                <span id="form-captcha-error" style="color:red"></span>
-              </div>
-            </div>
-          </template>
+          <TheCaptcha
+            ref="captcha"
+            v-if="$store.state.site.settings?.['registration:use-google-captcha-enabled']"
+            v-model="credentials.g_recaptcha_response"
+            :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
+          />
         </div>
-        <div v-if="$store.state.site.settings?.['registration:is-subscribe']" class="col_full check-control">
+        <div
+          v-if="$store.state.site.settings?.['registration:is-subscribe']"
+          class="col_full check-control"
+          :class="{error: errors?.is_subscriber}"
+        >
           <input id="checkbox-subscriber" class="checkbox-style" type="checkbox" checked value="1" v-model="credentials.is_subscriber">
           <label for="checkbox-subscriber" class="checkbox-style-2-label checkbox-small" v-html="$store.state.site.settings?.['registration:subscribe-help']"></label>
         </div>
-        <div v-if="$store.state.site.settings?.['general:is-terms-message-enabled']" class="col_full check-control">
+        <div
+          v-if="$store.state.site.settings?.['general:is-terms-message-enabled']"
+          class="col_full check-control"
+          :class="{error: errors?.is_agree_with_terms}"
+        >
           <input id="checkbox-terms" class="checkbox-style" type="checkbox" v-model="credentials.is_agree_with_terms">
           <label for="checkbox-terms" class="checkbox-style-2-label checkbox-small" v-html="$store.state.site.settings?.['registration:terms-message']"></label>
         </div>
@@ -99,14 +100,15 @@ export default {
   data: () => ({
     CaptchaVersionEnum,
     credentials: {
-      firstname: null,
-      surname: null,
-      email: null,
-      phone: null,
-      password: null,
-      password_confirmation: null,
-      is_subscriber: null,
-      is_agree_with_terms: null,
+      firstname: undefined,
+      surname: undefined,
+      email: undefined,
+      phone: undefined,
+      password: undefined,
+      password_confirmation: undefined,
+      is_subscriber: undefined,
+      is_agree_with_terms: undefined,
+      g_recaptcha_response: undefined,
     },
     loading: false,
     errors: null,
@@ -114,9 +116,10 @@ export default {
   methods: {
     async handleRegisterSubmit() {
       this.loading = true;
-      let success, message;
+      this.errors = null;
+      let success, confirmed, message;
       try {
-        ({data: {success, message}} = await this.$axios.post('register/user', this.credentials));
+        ({data: {success, confirmed, message}} = await this.$axios.post('register/user', this.credentials));
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
           this.errors = exception.response.data.errors;
@@ -126,10 +129,20 @@ export default {
         return;
       } finally {
         this.loading = false;
+        this.$refs.captcha?.resetRepatcha();
       }
       if (!success) {
         this.$noty(message, 'error');
         return;
+      }
+      if (confirmed) {
+        this.$auth.login({data: {
+          email: this.credentials.email,
+          password: this.credentials.password,
+        }});
+      }
+      if (message) {
+        this.$noty(message);
       }
       this.$emit('success');
     },

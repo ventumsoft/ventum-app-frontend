@@ -8,7 +8,7 @@
           <ul class="clearfix">
             <ContentWidgetsOnPage type="header" location="top" name="SitesList" class="hidden-xs hidden-sm" />
             <LanguagesMenu class="hidden-xs hidden-sm" />
-            <LoginMenuItems class="hidden-xs hidden-sm" :subMenuWidth="190" @login="$emit('login')" />
+            <LoginMenuItems class="hidden-xs hidden-sm" :subMenuWidth="190" />
           </ul>
         </div>
       </div>

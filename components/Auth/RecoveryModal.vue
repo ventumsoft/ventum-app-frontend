@@ -1,5 +1,6 @@
 <template>
   <BsModal
+    v-if="email && code"
     id="RestorePasswordModal"
     class="modaltop"
     @closed="$emit('closed')"
@@ -61,24 +62,41 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
 import querystring from 'querystring';
 
 export default {
   data: () => ({
+    email: null,
+    code: null,
+    check: null,
     password: null,
     password_confirmation: null,
     loading: false,
     errors: null,
   }),
-  computed: {
-    ...mapState('recovery', [
-      'email',
-      'code',
-      'check',
-    ]),
-  },
-  mounted() {
+  async mounted() {
+    const {restorePasswordEmail: email, restorePasswordCode: code} = this.$route.query;
+    if (email && code) {
+      if (this.$auth.user && !this.$auth.user.isTemporary) {
+        if (this.$auth.user.email === email) {
+          return this.$router.push({name: 'user/profile'});
+        } else {
+          await this.$auth.logout();
+        }
+      }
+      let check;
+      try {
+        ({data: {result: check}} = await this.$axios.post('recovery/check', {
+          email,
+          code,
+        }));
+      } catch (exception) {
+        this.$noty(exception.response?.data?.message || exception.message, 'error');
+      }
+      this.email = email;
+      this.code = code;
+      this.check = check;
+    }
     let query = querystring.parse(window.location.search.substr(1));
     delete query.restorePasswordEmail;
     delete query.restorePasswordCode;
@@ -91,8 +109,8 @@ export default {
       let success, message;
       try {
         ({data: {success, message}} = await this.$axios.post('recovery/password', {
-          email: this.$store.state.recovery.email,
-          code: this.$store.state.recovery.code,
+          email: this.email,
+          code: this.code,
           password: this.password,
           password_confirmation: this.password_confirmation,
         }));
@@ -111,7 +129,7 @@ export default {
       this.loading = true;
       try {
         await this.$auth.login({data: {
-          email: this.$store.state.recovery.email,
+          email: this.email,
           password: this.password,
         }});
       } catch (exception) {

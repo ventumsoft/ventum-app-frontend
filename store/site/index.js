@@ -3,6 +3,7 @@ export const state = () => ({
   settings: null,
   languages: null,
   language: null,
+  isShowingLoginModal: false,
 });
 
 export const mutations = {
@@ -10,5 +11,8 @@ export const mutations = {
     for (const [key, value] of Object.entries(data)) {
       state[key] = value;
     }
+  },
+  setShowingLoginModal(state, value) {
+    state.isShowingLoginModal = value;
   },
 }

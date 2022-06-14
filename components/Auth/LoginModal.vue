@@ -1,8 +1,9 @@
 <template>
   <BsModal
+    v-if="$store.state.site.isShowingLoginModal"
     id="loginRegisterModal"
     class="modaltop"
-    @closed="$emit('closed')"
+    @closed="$store.commit('site/setShowingLoginModal', false)"
   >
     <div class="modal-dialog">
       <div class="modal-body">
@@ -57,11 +58,45 @@
 </template>
 
 <script>
+import querystring from 'querystring';
+
 export default {
   data: () => ({
     isShowingRecoveryInsteadOfLogin: false,
   }),
+  async mounted() {
+    await this.confirmUserIfNeeded();
+  },
   methods: {
+    async confirmUserIfNeeded() {
+      const {confirmUserId: userId, confirmUserCode: code} = this.$route.query;
+      if (userId && code) {
+        if (this.$auth.user && !this.$auth.user.isTemporary) {
+          if (this.$auth.user.id == userId) {
+            return this.$router.push({name: 'user/profile'});
+          } else {
+            await this.$auth.logout();
+          }
+        }
+        let success, message;
+        try {
+          ({data: {success, message}} = await this.$axios.post('register/confirm', {
+            userId,
+            code,
+          }));
+        } catch (exception) {
+          this.$noty(exception.response?.data?.message || exception.message, 'error');
+        }
+        if (message) {
+          this.$noty(message, success ? 'info' : 'error');
+        }
+      }
+      let query = querystring.parse(window.location.search.substr(1));
+      delete query.confirmUserId;
+      delete query.confirmUserCode;
+      query = querystring.stringify(query);
+      history.replaceState(null, null, window.location.pathname + (query ? ('?' + query) : ''));
+    },
     close() {
       $(this.$el).modal('hide');
     },

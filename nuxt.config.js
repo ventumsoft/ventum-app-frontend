@@ -165,7 +165,7 @@ export default {
       return !to.params.append && {x: 0, y: 0};
     },
     middleware: [
-      'restore-password',
+      //
     ],
   },
 }
