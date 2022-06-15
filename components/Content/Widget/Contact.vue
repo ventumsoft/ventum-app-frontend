@@ -20,7 +20,7 @@
             type="text"
             class="required form-control input-block-level"
             name="name"
-            value="auth.user.name"
+            :value="$auth.user?.name"
             :placeholder="$trans('forms.all_forms.input_name')"
           >
         </div>
@@ -30,7 +30,7 @@
             type="text"
             class="required form-control email input-block-level"
             name="email"
-            value="auth.user.email"
+            :value="$auth.user?.email"
             :placeholder="$trans('forms.all_forms.input_email')"
           >
         </div>
@@ -41,24 +41,17 @@
           cols="30"
           :placeholder="$trans('forms.all_forms.input_massage')"
         ></textarea>
-
         <div v-if="$store.state.site.settings?.['general:is-terms-message-enabled']" class="input-group check-control">
           <input hidden name="is-terms-message-enabled" value="">
           <input id="footer-checkbox-terms" class="checkbox-style" type="checkbox" name="is-terms-message-enabled">
           <label for="footer-checkbox-terms" class="checkbox-style-2-label checkbox-small" v-html="terms_message"></label>
         </div>
-
-        <template v-if="is_captcha_enabled">
-          <div v-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V2" class="col_full has-error">
-            <div align="center" class="g-recaptcha" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']" style="display: none;"></div>
-            <div id="form-captcha-error" style="color: red;"></div>
-          </div>
-          <template v-else-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3">
-            <input type="hidden" class="g-recaptcha-v3" name="g-recaptcha-response" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']">
-            <div id="form-captcha-error" style="color: red;"></div>
-          </template>
-        </template>
-
+        <TheCaptcha
+          ref="captcha"
+          v-if="is_captcha_enabled"
+          v-model="formData.g_recaptcha_response"
+          :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
+        />
         <button
           type="submit"
           class="button button-rounded button-reveal tright nomargin fright btn-status-write-to-us"
@@ -83,6 +76,10 @@ export default {
   },
   data: () => ({
     CaptchaVersionEnum,
+    formData: {
+      g_recaptcha_response: undefined,
+    },
+    errors: null,
   }),
 }
 </script>

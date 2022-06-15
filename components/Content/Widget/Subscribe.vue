@@ -49,16 +49,12 @@
                     <input id="subscribe-checkbox-terms" class="checkbox-style required" type="checkbox" name="is-terms-message-enabled" required>
                     <label for="subscribe-checkbox-terms" class="checkbox-style-2-label checkbox-small" v-html="terms_message"></label>
                   </div>
-                  <template v-if="is_captcha_enabled">
-                    <div v-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === 'recaptcha-v2'" class="col_full">
-                      <div align="center" class="g-recaptcha" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']"></div>
-                      <div id="form-captcha-error" style="color: red;"></div>
-                    </div>
-                    <div v-else-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === 'recaptcha-v3'" class="col_full" style="display: none;">
-                      <input type="hidden" class="g-recaptcha-v3" name="g-recaptcha-response" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']" />
-                      <div id="form-captcha-error" style="color: red;"></div>
-                    </div>
-                  </template>
+                  <TheCaptcha
+                    ref="captcha"
+                    v-if="is_captcha_enabled"
+                    v-model="formData.g_recaptcha_response"
+                    :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
+                  />
                   <button
                     type="submit"
                     class="button button-rounded nomargin fright"
@@ -85,5 +81,11 @@ export default {
     terms_message: {type: String},
     is_captcha_enabled: {type: Boolean},
   },
+  data: () => ({
+    formData: {
+      g_recaptcha_response: undefined,
+    },
+    errors: null,
+  }),
 }
 </script>

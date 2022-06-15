@@ -91,7 +91,8 @@ export default {
 
   auth: {
     strategies: {
-      'laravelJWT': {
+      laravelJWT: {
+        scheme: '~/modules/auth/scheme',
         provider: 'laravel/jwt',
         url: process.env.API_URL,
         endpoints: {
@@ -110,7 +111,7 @@ export default {
       },
     },
     redirect: {
-      login: '/',
+      login: false,
       home: false,
     },
   },

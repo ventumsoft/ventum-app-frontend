@@ -20,7 +20,7 @@
           type="text"
           id="template-contactform-name"
           name="name"
-          value="Auth.user.name"
+          :value="$auth.user?.name"
           class="form-control required"
         >
       </div>
@@ -31,7 +31,7 @@
           id="template-contactform-email"
           name="email"
           class="required email form-control"
-          value="Auth.user.email"
+          :value="$auth.user?.email"
         >
       </div>
       <div class="clear"></div>
@@ -42,7 +42,7 @@
           type="text"
           id="template-contactform-phone"
           name="phone"
-          value="Auth.user.phone"
+          :value="$auth.user?.phone"
           class="form-control"
           :data-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : ''"
           :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace('#', '_') : ''"
@@ -80,16 +80,12 @@
         <label for="feedback-checkbox-terms" class="checkbox-style-2-label checkbox-small" v-html="$store.state.site.settings?.['general:terms-message']"></label>
       </div>
 
-      <template v-if="is_captcha_enabled">
-        <div v-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V2" class="col_full has-error">
-          <div align="center" class="g-recaptcha" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']"></div>
-          <div id="form-captcha-error" style="color: red;"></div>
-        </div>
-        <template v-else-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3">
-          <input type="hidden" class="g-recaptcha-v3" name="g-recaptcha-response" :data-sitekey="$store.state.site.settings?.['seo-integration:use-google-captcha-key']" />
-          <div id="form-captcha-error" style="color: red;"></div>
-        </template>
-      </template>
+      <TheCaptcha
+        ref="captcha"
+        v-if="is_captcha_enabled"
+        v-model="formData.g_recaptcha_response"
+        :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
+      />
 
       <div v-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3" class="col_full google-captcha-agreement">
         This site is protected by reCAPTCHA and the Google
@@ -226,6 +222,10 @@ export default {
   },
   data: () => ({
     CaptchaVersionEnum,
+    formData: {
+      g_recaptcha_response: undefined,
+    },
+    errors: null,
   }),
 }
 </script>

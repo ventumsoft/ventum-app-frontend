@@ -5,16 +5,32 @@
     </template>
     <template v-slot:body>
       <div v-show="loading" class="form-process" style="display: block; left: 0; top: 0;"></div>
-      <form class="nobottommargin modal-review-form" @submit.prevent="handleReviewSubmit">
+      <form
+        class="nobottommargin modal-review-form"
+        @change="errors = null"
+        @input="errors = null"
+        @submit.prevent="handleReviewSubmit"
+      >
         <div class="col_full">
           <label>{{ $trans('reviews.modal.label.name.customer') }}</label>
-          <input type="text" class="form-control" v-model="formData.customer_name">
+          <input
+            type="text"
+            class="form-control"
+            :class="{error: errors?.customer_name}"
+            v-model="formData.customer_name"
+          >
         </div>
         <div class="col_full">
           <label>{{ $trans('reviews.modal.label.customer.about') }}</label>
-          <input type="text" class="form-control" maxlength="150" v-model="formData.company_position_etc">
+          <input
+            type="text"
+            class="form-control"
+            maxlength="150"
+            :class="{error: errors?.company_position_etc}"
+            v-model="formData.company_position_etc"
+          >
         </div>
-        <div class="col_full nobottommargin">
+        <div class="col_full nobottommargin" :class="{error: errors?.avatar}">
           <label>{{ $trans('reviews.modal.label.customer.image') }}</label>
           <br>
           <div class="col_full">
@@ -52,10 +68,11 @@
             rows="4"
             cols="30"
             maxlength="400"
+            :class="{error: errors?.review}"
             v-model="formData.review"
           ></textarea>
         </div>
-        <div class="col_full">
+        <div class="col_full" :class="{error: errors?.rating}">
           <div class="white-section">
             <label for="testimonial-form-rating">{{ $trans('reviews.modal.label.rating') }}</label>
             <input
@@ -84,7 +101,11 @@
             >
           </div>
         </div>
-        <div v-if="$store.state.site.settings?.['general:is-terms-message-enabled']" class="col_full check-control">
+        <div
+          v-if="$store.state.site.settings?.['general:is-terms-message-enabled']"
+          class="col_full check-control"
+          :class="{error: errors?.is_agree_with_terms}"
+        >
           <input id="reviews-checkbox-terms" class="checkbox-style" type="checkbox" v-model="formData.is_agree_with_terms">
           <label for="reviews-checkbox-terms" class="checkbox-style-2-label checkbox-small" v-html="$store.state.site.settings?.['general:terms-message']"></label>
         </div>

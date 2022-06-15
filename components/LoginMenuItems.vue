@@ -1,15 +1,15 @@
 <template>
-  <li :class="{'sub-menu': subMenuClass && $auth.user}">
-    <a v-if="!$auth.user" href="#" @click.prevent="$store.commit('site/setShowingLoginModal', true)">
+  <li :class="{'sub-menu': subMenuClass && $auth.loggedIn}">
+    <a v-if="!$auth.loggedIn" href="#" @click.prevent="$store.commit('site/setShowingLoginModal', true)">
       <i class="icon-signin"></i> {{ $trans('header.login') }}
     </a>
-    <a v-if="$auth.user" href="#" @click.prevent>
+    <a v-if="$auth.loggedIn" href="#" @click.prevent>
       <i class="icon-user"></i>
       <span class="stat-new-messages-orders" style="position:absolute;top:5px;left:20px;font-size:10px;color:#FFF;width:14px;height:14px;line-height:15px;text-align:center;border-radius:50%;background-color:#59BA40;">{{ $auth.user.statNewMessagesOrders }}</span>
       {{ $auth.user.name }}
       <i class="icon-angle-down"></i>
     </a>
-    <ul v-if="$auth.user" :style="{width: subMenuWidth ? (subMenuWidth + 'px') : ''}">
+    <ul v-if="$auth.loggedIn" :style="{width: subMenuWidth ? (subMenuWidth + 'px') : ''}">
       <li
         v-for="tab of PersonalAccountTabEnum"
         v-if="(tab !== PersonalAccountTabEnum.CREATORS_TEMPLATES) && (tab !== PersonalAccountTabEnum.CREATORS_TEMPLATES_PAYMENTS) || $auth.user.isDesigner"

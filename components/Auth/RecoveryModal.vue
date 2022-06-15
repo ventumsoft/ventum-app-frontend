@@ -77,7 +77,7 @@ export default {
   async mounted() {
     const {restorePasswordEmail: email, restorePasswordCode: code} = this.$route.query;
     if (email && code) {
-      if (this.$auth.user && !this.$auth.user.isTemporary) {
+      if (this.$auth.loggedIn) {
         if (this.$auth.user.email === email) {
           return this.$router.push({name: 'user/profile'});
         } else {
