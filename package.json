@@ -16,6 +16,7 @@
     "bootstrap-fileinput": "^4.3.6",
     "bootstrap-star-rating": "^4.1.2",
     "core-js": "^3.19.3",
+    "cropit": "^0.5.1",
     "fitvids": "^2.1.1",
     "flexslider": "^2.7.2",
     "ion-rangeslider": "^2.2.0",

@@ -19,22 +19,22 @@
           <br>
           <div class="col_full">
             <div class="col_three_fifth">
-              <div
-                class="image-editor"
-                :data-src="$auth.user?.avatar"
-              >
+              <div ref="cropitEditor" class="image-editor">
                 <div class="cropit-preview">
                   <div class="cropit-preview-default">
                     <img
                       class="preview-default"
-                      src="/images/admin/review_no_photo.png"
+                      src="/images/no-photo.png"
                       alt="avatar"
                       style="object-fit: cover;position: absolute;top: 0;left: 0;width: 100%;height: 100%;"
                     >
                   </div>
                 </div>
-                <input type="file" class="cropit-image-input" accept="image/jpeg,image/png">
-                <div class="select-image-btn button button-rounded button-amber button-reveal nomargin">
+                <input ref="cropitInput" type="file" class="cropit-image-input" accept="image/jpeg,image/png">
+                <div
+                  class="select-image-btn button button-rounded button-amber button-reveal nomargin"
+                  @click="$refs.cropitInput.click()"
+                >
                   {{ $trans('reviews.modal.button.select_photo') }}
                 </div>
                 <div class="image-size-label">
@@ -110,12 +110,14 @@
 </template>
 
 <script>
+import _debounce from 'lodash/debounce';
+
 export default {
   data: ({$auth}) => ({
     formData: {
       customer_name: $auth.user?.name,
       company_position_etc: undefined,
-      // avatar
+      avatar: undefined,
       review: undefined,
       rating: 5,
       is_agree_with_terms: undefined,
@@ -125,7 +127,23 @@ export default {
     errors: null,
   }),
   async mounted() {
+    await import('cropit');
     await import('bootstrap-star-rating');
+    const $cropitEditor = $(this.$refs.cropitEditor);
+    $cropitEditor.cropit({
+      allowDragNDrop: false,
+      width: 180,
+      height: 180,
+      smallImage: 'stretch',
+      imageState: {src: this.$auth.user?.avatar},
+      exportZoom: 500 / 180,
+      onImageLoaded: () => {
+        this.formData.avatar = $cropitEditor.cropit('export', {type: 'image/jpeg'});
+      },
+      onOffsetChange: _debounce(() => {
+        this.formData.avatar = $cropitEditor.cropit('export', {type: 'image/jpeg'});
+      }, 100),
+    });
     $(this.$refs.ratingInput).rating().on('change', event => {
       this.formData.rating = $(event.currentTarget).val();
     });
