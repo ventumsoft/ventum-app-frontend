@@ -99,7 +99,7 @@
         class="button button-reveal button-rounded tright fright nomargin product-calculator-order-button"
         :class="{
           hidden: preventing,
-          'product-calculator-order-button-disabled': false,
+          'product-calculator-order-button-disabled': priceData.value === null,
           'hidden-xs': integrationsAvailableOnMobile?.length !== 1,
           'hidden-sm hidden-md hidden-lg': integrationsAvailableOnDesktop?.length !== 1,
         }"

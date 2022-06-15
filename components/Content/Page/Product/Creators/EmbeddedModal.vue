@@ -7,7 +7,13 @@
       {{ integration.embedded.title }}
     </template>
     <template v-slot:body>
-      <form class="product-creator-embedded-form" @submit.prevent>
+      <form
+        class="product-creator-embedded-form"
+        @submit.prevent="$store.dispatch('product/handleOrderSubmit', {
+          integration,
+          embeddedCreatorFormData: {...formData},
+        })"
+      >
         <div v-show="false" class="form-progress" style="display: block;">
           <div class="progress"><div class="progress-bar progress-bar-striped active"></div></div>
         </div>
@@ -18,10 +24,10 @@
           <textarea
             class="required form-control"
             id="integrationEmbeddedCreatorDesignOrderMessage1"
-            name="message1"
             rows="6"
             cols="30"
             required
+            v-model="formData.message1"
           ></textarea>
         </div>
         <div v-if="integration.embedded.secondField !== undefined" class="col_full">
@@ -31,10 +37,10 @@
           <textarea
             class="required form-control"
             id="integrationEmbeddedCreatorDesignOrderMessage2"
-            name="message2"
             rows="6"
             cols="30"
             required
+            v-model="formData.message2"
           ></textarea>
         </div>
         <template v-if="integration.embedded.files">
@@ -44,7 +50,6 @@
             </label>
             <BsFileInput
               id="integrationEmbeddedCreatorDesignOrderFiles"
-              name="files[]"
               class="file-loading fileinput"
               multiple
               :options="{
@@ -61,6 +66,7 @@
                 allowedFileExtensions: integration.embedded.files.types,
               }"
               :accept="integration.embedded.files.types.join(',')"
+              @change.native="formData.files = $event.target.files"
             />
           </div>
           <div v-if="integration.embedded.files.url" class="col_full">
@@ -71,8 +77,8 @@
               id="integrationEmbeddedCreatorDesignOrderFilesUrl"
               class="form-control"
               type="url"
-              name="filesUrl"
               :placeholder="integration.embedded.files.url.placeholder"
+              v-model="formData.filesUrl"
             >
           </div>
         </template>
@@ -110,7 +116,11 @@
             <div v-if="priceData.formatted === null" class="form-process" style="display: block;"></div>
             <Transition><span v-if="priceData.formatted !== null">{{ priceData.formatted }}</span></Transition>
           </div>
-          <button type="submit" class="button button-reveal button-rounded tright fright nomargin">
+          <button
+            type="submit"
+            class="button button-reveal button-rounded tright fright nomargin"
+            :class="{disabled: priceData.value === null}"
+          >
             <span>{{ $trans('product.button.order') }}</span>
             <i class="icon-angle-right"></i>
           </button>
@@ -135,6 +145,12 @@ export default {
       formattedWithDiscount: null,
       discountBonusInfo: null,
     },
+    formData: {
+      message1: undefined,
+      message2: undefined,
+      files: undefined,
+      filesUrl: undefined,
+    },
   }),
   computed: {
     ...mapState('page', ['product']),
@@ -146,6 +162,14 @@ export default {
     ...mapState('product', {integration: 'currentActiveEmbeddedIntegration'}),
   },
   watch: {
+    integration(value) {
+      for (const key in this.formData) {
+        this.formData[key] = undefined;
+      }
+      if (value) {
+        this.updatePrice();
+      }
+    },
     params: {
       handler() {
         if (!this.integration) {

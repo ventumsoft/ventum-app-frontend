@@ -54,7 +54,7 @@ export const getters = {
 }
 
 export const actions = {
-  handleOrderCall({commit, getters, rootState}, {integration} = {}) {
+  handleOrderCall({commit, getters, dispatch, rootState}, {integration} = {}) {
     if (!integration) {
       const $mobileChecker = $('<div class="visible-xs" style="display: none;"></div>').appendTo('body');
       const isMobile = $mobileChecker.is(':visible');
@@ -64,7 +64,7 @@ export const actions = {
         getters.integrationsAvailableOnDesktop[0];
     }
     if (integration.creator === CreatorEnum.BUY_BUTTON) {
-      this.$router.push(this.$page({name: 'checkout/cart'}));
+      dispatch('handleOrderSubmit', {integration});
     } else if (CreatorEnum.isEmbedded[integration.creator]) {
       commit('setCurrentActiveEmbeddedIntegration', integration);
     } else if ((integration.creator === CreatorEnum.UNIVERSAL) && !rootState.site.settings?.['constructor:templates:skip-template-selection'] && !integration.settings?.skipTemplateSelection) {
@@ -72,5 +72,22 @@ export const actions = {
     } else {
       this.$router.push(this.$page({name: 'creator/creator', params: {creator: integration.creator}, query: {compilationId: undefined}}));
     }
+  },
+  async handleOrderSubmit({state, commit, rootState}, {integration, embeddedCreatorFormData}) {
+    console.log('handleOrderSubmit product', rootState.page.product.id);
+    console.log('handleOrderSubmit params', JSON.stringify(state.params));
+    console.log('handleOrderSubmit integration', integration.creator, integration.id);
+    console.log('handleOrderSubmit embeddedCreatorFormData', JSON.stringify(embeddedCreatorFormData));
+
+    // get auth user or login with temporary user
+
+    // create compilation
+    // add to cart
+
+    commit('setCurrentActiveEmbeddedIntegration', null);
+    await new Promise(resolve => setTimeout(() => resolve(), 2000));
+    //await Vue.nextTick();
+
+    this.$router.push(this.$page({name: 'checkout/cart'}));
   },
 }
