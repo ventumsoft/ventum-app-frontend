@@ -12,7 +12,7 @@ export default class AuthScheme extends LaravelJWTScheme {
   }
 
   async fetchUser (endpoint) {
-    const redirectLogoutBackup = this.$auth.options.redirect.logout = false;
+    const redirectLogoutBackup = this.$auth.options.redirect.logout;
     this.$auth.options.redirect.logout = false;
 
     await super.fetchUser(endpoint);
