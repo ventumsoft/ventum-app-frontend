@@ -64,7 +64,9 @@ export const actions = {
         getters.integrationsAvailableOnDesktop[0];
     }
     if (integration.creator === CreatorEnum.BUY_BUTTON) {
-      dispatch('handleOrderSubmit', {integration});
+      const compilation = await dispatch('createCompilation', {integration});
+      const cartItem = await dispatch('addToCart', {compilation, integration});
+      this.$router.push(this.$page({name: 'checkout/cart'}));
     } else if (CreatorEnum.isEmbedded[integration.creator]) {
       commit('setCurrentActiveEmbeddedIntegration', integration);
     } else {
@@ -84,44 +86,28 @@ export const actions = {
     }
   },
 
-  async handleOrderSubmit({state, commit, dispatch, rootState}, {integration, embeddedCreatorFormData, callbackBeforeRedirect}) {
-    console.log('handleOrderSubmit');
+  async createCompilation({state, commit, rootState}, {integration} = {}) {
+    await this.$auth.getUserOrGuest();
 
-    const compilation = await dispatch('createCompilation', {integration, embeddedCreatorFormData});
-
-    try {
-      await this.$axios.post('cart/add', {
-        productId: rootState.page.product.id,
-        compilationId: compilation?.id,
-        integrationId: integration?.id || undefined,
-        params: state.params,
-      });
-    } catch (exception) {
-      this.$noty(exception.response?.data?.message || exception.message, 'error');
-      return;
-    }
-
-    callbackBeforeRedirect && (await callbackBeforeRedirect());
-
-    this.$router.push(this.$page({name: 'checkout/cart'}));
-  },
-
-  async createCompilation({state, commit, rootState}, {integration, embeddedCreatorFormData} = {}) {
-    let compilation;
-
-    try {
-      await this.$auth.getUserOrGuest();
-      ({data: compilation} = await this.$axios.post('products/compilation', {
-        productId: rootState.page.product.id,
-        params: state.params,
-        creator: integration?.creator || undefined,
-        // embeddedCreatorFormData
-      }));
-    } catch (exception) {
-      this.$noty(exception.response?.data?.message || exception.message, 'error');
-      return;
-    }
+    const {data: compilation} = await this.$axios.post('products/compilation', {
+      productId: rootState.page.product.id,
+      params: state.params,
+      integrationId: integration?.id || undefined,
+    });
 
     return compilation;
+  },
+
+  async addToCart({state, rootState}, {compilation, integration}) {
+    await this.$auth.getUserOrGuest();
+
+    const {data: cartItem} = await this.$axios.post('cart/add', {
+      productId: rootState.page.product.id,
+      compilationId: compilation?.id,
+      integrationId: integration?.id || undefined,
+      params: state.params,
+    });
+
+    return cartItem;
   },
 }

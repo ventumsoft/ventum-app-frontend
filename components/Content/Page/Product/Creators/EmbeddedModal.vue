@@ -11,10 +11,18 @@
         class="product-creator-embedded-form"
         @submit.prevent="handleEmbeddedCreatorFormSubmit"
       >
-        <div v-show="false" class="form-progress" style="display: block;">
-          <div class="progress"><div class="progress-bar progress-bar-striped active"></div></div>
+        <div v-if="loading" class="form-progress" style="display: block;">
+          <div v-if="progress !== null" class="progress">
+            <div class="progress-bar progress-bar-striped active" :style="{width: progress * 100 + '%'}">
+              {{ Math.round(progress * 100 * 100) / 100 }}%
+            </div>
+          </div>
         </div>
-        <div v-if="integration.embedded.firstField !== undefined" class="col_full">
+        <div
+          v-if="integration.embedded.firstField !== undefined"
+          class="col_full"
+          :class="{'has-error': errors?.message1}"
+        >
           <label for="integrationEmbeddedCreatorDesignOrderMessage1">
             {{ integration.embedded.firstField }} <small>*</small>
           </label>
@@ -27,7 +35,11 @@
             v-model="formData.message1"
           ></textarea>
         </div>
-        <div v-if="integration.embedded.secondField !== undefined" class="col_full">
+        <div
+          v-if="integration.embedded.secondField !== undefined"
+          class="col_full"
+          :class="{'has-error': errors?.message2}"
+        >
           <label for="integrationEmbeddedCreatorDesignOrderMessage2">
             {{ integration.embedded.secondField }} <small>*</small>
           </label>
@@ -41,7 +53,10 @@
           ></textarea>
         </div>
         <template v-if="integration.embedded.files">
-          <div class="col_full">
+          <div
+            class="col_full"
+            :class="{'has-error': errors && Object.keys(errors).find(key => key.startsWith('files.'))}"
+          >
             <label for="integrationEmbeddedCreatorDesignOrderFiles">
               {{ integration.embedded.files.title }}
             </label>
@@ -66,7 +81,11 @@
               @change.native="formData.files = $event.target.files"
             />
           </div>
-          <div v-if="integration.embedded.files.url" class="col_full">
+          <div
+            v-if="integration.embedded.files.url"
+            class="col_full"
+            :class="{'has-error': errors?.filesUrl}"
+          >
             <label for="integrationEmbeddedCreatorDesignOrderFilesUrl">
               {{ integration.embedded.files.url.title }}
             </label>
@@ -142,12 +161,15 @@ export default {
       formattedWithDiscount: null,
       discountBonusInfo: null,
     },
+    loading: false,
+    progress: null,
     formData: {
       message1: undefined,
       message2: undefined,
       files: undefined,
       filesUrl: undefined,
     },
+    errors: null,
   }),
   computed: {
     ...mapState('page', ['product']),
@@ -160,6 +182,9 @@ export default {
   },
   watch: {
     integration(value) {
+      this.loading = false;
+      this.progress = null;
+      this.errors = null;
       for (const key in this.formData) {
         this.formData[key] = undefined;
       }
@@ -188,16 +213,63 @@ export default {
         usingPrice: this.integration.usingPrice,
       }, {progress: false}));
     }, 10),
-    handleEmbeddedCreatorFormSubmit() {
-      this.$store.dispatch('product/handleOrderSubmit', {
-        integration: this.integration,
-        embeddedCreatorFormData: {...this.formData},
-        callbackBeforeRedirect: () => new Promise(resolve =>
-          $(this.$el)
-            .on('hidden.bs.modal', event => resolve())
-            .modal('hide')
-        ),
+    async handleEmbeddedCreatorFormSubmit() {
+      this.loading = true;
+      this.progress = 0;
+      this.errors = null;
+
+      try {
+        const compilation = await this.$store.dispatch('product/createCompilation', {
+          integration: this.integration,
+        });
+
+        const embeddedCreatorFormData = new FormData;
+        embeddedCreatorFormData.append('compilationId', compilation.id);
+        embeddedCreatorFormData.append('integrationId', this.integration.id);
+        for (const [key, value] of Object.entries(this.formData)) {
+          if (value !== undefined) {
+            if (value instanceof FileList) {
+              for (const [fileIndex, file] of [...value].entries()) {
+                embeddedCreatorFormData.append(key + '[' + fileIndex + ']', file);
+              }
+            } else {
+              embeddedCreatorFormData.append(key, value);
+            }
+          }
+        }
+
+        await this.$axios.post('products/embedded-creator', embeddedCreatorFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          onUploadProgress: event => {
+            this.progress = event.loaded / event.total;
+          },
+        });
+
+        const cartItem = await this.$store.dispatch('product/addToCart', {
+          compilation,
+          integration: this.integration,
+        });
+      } catch (exception) {
+        if ('object' === typeof exception.response?.data?.errors) {
+          this.errors = Object.fromEntries(Object.entries(exception.response.data.errors).map(([key, value]) => [key.replace('embeddedCreatorData.', ''), value]));
+        } else {
+          this.$noty(exception.response?.data?.message || exception.message, 'error');
+        }
+        return;
+      } finally {
+        this.loading = false;
+        this.progress = null;
+      }
+
+      await new Promise(resolve => {
+        $(this.$el)
+          .on('hidden.bs.modal', event => resolve())
+          .modal('hide');
       });
+
+      this.$router.push(this.$page({name: 'checkout/cart'}));
     },
   },
 }

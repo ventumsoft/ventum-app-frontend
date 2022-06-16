@@ -61,6 +61,7 @@ export default {
     '~/plugins/bs.client',
     '~/plugins/fitvids.client',
     '~/plugins/noty.client',
+    //'~/plugins/axios-error.client.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
