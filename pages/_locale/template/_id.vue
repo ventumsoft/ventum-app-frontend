@@ -34,7 +34,7 @@
                 <TheLink
                   v-else
                   class="center-icon"
-                  :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id}})"
+                  :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id, ...(({productId, compilationId}) => ({productId, compilationId}))($route.query)}})"
                 >
                   <img
                     :src="template.preview"
@@ -61,7 +61,7 @@
               <TheLink
                 v-for="category of template.categories"
                 :key="category.id"
-                :to="$page({name: 'slug/templates', params: {slug: template.productSlug}, query: {categoryId: category.id}})"
+                :to="$page({name: 'slug/templates', params: {slug: template.productSlug}, query: {categoryId: category.id, ...(({productId, compilationId}) => ({productId, compilationId}))($route.query)}})"
               >{{ category.title }}</TheLink>
               <div class="clear"></div>
             </div>
@@ -82,7 +82,7 @@
               </ins>
               <TheLink
                 class="button button-rounded fright nomargin"
-                :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id}})"
+                :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id, ...(({productId, compilationId}) => ({productId, compilationId}))($route.query)}})"
               >
                 <span>{{ $trans('product.template.create_layout') }}</span>
                 <i class="icon-angle-right"></i>
@@ -99,7 +99,7 @@
               <div v-for="(similarTemplate, templateIndex) of template.similar" class="oc-item">
                 <div class="iportfolio">
                   <div class="portfolio-image">
-                    <TheLink :to="$page({name: 'template/id', params: {id: similarTemplate.id}, query: {productId: undefined, compilationId: undefined}})">
+                    <TheLink :to="$page({name: 'template/id', params: {id: similarTemplate.id}, query: (({productId, compilationId}) => ({productId, compilationId}))($route.query)})">
                       <img
                         v-if="(templateIndex < 2) || (templateIndex === template.similar.length - 1)"
                         :src="similarTemplate.preview"
@@ -134,7 +134,7 @@
                   </div>
                   <div class="portfolio-desc">
                     <h3>
-                      <TheLink :to="$page({name: 'template/id', params: {id: similarTemplate.id}, query: {productId: undefined, compilationId: undefined}})">
+                      <TheLink :to="$page({name: 'template/id', params: {id: similarTemplate.id}, query: (({productId, compilationId}) => ({productId, compilationId}))($route.query)})">
                         {{ similarTemplate.title }}
                       </TheLink>
                     </h3>
@@ -142,7 +142,7 @@
                       <TheLink
                         v-for="category of similarTemplate.categories"
                         :key="category.id"
-                        :to="$page({name: 'slug/templates', params: {slug: template.productSlug}, query: {categoryId: category.id, productId: undefined, compilationId: undefined}})"
+                        :to="$page({name: 'slug/templates', params: {slug: template.productSlug}, query: {categoryId: category.id, ...(({productId, compilationId}) => ({productId, compilationId}))($route.query)}})"
                       >
                         {{ category.title }}
                       </TheLink>

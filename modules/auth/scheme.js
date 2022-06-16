@@ -1,7 +1,16 @@
-//import { LaravelJWTScheme } from '~auth/runtime';
 import { LaravelJWTScheme } from '@nuxtjs/auth-next/dist/runtime';
 
 export default class AuthScheme extends LaravelJWTScheme {
+  constructor($auth, options) {
+    super($auth, options);
+    $auth.getUserOrGuest = async () => {
+      if (!$auth.user) {
+        await $auth.login({data: {temporary: true}});
+      }
+      return $auth.user;
+    }
+  }
+
   async fetchUser (endpoint) {
     const redirectLogoutBackup = this.$auth.options.redirect.logout = false;
     this.$auth.options.redirect.logout = false;

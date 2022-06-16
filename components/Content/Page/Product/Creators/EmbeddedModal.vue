@@ -9,10 +9,7 @@
     <template v-slot:body>
       <form
         class="product-creator-embedded-form"
-        @submit.prevent="$store.dispatch('product/handleOrderSubmit', {
-          integration,
-          embeddedCreatorFormData: {...formData},
-        })"
+        @submit.prevent="handleEmbeddedCreatorFormSubmit"
       >
         <div v-show="false" class="form-progress" style="display: block;">
           <div class="progress"><div class="progress-bar progress-bar-striped active"></div></div>
@@ -191,6 +188,17 @@ export default {
         usingPrice: this.integration.usingPrice,
       }, {progress: false}));
     }, 10),
+    handleEmbeddedCreatorFormSubmit() {
+      this.$store.dispatch('product/handleOrderSubmit', {
+        integration: this.integration,
+        embeddedCreatorFormData: {...this.formData},
+        callbackBeforeRedirect: () => new Promise(resolve =>
+          $(this.$el)
+            .on('hidden.bs.modal', event => resolve())
+            .modal('hide')
+        ),
+      });
+    },
   },
 }
 </script>

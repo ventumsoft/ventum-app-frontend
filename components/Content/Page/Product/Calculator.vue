@@ -91,8 +91,12 @@
     >
       <Transition>
         <span class="total-price-product" v-if="priceData.formatted && (priceData.formatted !== priceData.formattedWithDiscount)">{{ priceData.formatted }}</span>
+      </Transition>
+      <Transition>
         <ins v-if="priceData.formattedWithDiscount"><span>{{ priceData.formattedWithDiscount || product.calculator.basicPrice }}</span></ins>
-        <div class="discount-bonus-info" v-if="priceData.discountBonusInfo">{{ priceData.discountBonusInfo }}</div>
+      </Transition>
+      <Transition>
+        <div class="discount-bonus-info" v-if="priceData.discountBonusInfo" style="display: block;">{{ priceData.discountBonusInfo }}</div>
       </Transition>
       <button
         type="button"

@@ -54,7 +54,7 @@ export const getters = {
 }
 
 export const actions = {
-  handleOrderCall({commit, getters, dispatch, rootState}, {integration} = {}) {
+  async handleOrderCall({commit, getters, dispatch, rootState}, {integration} = {}) {
     if (!integration) {
       const $mobileChecker = $('<div class="visible-xs" style="display: none;"></div>').appendTo('body');
       const isMobile = $mobileChecker.is(':visible');
@@ -67,27 +67,61 @@ export const actions = {
       dispatch('handleOrderSubmit', {integration});
     } else if (CreatorEnum.isEmbedded[integration.creator]) {
       commit('setCurrentActiveEmbeddedIntegration', integration);
-    } else if ((integration.creator === CreatorEnum.UNIVERSAL) && !rootState.site.settings?.['constructor:templates:skip-template-selection'] && !integration.settings?.skipTemplateSelection) {
-      this.$router.push(this.$page({name: 'slug/templates', params: {slug: this.$router.currentRoute.params.slug}, query: {compilationId: undefined}}));
     } else {
-      this.$router.push(this.$page({name: 'creator/creator', params: {creator: integration.creator}, query: {compilationId: undefined}}));
+      const isNeedsToChooseTemplate = (integration.creator === CreatorEnum.UNIVERSAL) &&
+        !rootState.site.settings?.['constructor:templates:skip-template-selection'] &&
+        !integration.settings?.skipTemplateSelection;
+      const compilation = await dispatch('createCompilation', {integration});
+      this.$router.push(this.$page(isNeedsToChooseTemplate ? {
+        name: 'slug/templates',
+        params: {slug: this.$router.currentRoute.params.slug},
+        query: {compilationId: compilation.id},
+      } : {
+        name: 'creator/creator',
+        params: {creator: integration.creator},
+        query: {compilationId: compilation.id},
+      }));
     }
   },
-  async handleOrderSubmit({state, commit, rootState}, {integration, embeddedCreatorFormData}) {
-    console.log('handleOrderSubmit product', rootState.page.product.id);
-    console.log('handleOrderSubmit params', JSON.stringify(state.params));
-    console.log('handleOrderSubmit integration', integration.creator, integration.id);
-    console.log('handleOrderSubmit embeddedCreatorFormData', JSON.stringify(embeddedCreatorFormData));
 
-    // get auth user or login with temporary user
+  async handleOrderSubmit({state, commit, dispatch, rootState}, {integration, embeddedCreatorFormData, callbackBeforeRedirect}) {
+    console.log('handleOrderSubmit');
 
-    // create compilation
-    // add to cart
+    const compilation = await dispatch('createCompilation', {integration, embeddedCreatorFormData});
 
-    commit('setCurrentActiveEmbeddedIntegration', null);
-    await new Promise(resolve => setTimeout(() => resolve(), 2000));
-    //await Vue.nextTick();
+    try {
+      await this.$axios.post('cart/add', {
+        productId: rootState.page.product.id,
+        compilationId: compilation?.id,
+        integrationId: integration?.id || undefined,
+        params: state.params,
+      });
+    } catch (exception) {
+      this.$noty(exception.response?.data?.message || exception.message, 'error');
+      return;
+    }
+
+    callbackBeforeRedirect && (await callbackBeforeRedirect());
 
     this.$router.push(this.$page({name: 'checkout/cart'}));
+  },
+
+  async createCompilation({state, commit, rootState}, {integration, embeddedCreatorFormData} = {}) {
+    let compilation;
+
+    try {
+      await this.$auth.getUserOrGuest();
+      ({data: compilation} = await this.$axios.post('products/compilation', {
+        productId: rootState.page.product.id,
+        params: state.params,
+        creator: integration?.creator || undefined,
+        // embeddedCreatorFormData
+      }));
+    } catch (exception) {
+      this.$noty(exception.response?.data?.message || exception.message, 'error');
+      return;
+    }
+
+    return compilation;
   },
 }

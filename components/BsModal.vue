@@ -26,10 +26,9 @@ export default {
     });
   },
   beforeDestroy() {
-    console.log('BsModal beforeDestroy', $(this.$el).data('bs.modal').isShown);
     if ($(this.$el).data('bs.modal').isShown) {
       $(this.$el).removeClass('fade');
-      $(this.$el).data('bs.modal').hideModal();
+      $(this.$el).data('bs.modal').hide();
     }
   },
 }

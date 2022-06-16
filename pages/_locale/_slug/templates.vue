@@ -55,7 +55,7 @@
                   <div class="portfolio-image">
                     <TheLink
                       class="product-template-thumb"
-                      :to="$page({name: 'creator/creator', params: {creator: 'universal'}})"
+                      :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: (({productId, compilationId}) => ({productId, compilationId}))($route.query)})"
                     >
                       <div class="product-templates-item-empty">
                         <i class="icon-line2-doc"></i>
@@ -64,7 +64,7 @@
                   </div>
                   <div v-if="!$store.state.site.settings?.['constructor:templates:hide-template-usages'] || !$store.state.site.settings?.['constructor:templates:hide-template-price']" class="portfolio-desc clearfix">
                     <h3>
-                      <TheLink :to="$page({name: 'creator/creator', params: {creator: 'universal'}})">
+                      <TheLink :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: (({productId, compilationId}) => ({productId, compilationId}))($route.query)})">
                         {{ $trans('product.templates.empty-template') }}
                       </TheLink>
                     </h3>
@@ -77,7 +77,7 @@
                     <div class="portfolio-image">
                       <TheLink
                         class="product-template-thumb"
-                        :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id}})"
+                        :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id, ...(({productId, compilationId}) => ({productId, compilationId}))($route.query)}})"
                       >
                         <img
                           class="lazy"
@@ -98,13 +98,17 @@
                         <TheLink
                           v-if="!$store.state.site.settings?.['constructor:templates:disable-template-page']"
                           class="center-icon two-icons"
-                          :to="$page({name: 'template/id', params: {id: template.id}})"
+                          :to="$page({name: 'template/id', params: {id: template.id}, query: (({productId, compilationId}) => ({productId, compilationId}))($route.query)})"
                         ><i class="icon-line-ellipsis"></i></TheLink>
                       </div>
                     </div>
                     <div v-if="!$store.state.site.settings?.['constructor:templates:hide-template-usages'] || !$store.state.site.settings?.['constructor:templates:hide-template-price']" class="portfolio-desc clearfix">
                       <TheLink
-                        :to="$store.state.site.settings?.['constructor:templates:disable-template-page'] ? $page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id}}) : $page({name: 'template/id', params: {id: template.id}})"
+                        :to="
+                          $store.state.site.settings?.['constructor:templates:disable-template-page'] ?
+                            $page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id, ...(({productId, compilationId}) => ({productId, compilationId}))($route.query)}}) :
+                            $page({name: 'template/id', params: {id: template.id}, query: (({productId, compilationId}) => ({productId, compilationId}))($route.query)})
+                        "
                       >
                         <span v-if="!$store.state.site.settings?.['constructor:templates:hide-template-usages']"><i class="icon-line2-printer"></i> {{ template.usages }}</span>
                         <span v-if="!$store.state.site.settings?.['constructor:templates:hide-template-usages'] && !$store.state.site.settings?.['constructor:templates:hide-template-price']" class="separate-padding"> | </span>
