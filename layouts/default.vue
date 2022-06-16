@@ -101,6 +101,16 @@ body {
       -webkit-text-stroke: unset;
     }
   }
+  .btn-file i {
+    position: relative;
+    top: 2px;
+    & ~ span {
+      margin-left: 2px;
+    }
+  }
+  .btn-file.btn, .fileinput-upload.btn {
+    padding-bottom: 5px;
+  }
 }
 #__nuxt .nuxt-progress + #__layout {
   #top-bar, #primary-menu {

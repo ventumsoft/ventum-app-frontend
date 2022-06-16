@@ -1,108 +1,111 @@
 <template>
   <div class="container clearfix showcase-widget last-no-margin" data-widget="MainthemFeedbackForm">
     <div class="postcontent nobottommargin">
-      <div
-        class="contacts-form-result"
-        data-notify-type="success"
-        :data-notify-msg="'<i class=icon-ok-sign></i>' + $trans('contacts.form.success')"
-      ></div>
       <form
-        method="post"
         class="nobottommargin contacts-form"
-        data-result-target=".contacts-form-result"
         :data-terms-confirm="is_terms_message_enabled ? $trans('contacts.form.accept_terms_message') : undefined"
+        @change="errors = null"
+        @input="errors = null"
+        @submit.prevent="handleFeedbackSubmit"
       >
-        <input type="hidden" name="widget_id" :value="$parent.widget.id">
-      <div class="form-process"></div>
-      <div class="col_half">
-        <label for="template-contactform-name">{{ $trans('contacts.form.name') }} <small>*</small></label>
-        <input
-          type="text"
-          id="template-contactform-name"
-          name="name"
-          :value="$auth.user?.name"
-          class="form-control required"
+        <div v-if="loading" class="form-process" style="display: block;"></div>
+        <div class="col_half" :class="{'has-error': errors?.name}">
+          <label for="template-contactform-name">{{ $trans('contacts.form.name') }} <small>*</small></label>
+          <input
+            type="text"
+            id="template-contactform-name"
+            class="form-control required"
+            v-model="formData.name"
+          >
+        </div>
+        <div class="col_half col_last" :class="{'has-error': errors?.email}">
+          <label for="template-contactform-email">{{ $trans('contacts.form.email') }} <small>*</small></label>
+          <input
+            type="email"
+            id="template-contactform-email"
+            class="required email form-control"
+            v-model="formData.email"
+          >
+        </div>
+        <div class="clear"></div>
+        <div v-if="is_phone_enabled" class="col_half" :class="{'has-error': errors?.phone}">
+          <label for="template-contactform-phone">{{ $trans('contacts.form.phone') }}</label>
+          <input
+            type="text"
+            id="template-contactform-phone"
+            class="form-control"
+            :data-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : ''"
+            :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace('#', '_') : ''"
+            v-model="formData.phone"
+          >
+        </div>
+        <div
+          v-if="upload_files_enabled"
+          class="col_half col_last"
+          :class="{'has-error': errors && Object.keys(errors).find(key => key.startsWith('files.'))}"
         >
-      </div>
-      <div class="col_half col_last">
-        <label for="template-contactform-email">{{ $trans('contacts.form.email') }} <small>*</small></label>
-        <input
-          type="email"
-          id="template-contactform-email"
-          name="email"
-          class="required email form-control"
-          :value="$auth.user?.email"
+          <label for="input-1">{{ $trans('contacts.form.files') }}</label>
+          <BsFileInput
+            id="input-1"
+            type="file"
+            class="file-loading"
+            multiple
+            :options="{
+              showUpload: false,
+              showCaption: true,
+              showPreview: false,
+              mainClass: 'input-group-md',
+              browseClass: 'btn btn-warning',
+              browseIcon: '<i class=icon-folder-open></i>',
+              //maxFileCount: integration.embedded.files.maxCount, // env('INPUT_FILE_SIZE')
+              //maxFileSize: integration.embedded.files.maxSize / 1024, // env('INPUT_FILE_COUNT')
+              //sizeMessage: $trans('common.input.file.size')
+              //countMessage: $trans('common.input.file.count')
+              allowedFileExtensions: upload_files_types?.map(fileType => '.' + fileType),
+            }"
+            :accept="upload_files_types?.map(fileType => '.' + fileType)"
+            @change.native="formData.files = $event.target.files"
+          />
+        </div>
+        <div class="clear"></div>
+        <div class="col_full" :class="{'has-error': errors?.message}">
+          <label for="template-contactform-message">{{ $trans('contacts.form.message') }} <small>*</small></label>
+          <textarea
+            class="required form-control"
+            id="template-contactform-message"
+            rows="6"
+            cols="30"
+            v-model="formData.message"
+          ></textarea>
+        </div>
+        <div
+          v-if="$store.state.site.settings?.['general:is-terms-message-enabled']"
+          class="col_full check-control"
+          :class="{error: errors?.is_agree_with_terms}"
         >
-      </div>
-      <div class="clear"></div>
-
-      <div v-if="is_phone_enabled" class="col_half ">
-        <label for="template-contactform-phone">{{ $trans('contacts.form.phone') }}</label>
-        <input
-          type="text"
-          id="template-contactform-phone"
-          name="phone"
-          :value="$auth.user?.phone"
-          class="form-control"
-          :data-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : ''"
-          :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace('#', '_') : ''"
-        >
-      </div>
-
-      <div v-if="upload_files_enabled" class="col_half col_last">
-        <label for="input-1">{{ $trans('contacts.form.files') }}</label>
-        <input
-          id="input-1"
-          type="file"
-          name="files[]"
-          class="file-loading"
-          multiple
-          data-show-upload="false"
-          data-show-caption="true"
-          data-show-preview="false"
-          data-size="env('INPUT_FILE_SIZE')"
-          data-count="env('INPUT_FILE_COUNT')"
-          :data-size-message="$trans('common.input.file.size')"
-          :data-count-message="$trans('common.input.file.count')"
-          :accept="upload_files_types?.length ? upload_files_types.map(fileType => '.' + fileType) : ''"
-        >
-      </div>
-
-      <div class="clear"></div>
-      <div class="col_full">
-        <label for="template-contactform-message">{{ $trans('contacts.form.message') }} <small>*</small></label>
-        <textarea class="required form-control" id="template-contactform-message" name="message" rows="6" cols="30"></textarea>
-      </div>
-
-      <div v-if="$store.state.site.settings?.['general:is-terms-message-enabled']" class="col_full check-control">
-        <input hidden name="is-terms-message-enabled" value="">
-        <input id="feedback-checkbox-terms" class="checkbox-style" type="checkbox" name="is-terms-message-enabled">
-        <label for="feedback-checkbox-terms" class="checkbox-style-2-label checkbox-small" v-html="$store.state.site.settings?.['general:terms-message']"></label>
-      </div>
-
-      <TheCaptcha
-        ref="captcha"
-        v-if="is_captcha_enabled"
-        v-model="formData.g_recaptcha_response"
-        :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
-      />
-
-      <div v-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3" class="col_full google-captcha-agreement">
-        This site is protected by reCAPTCHA and the Google
-        <a href="https://policies.google.com/privacy">Privacy Policy</a> and
-        <a href="https://policies.google.com/terms">Terms of Service</a> apply.
-      </div>
-
-      <div class="col_full">
-        <button
-          class="button button-rounded button-reveal tright nomargin"
-          type="submit"
-          value="submit"
-          :data-loading-text="$trans('chat.sending')"
-        >
-          <i class="icon-email2"></i><span>{{ $trans('contacts.form.send') }}</span>
-        </button>
-      </div>
+          <input id="feedback-checkbox-terms" class="checkbox-style" type="checkbox" v-model="formData.is_agree_with_terms">
+          <label for="feedback-checkbox-terms" class="checkbox-style-2-label checkbox-small" v-html="$store.state.site.settings?.['general:terms-message']"></label>
+        </div>
+        <TheCaptcha
+          ref="captcha"
+          v-if="is_captcha_enabled"
+          v-model="formData.g_recaptcha_response"
+          :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
+        />
+        <div v-if="$store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3" class="col_full google-captcha-agreement">
+          This site is protected by reCAPTCHA and the Google
+          <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+          <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+        </div>
+        <div class="col_full">
+          <button
+            class="button button-rounded button-reveal tright nomargin"
+            type="submit"
+            value="submit"
+          >
+            <i class="icon-email2"></i><span>{{ loading ? $trans('chat.sending') : $trans('contacts.form.send') }}</span>
+          </button>
+        </div>
       </form>
     </div>
 
@@ -220,12 +223,31 @@ export default {
     upload_files_enabled: {type: Boolean},
     upload_files_types: {type: Array},
   },
-  data: () => ({
+  data: ({$parent, $auth}) => ({
     CaptchaVersionEnum,
+    loading: false,
     formData: {
+      widget_id: $parent.widget.id,
+      name: $auth.user?.name || undefined,
+      email: $auth.user?.email || undefined,
+      phone: $auth.user?.phone || undefined,
+      message: undefined,
+      is_agree_with_terms: undefined,
       g_recaptcha_response: undefined,
     },
     errors: null,
   }),
+  methods: {
+    async handleFeedbackSubmit() {
+      this.loading = true;
+      this.errors = null;
+
+      await new Promise(resolve => setTimeout(() => resolve(), 1000));
+
+      this.loading = false;
+
+      this.$noty('<i class=icon-ok-sign></i> ' + this.$trans('contacts.form.success'), 'success');
+    },
+  },
 }
 </script>

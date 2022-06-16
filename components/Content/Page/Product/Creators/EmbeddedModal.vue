@@ -11,7 +11,7 @@
         class="product-creator-embedded-form"
         @submit.prevent="handleEmbeddedCreatorFormSubmit"
       >
-        <div v-if="loading" class="form-progress" style="display: block;">
+        <div v-if="loading" class="form-progress" style="display: flex;">
           <div v-if="progress !== null" class="progress">
             <div class="progress-bar progress-bar-striped active" :style="{width: progress * 100 + '%'}">
               {{ Math.round(progress * 100 * 100) / 100 }}%
@@ -78,6 +78,7 @@
                 allowedFileExtensions: integration.embedded.files.types,
               }"
               :accept="integration.embedded.files.types.join(',')"
+              :required="(integration.creator === CreatorEnum.SIMPLOADER) && !formData.filesUrl"
               @change.native="formData.files = $event.target.files"
             />
           </div>
@@ -94,6 +95,7 @@
               class="form-control"
               type="url"
               :placeholder="integration.embedded.files.url.placeholder"
+              :required="(integration.creator === CreatorEnum.SIMPLOADER) && !formData.files"
               v-model="formData.filesUrl"
             >
           </div>
@@ -148,11 +150,13 @@
 </template>
 
 <script>
+import CreatorEnum from '@/enums/CreatorEnum';
 import {mapGetters, mapState} from 'vuex';
 import _debounce from 'lodash/debounce';
 
 export default {
   data: () => ({
+    CreatorEnum,
     priceData: {
       error: null,
       value: null,
