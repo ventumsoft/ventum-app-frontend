@@ -9,26 +9,28 @@
         @submit.prevent="handleFeedbackSubmit"
       >
         <div v-if="loading" class="form-process" style="display: block;"></div>
-        <div class="col_half" :class="{'has-error': errors?.name}">
+        <div class="col_half">
           <label for="template-contactform-name">{{ $trans('contacts.form.name') }} <small>*</small></label>
           <input
             type="text"
             id="template-contactform-name"
             class="form-control required"
+            :class="{error: errors?.name}"
             v-model="formData.name"
           >
         </div>
-        <div class="col_half col_last" :class="{'has-error': errors?.email}">
+        <div class="col_half col_last">
           <label for="template-contactform-email">{{ $trans('contacts.form.email') }} <small>*</small></label>
           <input
             type="email"
             id="template-contactform-email"
             class="required email form-control"
+            :class="{error: errors?.email}"
             v-model="formData.email"
           >
         </div>
         <div class="clear"></div>
-        <div v-if="is_phone_enabled" class="col_half" :class="{'has-error': errors?.phone}">
+        <div v-if="is_phone_enabled" class="col_half">
           <label for="template-contactform-phone">{{ $trans('contacts.form.phone') }}</label>
           <input
             type="text"
@@ -36,6 +38,7 @@
             class="form-control"
             :data-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : ''"
             :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace('#', '_') : ''"
+            :class="{error: errors?.phone}"
             v-model="formData.phone"
           >
         </div>
@@ -68,13 +71,14 @@
           />
         </div>
         <div class="clear"></div>
-        <div class="col_full" :class="{'has-error': errors?.message}">
+        <div class="col_full">
           <label for="template-contactform-message">{{ $trans('contacts.form.message') }} <small>*</small></label>
           <textarea
             class="required form-control"
             id="template-contactform-message"
             rows="6"
             cols="30"
+            :class="{error: errors?.message}"
             v-model="formData.message"
           ></textarea>
         </div>
@@ -223,11 +227,10 @@ export default {
     upload_files_enabled: {type: Boolean},
     upload_files_types: {type: Array},
   },
-  data: ({$parent, $auth}) => ({
+  data: ({$auth}) => ({
     CaptchaVersionEnum,
     loading: false,
     formData: {
-      widget_id: $parent.widget.id,
       name: $auth.user?.name || undefined,
       email: $auth.user?.email || undefined,
       phone: $auth.user?.phone || undefined,
@@ -237,16 +240,57 @@ export default {
     },
     errors: null,
   }),
+  watch: {
+    '$auth.user'() {
+      this.resetFormData();
+    },
+  },
   methods: {
     async handleFeedbackSubmit() {
       this.loading = true;
       this.errors = null;
 
-      await new Promise(resolve => setTimeout(() => resolve(), 1000));
+      const formData = new FormData;
+      formData.append('widgetId', this.$parent.widget.id);
+      for (const [key, value] of Object.entries(this.formData)) {
+        if (value !== undefined) {
+          if (value instanceof FileList) {
+            for (const [fileIndex, file] of [...value].entries()) {
+              formData.append(key + '[' + fileIndex + ']', file);
+            }
+          } else {
+            formData.append(key, value);
+          }
+        }
+      }
 
-      this.loading = false;
+      try {
+        await this.$auth.getUserOrGuest();
+        await this.$axios.post('ticket/message', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          silenceException: true,
+        });
+      } catch (exception) {
+        if ('object' === typeof exception.response?.data?.errors) {
+          this.errors = exception.response.data.errors;
+        } else {
+          this.$noty(exception.response?.data?.message || exception.message, 'error');
+        }
+        this.$refs.captcha?.resetRepatcha();
+        return;
+      } finally {
+        this.loading = false;
+      }
 
+      this.resetFormData();
       this.$noty('<i class=icon-ok-sign></i> ' + this.$trans('contacts.form.success'), 'success');
+    },
+
+    resetFormData() {
+      Object.assign(this.$data, this.$options.data.apply(this, [this]));
+      this.$refs.captcha?.resetRepatcha();
     },
   },
 }

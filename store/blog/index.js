@@ -39,17 +39,14 @@ export const actions = {
 
     let articles, pages;
     try {
-      const response = (await this.$axios.get('blog/articles', {
+      ({data: {data: articles, pagination: {pages}}} = (await this.$axios.get('blog/articles', {
         params: {
-          locale: rootState.site.language.slug,
           categoryId,
           page,
         },
-      })).data;
-      articles = response.data;
-      pages = response.pagination.pages;
+        showErrorPageOnException: true,
+      })));
     } catch (exception) {
-      console.error(exception);
       return;
     } finally {
       commit('loading', false);
@@ -63,31 +60,21 @@ export const actions = {
     });
   },
 
-  async fetchCategories({commit, rootState}) {
+  async fetchCategories({commit}) {
     let categories;
     try {
-      categories = (await this.$axios.get('blog/categories', {
-        params: {
-          locale: rootState.site.language.slug,
-        },
-      })).data;
+      ({data: categories} = (await this.$axios.get('blog/categories', {showErrorPageOnException: true})));
     } catch (exception) {
-      console.error(exception);
       return;
     }
     commit('setCategories', categories);
   },
 
-  async fetchRecentArticles({commit, rootState}) {
+  async fetchRecentArticles({commit}) {
     let articles;
     try {
-      articles = (await this.$axios.get('blog/recent', {
-        params: {
-          locale: rootState.site.language.slug,
-        },
-      })).data;
+      ({data: articles} = (await this.$axios.get('blog/recent', {showErrorPageOnException: true})));
     } catch (exception) {
-      console.error(exception);
       return;
     }
     commit('setRecentArticles', articles);

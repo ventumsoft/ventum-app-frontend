@@ -43,7 +43,7 @@
 import {mapState, mapGetters} from "vuex";
 
 export default {
-  async middleware({from, route, params, store, $axios, redirect, error}) {
+  async middleware({from, route, params, store, $axios, redirect}) {
     if (route.name !== 'slug') {
       store.commit('widgets/update', {page: null});
       store.commit('page/set', {slug: params.slug});
@@ -60,17 +60,17 @@ export default {
         redirectSlug,
         widgets,
         ...data
-      }} = await $axios.get('page/data', {params: {locale: params.locale, slug: params.slug}});
+      }} = await $axios.get('page/data', {
+        params: {slug: params.slug},
+        showErrorPageOnException: true,
+      });
       if (redirectSlug) {
         return redirect({...route, params: {...params, slug: redirectSlug}});
       }
       store.commit('widgets/update', {page: widgets});
       store.commit('page/set', {slug: params.slug, ...data});
     } catch (exception) {
-      error({
-        statusCode: exception.response.status,
-        message: exception.response.statusText,
-      });
+      return;
     }
   },
   async asyncData({route, params, store}) {

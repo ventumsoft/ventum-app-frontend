@@ -52,6 +52,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/axios-cache.server.js',
+    '~/plugins/axios-error.js',
+    '~/plugins/axios-headers.js',
     '~/plugins/fragment',
     '~/plugins/page',
     '~/plugins/images-loaded.client',
@@ -61,7 +63,6 @@ export default {
     '~/plugins/bs.client',
     '~/plugins/fitvids.client',
     '~/plugins/noty.client',
-    //'~/plugins/axios-error.client.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

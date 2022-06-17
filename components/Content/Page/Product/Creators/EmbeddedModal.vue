@@ -249,6 +249,7 @@ export default {
           onUploadProgress: event => {
             this.progress = event.loaded / event.total;
           },
+          silenceException: true,
         });
 
         const cartItem = await this.$store.dispatch('product/addToCart', {
@@ -257,7 +258,7 @@ export default {
         });
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
-          this.errors = Object.fromEntries(Object.entries(exception.response.data.errors).map(([key, value]) => [key.replace('embeddedCreatorData.', ''), value]));
+          this.errors = exception.response.data.errors;
         } else {
           this.$noty(exception.response?.data?.message || exception.message, 'error');
         }

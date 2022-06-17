@@ -124,7 +124,7 @@ export default {
           confirmed,
           message,
           token,
-        }} = await this.$axios.post('register/user', this.credentials));
+        }} = await this.$axios.post('register/user', this.credentials, {silenceException: true}));
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
           this.errors = exception.response.data.errors;

@@ -38,18 +38,16 @@ export const actions = {
 
     let reviews, pages, count, averageRating;
     try {
-      const response = (await this.$axios.get('reviews', {
-        params: {
-          locale: rootState.site.language.slug,
-          page,
-        },
-      })).data;
-      reviews = response.data;
-      pages = response.pagination.pages;
-      count = response.reviewsCount;
-      averageRating = response.ratingValue;
+      ({data: {
+        data: reviews,
+        pagination: {pages},
+        reviewsCount: count,
+        ratingValue: averageRating,
+      }} = (await this.$axios.get('reviews', {
+        params: {page},
+        showErrorPageOnException: true,
+      })));
     } catch (exception) {
-      console.error(exception);
       return;
     } finally {
       commit('loading', false);

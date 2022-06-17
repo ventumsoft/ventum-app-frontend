@@ -178,7 +178,7 @@ export default {
         ({data: {
           success,
           message,
-        }} = await this.$axios.post('reviews', this.formData));
+        }} = await this.$axios.post('reviews', this.formData, {silenceException: true}));
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
           this.errors = exception.response.data.errors;

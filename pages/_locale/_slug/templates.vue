@@ -153,39 +153,32 @@ export default {
       }],
     };
   },
-  async asyncData({route, $axios, error}) {
-    try {
-      const {
-        data: templates,
-        pagination,
-        breadcrumbs,
-        meta,
-        categories,
-        priceKinds,
-      } = (await $axios.get('products/templates', {
-        params: {
-          locale: route.params.locale,
-          slug: route.params.slug,
-          categoryId: route.query.categoryId,
-          price: route.query.price,
-          color: route.query.color,
-          page: route.query.page,
-        },
-      })).data;
-      return {
-        templates,
-        pagination,
-        breadcrumbs,
-        meta,
-        categories,
-        priceKinds,
-      };
-    } catch (exception) {
-      error({
-        statusCode: exception.response.status,
-        message: exception.response.statusText,
-      });
-    }
+  async asyncData({route, $axios}) {
+    const {
+      data: templates,
+      pagination,
+      breadcrumbs,
+      meta,
+      categories,
+      priceKinds,
+    } = (await $axios.get('products/templates', {
+      params: {
+        slug: route.params.slug,
+        categoryId: route.query.categoryId,
+        price: route.query.price,
+        color: route.query.color,
+        page: route.query.page,
+      },
+      showErrorPageOnException: true,
+    })).data;
+    return {
+      templates,
+      pagination,
+      breadcrumbs,
+      meta,
+      categories,
+      priceKinds,
+    };
   },
   async mounted() {
     this.TemplateColorEnum = TemplateColorEnum;

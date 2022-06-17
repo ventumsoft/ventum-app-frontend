@@ -117,7 +117,7 @@ export default {
           code: this.code,
           password: this.password,
           password_confirmation: this.password_confirmation,
-        }));
+        }, {silenceException: true}));
       } catch (exception) {
         this.errors = ('object' === typeof exception.response?.data?.errors) && exception.response.data.errors ||
           exception.response?.data?.message && [exception.response.data.message] ||

@@ -159,14 +159,19 @@ export default {
         event.preventDefault();
         $(this.$refs.modal).modal('show');
       }
-      const {data: elementsPrices} = await this.$axios.post('products/option-elements-prices', {
-        productId: this.product.id,
-        params: this.params,
-        usingPrice: this.$store.state.product.currentActiveEmbeddedIntegration?.usingPrice || undefined,
-        optionId: this.option.id,
-        optionValues: [!this.option.required ? 0 : undefined, ...this.option.elements.map(element => element.id)].filter(v => v !== undefined),
-        optionsIds: Object.keys(this.params.options),
-      }, {progress: false});
+      let elementsPrices;
+      try {
+        ({data: elementsPrices} = await this.$axios.post('products/option-elements-pridces', {
+          productId: this.product.id,
+          params: this.params,
+          usingPrice: this.$store.state.product.currentActiveEmbeddedIntegration?.usingPrice || undefined,
+          optionId: this.option.id,
+          optionValues: [!this.option.required ? 0 : undefined, ...this.option.elements.map(element => element.id)].filter(v => v !== undefined),
+          optionsIds: Object.keys(this.params.options),
+        }, {progress: false}));
+      } catch (exception) {
+        return;
+      }
       const $optionElementsPrices = (this.option.viewType === ProductOptionViewTypeEnum.PICTURESVIEW) ?
         $(this.$refs.modal).find('.calculator-option-element-price') :
         $(this.$refs.optionSelect2.$el).data('select2').$dropdown.find('.calculator-option-element-price');

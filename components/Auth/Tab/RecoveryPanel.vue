@@ -48,7 +48,6 @@ export default {
           success,
           message,
         }} = await this.$axios.post('recovery/request', {
-          locale: this.$store.state.site.language.slug,
           email: this.email,
         }));
       } catch (exception) {

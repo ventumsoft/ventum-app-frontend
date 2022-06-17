@@ -14,30 +14,24 @@ export const actions = {
   async fetchItems({commit, rootState}, {favorite, categoryId} = {}) {
     let items;
     try {
-      items = (await this.$axios.get('faq/items', {
+      ({data: items} = (await this.$axios.get('faq/items', {
         params: {
-          locale: rootState.site.language.slug,
           favorite,
           categoryId,
         },
-      })).data;
+        showErrorPageOnException: true,
+      })));
     } catch (exception) {
-      console.error(exception);
       return;
     }
     commit('setItems', items);
   },
 
-  async fetchCategories({commit, rootState}) {
+  async fetchCategories({commit}) {
     let categories;
     try {
-      categories = (await this.$axios.get('faq/categories', {
-        params: {
-          locale: rootState.site.language.slug,
-        },
-      })).data;
+      ({data: categories} = (await this.$axios.get('faq/categories', {showErrorPageOnException: true})));
     } catch (exception) {
-      console.error(exception);
       return;
     }
     commit('setCategories', categories);
