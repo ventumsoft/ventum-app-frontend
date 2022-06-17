@@ -2,26 +2,22 @@
   <div class="showcase-widget col-md-3 hidden-sm hidden-xs" data-widget="MainthemContact">
     <div class="widget quick-contact-widget clearfix">
       <h4>{{ title }}</h4>
-      <div
-        class="footer-contacts-form-result"
-        data-notify-type="success"
-        :data-notify-msg="'<i class=icon-ok-sign></i>' + $trans('contacts.form.success')"
-      ></div>
       <form
         class="nobottommargin"
-        data-result-target=".footer-contacts-form-result"
-        @submit.prevent
+        @change="errors = null"
+        @input="errors = null"
+        @submit.prevent="handleFeedbackSubmit"
       >
-        <input type="hidden" name="widget_id" :value="$parent.widget.id">
-        <div class="form-process"></div>
+        <div v-if="loading" class="form-process" style="display: block;"></div>
         <div class="input-group divcenter">
           <span class="input-group-addon"><i class="icon-user"></i></span>
           <input
             type="text"
             class="required form-control input-block-level"
-            name="name"
-            :value="$auth.user?.name"
             :placeholder="$trans('forms.all_forms.input_name')"
+            :class="{error: errors?.name}"
+            @focus="focused = true"
+            v-model="formData.name"
           >
         </div>
         <div class="input-group divcenter">
@@ -29,26 +25,32 @@
           <input
             type="text"
             class="required form-control email input-block-level"
-            name="email"
-            :value="$auth.user?.email"
             :placeholder="$trans('forms.all_forms.input_email')"
+            :class="{error: errors?.email}"
+            @focus="focused = true"
+            v-model="formData.email"
           >
         </div>
         <textarea
           class="required form-control input-block-level short-textarea"
-          name="message"
           rows="4"
           cols="30"
           :placeholder="$trans('forms.all_forms.input_massage')"
+          :class="{error: errors?.message}"
+          @focus="focused = true"
+          v-model="formData.message"
         ></textarea>
-        <div v-if="$store.state.site.settings?.['general:is-terms-message-enabled']" class="input-group check-control">
-          <input hidden name="is-terms-message-enabled" value="">
-          <input id="footer-checkbox-terms" class="checkbox-style" type="checkbox" name="is-terms-message-enabled">
+        <div
+          v-if="$store.state.site.settings?.['general:is-terms-message-enabled']"
+          class="input-group check-control"
+          :class="{error: errors?.is_agree_with_terms}"
+        >
+          <input id="footer-checkbox-terms" class="checkbox-style" type="checkbox" v-model="formData.is_agree_with_terms">
           <label for="footer-checkbox-terms" class="checkbox-style-2-label checkbox-small" v-html="terms_message"></label>
         </div>
         <TheCaptcha
           ref="captcha"
-          v-if="is_captcha_enabled"
+          v-if="is_captcha_enabled && focused"
           v-model="formData.g_recaptcha_response"
           :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
         />
@@ -74,12 +76,53 @@ export default {
     terms_message: {type: String},
     is_captcha_enabled: {type: Boolean},
   },
-  data: () => ({
+  data: ({$auth, $parent}) => ({
     CaptchaVersionEnum,
+    focused: false,
+    loading: false,
     formData: {
+      widgetId: $parent.widget.id,
+      name: $auth.user?.name || undefined,
+      email: $auth.user?.email || undefined,
+      message: undefined,
+      is_agree_with_terms: undefined,
       g_recaptcha_response: undefined,
     },
     errors: null,
   }),
+  watch: {
+    '$auth.user'() {
+      this.resetFormData();
+    },
+  },
+  methods: {
+    async handleFeedbackSubmit() {
+      this.loading = true;
+      this.errors = null;
+
+      try {
+        await this.$auth.getUserOrGuest();
+        await this.$axios.post('ticket/message', this.formData, {silenceException: true});
+      } catch (exception) {
+        if ('object' === typeof exception.response?.data?.errors) {
+          this.errors = exception.response.data.errors;
+        } else {
+          this.$noty(exception.response?.data?.message || exception.message, 'error');
+        }
+        this.$refs.captcha?.resetRepatcha();
+        return;
+      } finally {
+        this.loading = false;
+      }
+
+      this.resetFormData();
+      this.$noty('<i class=icon-ok-sign></i> ' + this.$trans('contacts.form.success'), 'success');
+    },
+
+    resetFormData() {
+      Object.assign(this.$data, this.$options.data.apply(this, [this]));
+      this.$refs.captcha?.resetRepatcha();
+    },
+  },
 }
 </script>

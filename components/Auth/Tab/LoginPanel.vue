@@ -48,7 +48,7 @@ export default {
     async handleLoginSubmit() {
       this.loading = true;
       try {
-        await this.$auth.login({data: this.credentials});
+        await this.$auth.login({data: this.credentials, silenceException: true});
       } catch (exception) {
         this.errors = ('object' === typeof exception.response?.data?.errors) && Object.values(exception.response.data.errors) ||
           exception.response?.data?.message && [exception.response.data.message] ||

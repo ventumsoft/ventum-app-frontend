@@ -25,7 +25,7 @@ export default {
   ],
   data: () => ({
     CaptchaVersionEnum,
-    recaptchaWidgetId: null,
+    recaptchaWidgetId: undefined,
   }),
   computed: {
     enabled() {
@@ -67,7 +67,7 @@ export default {
       }
       grecaptcha.ready(() => {
         if (this.version === CaptchaVersionEnum.RECAPTCHA_V2) {
-          if (this.recaptchaWidgetId) {
+          if (this.recaptchaWidgetId !== undefined) {
             grecaptcha.reset(this.recaptchaWidgetId);
           } else {
             this.recaptchaWidgetId = grecaptcha.render(this.$refs.recaptchaContainer, {

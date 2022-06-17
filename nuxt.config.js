@@ -62,6 +62,7 @@ export default {
     '~/plugins/trans',
     '~/plugins/bs.client',
     '~/plugins/fitvids.client',
+    '~/plugins/mask.client',
     '~/plugins/noty.client',
   ],
 

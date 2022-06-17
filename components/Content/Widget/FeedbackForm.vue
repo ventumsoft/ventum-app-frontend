@@ -36,10 +36,10 @@
             type="text"
             id="template-contactform-phone"
             class="form-control"
-            :data-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : ''"
-            :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace('#', '_') : ''"
+            :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace(/#/g, '_') : ''"
             :class="{error: errors?.phone}"
             v-model="formData.phone"
+            v-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : ''"
           >
         </div>
         <div
@@ -60,14 +60,11 @@
               mainClass: 'input-group-md',
               browseClass: 'btn btn-warning',
               browseIcon: '<i class=icon-folder-open></i>',
-              //maxFileCount: integration.embedded.files.maxCount, // env('INPUT_FILE_SIZE')
-              //maxFileSize: integration.embedded.files.maxSize / 1024, // env('INPUT_FILE_COUNT')
-              //sizeMessage: $trans('common.input.file.size')
-              //countMessage: $trans('common.input.file.count')
+              maxFileCount: 10,
               allowedFileExtensions: upload_files_types?.map(fileType => '.' + fileType),
             }"
             :accept="upload_files_types?.map(fileType => '.' + fileType)"
-            @change.native="formData.files = $event.target.files"
+            @change.native="handleSelectingFiles"
           />
         </div>
         <div class="clear"></div>
@@ -246,6 +243,24 @@ export default {
     },
   },
   methods: {
+    handleSelectingFiles(event) {
+      const files = event.target.files;
+
+      if (files.length > this.$store.state.site.settings?.['upload_count_max']) {
+        $(event.target).val('');
+        this.$noty(this.$trans('creator-uploader.violation_system_upload_files_count_max').replace(':value', this.$store.state.site.settings?.['upload_count_max']), 'error');
+        return;
+      }
+
+      if ([...files].reduce((size, file) => size + file.size, 0) > this.$store.state.site.settings?.['upload_size_max']) {
+        $(event.target).val('');
+        this.$noty(this.$trans('creator-uploader.violation_system_upload_files_size_max').replace(':value', Math.round(this.$store.state.site.settings?.['upload_size_max'] / 1024 / 1024)), 'error');
+        return;
+      }
+
+      this.formData.files = event.target.files;
+    },
+
     async handleFeedbackSubmit() {
       this.loading = true;
       this.errors = null;
