@@ -10,6 +10,7 @@
     <div id="gotoTop" class="icon-angle-up"></div>
     <AuthLoginModal />
     <AuthRecoveryModal />
+    <PageMessengers />
   </div>
 </template>
 

@@ -2,7 +2,7 @@
   <div>
     <div v-if="i18nParams.items" class="topmargin-sm">
       <div
-        v-for="(item, index) of i18nParams.items"
+        v-for="(item, index) of Object.values(i18nParams.items)"
         class="col_one_third col-max-height"
         :class="{col_last: index % 3 === 2}"
       >

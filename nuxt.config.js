@@ -56,6 +56,7 @@ export default {
     '~/plugins/axios-headers.js',
     '~/plugins/fragment',
     '~/plugins/page',
+    '~/plugins/load-interacted.client',
     '~/plugins/images-loaded.client',
     '~/plugins/isotope.client',
     '~/plugins/nl2br',
@@ -76,6 +77,7 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/bootstrap
     // 'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
@@ -84,6 +86,12 @@ export default {
     'vue-social-sharing/nuxt',
     '~/modules/axios-cache',
   ],
+
+  // Proxy module configuration: https://github.com/nuxt-community/proxy-module#object-config
+  proxy: {
+    '/attachment': process.env.API_ROOT_URL,
+    '/storage': process.env.API_ROOT_URL,
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

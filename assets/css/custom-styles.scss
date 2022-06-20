@@ -127,6 +127,7 @@ ul.tab-nav.tab-nav2 li.ui-state-active a,
 .sidenav > .ui-tabs-active > a,
 .sidenav > .ui-tabs-active > a:hover,
 .owl-theme .owl-controls .owl-nav [class*=owl-]:hover,
+.owl-carousel .owl-nav [class*=owl-]:hover,
 .pagination > .active > a,
 .pagination > .active > span,
 .pagination > .active > a:hover,
@@ -339,7 +340,8 @@ a.blog-announcement-link:hover { color: var(--custom-main-color); }
 
 #chat a { color: var(--custom-main-color); }
 
-#chat .chat-block-closed .messengers-block .chat-block-closed-social-account-button { background-color: var(--custom-main-color); }
+.chat-block .chat-block-closed .chat-block-closed-button,
+#chat .messengers-block .messenger-button { background-color: var(--custom-main-color); }
 
 #call-me { background-color: var(--custom-main-color) }
 

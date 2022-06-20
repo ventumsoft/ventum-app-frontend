@@ -4072,3 +4072,35 @@
 .icon-line3-support:before {
   content: "\e80b"
 }
+
+[class*=" backicon-line3-"], [class^=backicon-line3-], [class*=" icon-line3-"], [class^=icon-line3-] {
+  font-family: fontello;
+}
+
+.backicon-line3-country:before, .icon-line3-country:before {
+  content: "\e816"
+}
+
+.backicon-line3-points:before, .icon-line3-points:before {
+  content: "\e819"
+}
+
+.backicon-line3-goods:before, .icon-line3-goods:before {
+  content: "\e81e"
+}
+
+.backicon-line3-reviews:before, .icon-line3-reviews:before {
+  content: "\e81a"
+}
+
+.backicon-line3-delivery:before, .icon-line3-delivery:before {
+  content: "\e81b"
+}
+
+.backicon-line3-payment:before, .icon-line3-payment:before {
+  content: "\e820"
+}
+
+.backicon-line3-support:before, .icon-line3-support:before {
+  content: "\e80b"
+}
