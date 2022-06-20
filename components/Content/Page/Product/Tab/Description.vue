@@ -1,3 +1,12 @@
 <template>
-  <div>product tab description</div>
+  <div class="no-fv">
+    <h3 v-html="i18nParams.header || ''"></h3>
+    <fragment v-html="i18nParams.description || ''"></fragment>
+  </div>
 </template>
+
+<script>
+export default {
+  props: ['commonParams', 'i18nParams'],
+}
+</script>
