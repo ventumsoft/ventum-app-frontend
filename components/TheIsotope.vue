@@ -2,8 +2,7 @@
   <client-only>
     <Isotope
       ref="isotope"
-      :options="{itemSelector: '.entry', masonry: {columnWidth: '.entry:not(.entry-date-section)'}}"
-      v-bind="{list}"
+      v-bind="{list, options}"
       v-images-loaded:on.progress="() => $refs.isotope.iso.layout()"
     >
       <slot></slot>
@@ -18,6 +17,7 @@
 export default {
   props: {
     list: {type: Array},
+    options: {type: Object},
   },
   mounted() {
     setTimeout(() => {

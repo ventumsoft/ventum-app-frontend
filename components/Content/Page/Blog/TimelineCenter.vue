@@ -2,7 +2,11 @@
   <fragment>
     <div id="posts" class="post-grid grid-container post-masonry post-timeline grid-2 clearfix record-timeline timeline-with-center-line">
       <div class="timeline-border"></div>
-      <TheIsotope v-if="articles?.length" :list="articles">
+      <TheIsotope
+        v-if="articles?.length"
+        :list="articles"
+        :options="{itemSelector: '.entry', masonry: {columnWidth: '.entry:not(.entry-date-section)'}}"
+      >
         <div ref="entries" v-for="(article, index) of articles" :key="article.id" class="entry clearfix">
           <div class="entry-timeline">
             <div class="timeline-divider"></div>

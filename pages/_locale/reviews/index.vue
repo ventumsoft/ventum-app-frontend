@@ -24,7 +24,11 @@
               </span>
             </div>
 
-            <TheIsotope v-if="reviews?.length" :list="reviews">
+            <TheIsotope
+              v-if="reviews?.length"
+              :list="reviews"
+              :options="{itemSelector: '.entry', masonry: {columnWidth: '.entry:not(.entry-date-section)'}}"
+            >
               <div
                 ref="entries"
                 v-for="(review, index) of reviews"
