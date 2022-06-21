@@ -7,11 +7,7 @@
       class="messenger-button"
       :href="button.url"
       target="_blank"
-      data-toggle="tooltip"
-      :title="$trans('chat.write-to.' + button.messenger)"
-      data-placement="left"
-      data-container=".messengers-block-tooltip-container"
-      :data-messenger="button.messenger"
+      v-bs.tooltip="{title: $trans('chat.write-to.' + button.messenger), placement: 'left', container: '.messengers-block-tooltip-container'}"
     >
       <i class="icon-2x" :class="button.icon"></i>
     </a>
@@ -20,10 +16,8 @@
       v-if="loadedMessengersData.callMe"
       class="messenger-button call-me"
       href="#"
-      data-toggle="tooltip"
-      :title="$trans('call-me.tooltip')"
-      data-placement="left"
-      data-container=".messengers-block-tooltip-container"
+      v-bs.tooltip="{title: $trans('call-me.tooltip'), placement: 'left', container: '.messengers-block-tooltip-container'}"
+      @click.prevent="$emit('call-me')"
     >
       <i class="icon-2x icon-line2-call-in"></i>
     </a>
@@ -31,13 +25,13 @@
     <a
       class="messenger-button messenger-button-chat"
       href="#"
-      data-toggle="tooltip"
-      :title="$trans('chat.write-us')"
-      data-placement="left"
-      data-container=".messengers-block-tooltip-container"
+      v-bs.tooltip="{title: $trans('chat.write-us'), placement: 'left', container: '.messengers-block-tooltip-container'}"
+      @click.prevent="$emit('chat')"
     >
       <i class="icon-2x icon-chat"></i>
-      <div v-show="chatTicketUnreadMessages" class="chat-block-new-count badge">{{ chatTicketUnreadMessages || '' }}</div>
+      <div v-show="loadedMessengersData.chat.ticket?.unreadMessagesCount" class="chat-block-new-count badge">
+        {{ loadedMessengersData.chat.ticket?.unreadMessagesCount || '' }}
+      </div>
     </a>
   </div>
 </template>
@@ -45,8 +39,10 @@
 <script>
 export default {
   props: ['loadedMessengersData'],
-  data: () => ({
-    chatTicketUnreadMessages: 0,
-  }),
+  mounted() {
+    $(this.$el).on('click', '.messenger-button', event => {
+      $(event.currentTarget).blur();
+    });
+  },
 }
 </script>

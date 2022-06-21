@@ -232,6 +232,7 @@ export default {
       email: $auth.user?.email || undefined,
       phone: $auth.user?.phone || undefined,
       message: undefined,
+      files: undefined,
       is_agree_with_terms: undefined,
       g_recaptcha_response: undefined,
     },
@@ -258,7 +259,7 @@ export default {
         return;
       }
 
-      this.formData.files = event.target.files;
+      this.formData.files = files;
     },
 
     async handleFeedbackSubmit() {
@@ -281,7 +282,7 @@ export default {
 
       try {
         await this.$auth.getUserOrGuest();
-        await this.$axios.post('ticket/message', formData, {
+        await this.$axios.post('communications/ticket-message', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

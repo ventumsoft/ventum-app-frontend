@@ -17,8 +17,9 @@ export default {
     isShowingCallMeModal: false,
     loadedMessengersData: null,
   }),
-  mounted() {
-    window.addEventListener('load-interacted', async event => {
+  async mounted() {
+    const {onPageLoadedAndInteracted} = await import('@/plugins/load-interacted.client.js');
+    onPageLoadedAndInteracted(async event => {
       ({data: this.loadedMessengersData} = await this.$axios('communications/load-messengers'));
     });
   },

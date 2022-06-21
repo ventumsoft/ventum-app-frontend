@@ -3,27 +3,36 @@
     <div
       v-if="!loadedMessengersData.chat && loadedMessengersData.callMe"
       id="call-me"
-      :title="$trans('call-me.tooltip')"
+      v-bs.tooltip="{title: $trans('call-me.tooltip')}"
     >
       <a class="call-me" href="#" @click.prevent="$emit('call-me')">
         <i class="icon-2x icon-line2-call-in"></i>
       </a>
     </div>
     <div
+      ref="chat"
       v-if="loadedMessengersData.chat"
       id="chat"
       class="chat-desktop chat-block collapse"
-      :class="{'has-messengers-block': loadedMessengersData.buttons || loadedMessengersData.callMe}"
+      :class="{
+        'has-messengers-block': existsMessengersBlock,
+        'has-messengers-block-visible': showingMessengersBlock,
+      }"
+      :data-chat-block-mode="chatMode"
     >
       <div class="chat-block-closed">
-        <div class="chat-block-closed-button">
-          <i class="icon-chat-3" :data-icons="JSON.stringify(['icon-chat', 'icon-chat-1', 'icon-chat-2', 'icon-chat-3'])"></i>
-          <i v-if="loadedMessengersData.buttons || loadedMessengersData.callMe" class="icon-line-cross hover"></i>
-          <div v-show="chatTicketUnreadMessages" class="chat-block-new-count badge">{{ chatTicketUnreadMessages || '' }}</div>
+        <div class="chat-block-closed-button" @click="handleChatBlockClosedButton">
+          <i :class="chatBlockClosedButtonIcons[chatBlockClosedButtonIconIndex]"></i>
+          <i v-if="existsMessengersBlock" class="icon-line-cross hover"></i>
+          <div v-show="loadedMessengersData.chat.ticket?.unreadMessagesCount" class="chat-block-new-count badge">
+            {{ loadedMessengersData.chat.ticket?.unreadMessagesCount || '' }}
+          </div>
         </div>
         <MessengersMenu
-          v-if="loadedMessengersData.buttons || loadedMessengersData.callMe"
+          v-if="existsMessengersBlock"
           :loadedMessengersData="loadedMessengersData"
+          @call-me="$emit('call-me')"
+          @chat="showChat()"
         />
       </div>
       <div class="panel panel-default chat-block-opened">
@@ -43,22 +52,22 @@
               class="chat-close icon-line-cross pull-right"
               style="font-size:16px;"
               role="button"
-              data-toggle="collapse"
-              data-target=".chat-block"
+              @click="hideChat"
             ></i>
-            <span class="nocolor chat-block-volume pull-right" data-state="on" style="margin-right: 15px;">
-              <i class="icon-line2-volume-2 chat-block-volume-on"></i>
-              <i class="icon-line2-volume-off chat-block-volume-off"></i>
+            <span
+              class="nocolor chat-block-volume pull-right"
+              style="margin-right: 15px;"
+              :data-state="chatSoundEnabled ? 'on' : 'off'"
+              @click="chatSoundEnabled ^= true"
+            >
+              <i v-if="chatSoundEnabled" class="icon-line2-volume-2 chat-block-volume-on"></i>
+              <i v-else class="icon-line2-volume-off chat-block-volume-off"></i>
             </span>
           </h5>
         </div>
         <div class="panel-body">
-          <div class="chat-block-online">
-            Chat block online panel body
-          </div>
-          <div class="chat-block-offline">
-            Chat block offline panel body
-          </div>
+          <MessengersChatOnline v-if="chatMode === 'online'" />
+          <MessengersChatOffline v-if="chatMode === 'offline'" />
         </div>
       </div>
     </div>
@@ -71,8 +80,69 @@ export default {
     'loadedMessengersData',
   ],
   data: () => ({
-    showMessengersButtons: false,
-    chatTicketUnreadMessages: 0,
+    chatBlockClosedButtonIcons: ['icon-chat', 'icon-chat-1', 'icon-chat-2', 'icon-chat-3'],
+    chatBlockClosedButtonIconIndex: 3,
+    showingMessengersBlock: false,
+    chatSoundEnabled: true,
+    chatOpening: false,
+    chatMode: null,
+    chatTicket: null,
   }),
+  computed: {
+    existsMessengersBlock() {
+      return this.loadedMessengersData.buttons || this.loadedMessengersData.callMe;
+    },
+  },
+  mounted() {
+    setInterval(() => {
+      this.chatBlockClosedButtonIconIndex = (this.chatBlockClosedButtonIconIndex + 1) % this.chatBlockClosedButtonIcons.length;
+    }, 1000);
+    $(this.$el).on('show.bs.tooltip', '.chat-block-closed', event => {
+      if ($(window).width() <= 768) {
+        return false;
+      }
+    });
+    $(window).on('resize', event => {
+      this.showingMessengersBlock = false;
+    });
+  },
+  methods: {
+    handleChatBlockClosedButton() {
+      if (!this.existsMessengersBlock) {
+        this.showChat();
+      } else if ($(window).width() <= 768) {
+        this.showingMessengersBlock ^= true;
+      }
+    },
+
+    async showChat() {
+      this.showingMessengersBlock = false;
+      if (this.chatOpening) {
+        return;
+      }
+      this.chatOpening = true;
+
+      try {
+        ({data: {
+          mode: this.chatMode,
+          ticket: this.chatTicket,
+        }} = await this.$axios.get('communications/open-chat'));
+      } catch (exception) {
+        return;
+      } finally {
+        this.chatOpening = false;
+      }
+
+      await this.$nextTick();
+
+      $(this.$refs.chat).collapse('show');
+    },
+
+    hideChat() {
+      $(this.$refs.chat).collapse('hide');
+
+      this.chatMode = null;
+    },
+  },
 }
 </script>

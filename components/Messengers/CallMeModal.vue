@@ -1,5 +1,5 @@
 <template>
-  <BsModal>
+  <BsModal id="modal-call-me-form" @closed="$emit('closed')">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header nobottomborder nobottompadding clearfix">
@@ -63,10 +63,30 @@ export default {
     errors: null,
   }),
   methods: {
-    handleCallMeSubmit() {
-      //
+    async handleCallMeSubmit() {
+      this.loading = true;
+      this.errors = null;
 
-      this.$trans('call-me.success');
+      try {
+        await this.$auth.getUserOrGuest();
+        await this.$axios.post('communications/ticket-message', this.formData, {silenceException: true});
+      } catch (exception) {
+        if ('object' === typeof exception.response?.data?.errors) {
+          this.errors = exception.response.data.errors;
+        } else {
+          this.$noty(exception.response?.data?.message || exception.message, 'error');
+        }
+        return;
+      } finally {
+        this.loading = false;
+      }
+
+      this.$noty('<i class=icon-ok-sign></i> ' + this.$trans('call-me.success'), 'success');
+      $(this.$el).modal('hide');
+    },
+
+    resetFormData() {
+      Object.assign(this.$data, this.$options.data.apply(this, [this]));
     },
   },
 }

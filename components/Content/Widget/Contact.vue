@@ -102,7 +102,7 @@ export default {
 
       try {
         await this.$auth.getUserOrGuest();
-        await this.$axios.post('ticket/message', this.formData, {silenceException: true});
+        await this.$axios.post('communications/ticket-message', this.formData, {silenceException: true});
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
           this.errors = exception.response.data.errors;
