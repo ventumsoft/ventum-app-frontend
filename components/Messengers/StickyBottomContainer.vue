@@ -43,7 +43,7 @@
             </span>
             <span class="nocolor chat-block-online">
               <i class="icon-line-clock position-left"></i>
-              <span class="nocolor helpdesk-ticket-timefromlastreply">---</span>
+              <span class="nocolor helpdesk-ticket-timefromlastreply">{{ chatTicket ? chatTicket.timeFromLastReply : '---' }}</span>
             </span>
             <span class="nocolor chat-block-offline">
               {{ $store.state.site.settings?.['helpdesk:chat-welcome-offline'] || $trans('chat.leaveyourmessage') }}
@@ -66,8 +66,8 @@
           </h5>
         </div>
         <div class="panel-body">
-          <MessengersChatOnline v-if="chatMode === 'online'" />
-          <MessengersChatOffline v-if="chatMode === 'offline'" />
+          <MessengersChatOnline v-if="chatMode === 'online'" :ticket="chatTicket" :welcome="chatWelcome" />
+          <MessengersChatOffline v-else-if="chatMode === 'offline'" />
         </div>
       </div>
     </div>
@@ -87,6 +87,7 @@ export default {
     chatOpening: false,
     chatMode: null,
     chatTicket: null,
+    chatWelcome: null,
   }),
   computed: {
     existsMessengersBlock() {
@@ -106,6 +107,11 @@ export default {
       this.showingMessengersBlock = false;
     });
   },
+  watch: {
+    '$auth.user'() {
+      this.hideChat();
+    },
+  },
   methods: {
     handleChatBlockClosedButton() {
       if (!this.existsMessengersBlock) {
@@ -123,9 +129,11 @@ export default {
       this.chatOpening = true;
 
       try {
+        await this.$auth.getUserOrGuest();
         ({data: {
           mode: this.chatMode,
           ticket: this.chatTicket,
+          welcome: this.chatWelcome,
         }} = await this.$axios.get('communications/open-chat'));
       } catch (exception) {
         return;

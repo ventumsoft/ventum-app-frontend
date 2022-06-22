@@ -1,9 +1,22 @@
 <template>
   <div class="chat-block-online">
-    <ul
-      class="media-list chat-list content-group chat-messages"
-      :data-welcome="$store.state.site.settings?.['helpdesk:chat-welcome-online'] || $trans('chat.welcome')"
-    ></ul>
+    <ul class="media-list chat-list content-group chat-messages">
+      <MessengersChatMessage
+        v-if="!ticket?.messages?.length"
+        :message="{
+          own: false,
+          author: welcome.name,
+          avatar: welcome.avatar,
+          message: $store.state.site.settings?.['helpdesk:chat-welcome-online'] || $trans('chat.welcome'),
+          createdAt: new Date,
+        }"
+      />
+      <MessengersChatMessage
+        v-for="message of (ticket?.messages || [])"
+        :key="message.id"
+        :message="message"
+      />
+    </ul>
     <form class="nobottommargin chat-message-send-form" @submit.prevent="handleChatOnlineSubmit">
       <textarea
         name="message"
@@ -64,6 +77,10 @@
 import CaptchaVersionEnum from '@/enums/CaptchaVersionEnum';
 
 export default {
+  props: [
+    'ticket',
+    'welcome',
+  ],
   data: () => ({
     CaptchaVersionEnum,
     formData: {
