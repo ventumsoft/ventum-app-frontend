@@ -5,7 +5,7 @@
         <span class="text-semibold chat-message-user">{{ message.own ? $trans('chat.you') : (message.authorL10nName?.[$store.state.site.language.slug] || message.authorName) }}</span>
         <span class="media-annotation dotted chat-message-time">{{ message.createdAt }}</span>
       </div>
-      <div v-if="message.message || message.images.length" class="media-content chat-message-content">
+      <div v-if="message.message || message.images?.length" class="media-content chat-message-content">
         <blockquote
           v-if="message.quoted"
           class="chat-message-quoted"
@@ -15,7 +15,7 @@
           class="chat-message-text"
           v-html="$nl2br(autolinker(striptags(message.message), {stripPrefix: false}))"
         ></div>
-        <div v-if="message.images.length" class="chat-message-images">
+        <div v-if="message.images?.length" class="chat-message-images">
           <div
             v-for="image of message.images"
             class="chat-message-image"
@@ -38,7 +38,7 @@
         </div>
       </div>
       <ul
-        v-if="message.attachments.length"
+        v-if="message.attachments?.length"
         class="list-inline list-inline-separate list-inline-chat text-size-small chat-message-actions"
       >
         <li v-for="attachment of message.attachments">

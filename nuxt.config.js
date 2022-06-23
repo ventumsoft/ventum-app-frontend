@@ -74,6 +74,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     ['nuxt-storm', { nested: true, alias: true }],
+    '@nuxtjs/laravel-echo',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -90,8 +91,22 @@ export default {
 
   // Proxy module configuration: https://github.com/nuxt-community/proxy-module#object-config
   proxy: {
-    '/attachment': process.env.API_ROOT_URL,
-    '/storage': process.env.API_ROOT_URL,
+    '/attachment': process.env.API_ORIGIN,
+    '/storage': process.env.API_ORIGIN,
+    '/socket.io': process.env.API_ORIGIN,
+  },
+
+  echo: {
+    broadcaster: 'socket.io',
+    host: process.env.API_ORIGIN,
+    auth: {
+      host: process.env.API_ORIGIN,
+      headers: {'X-Echo-Showcase-Slug': process.env.API_SITE},
+    },
+    authModule: true,
+    connectOnLogin: false,
+    disconnectOnLogout: false,
+    plugins: ['~/plugins/echo.client.js'],
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
