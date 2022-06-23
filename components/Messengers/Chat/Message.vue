@@ -2,16 +2,19 @@
   <li class="media chat-message" :class="{reversed: !message.own}">
     <div class="media-body">
       <div class="media-heading">
-        <span class="text-semibold chat-message-user">{{ message.own ? $trans('chat.you') : message.author }}</span>
+        <span class="text-semibold chat-message-user">{{ message.own ? $trans('chat.you') : (message.authorL10nName?.[$store.state.site.language.slug] || message.authorName) }}</span>
         <span class="media-annotation dotted chat-message-time">{{ message.createdAt }}</span>
       </div>
       <div v-if="message.message || message.images.length" class="media-content chat-message-content">
         <blockquote
           v-if="message.quoted"
           class="chat-message-quoted"
-          v-html="$nl2br(message.quoted.message)"
+          v-html="$nl2br(autolinker(striptags(message.quoted.message), {stripPrefix: false}))"
         ></blockquote>
-        <div class="chat-message-text" v-html="$nl2br(message.message)"></div>
+        <div
+          class="chat-message-text"
+          v-html="$nl2br(autolinker(striptags(message.message), {stripPrefix: false}))"
+        ></div>
         <div v-if="message.images.length" class="chat-message-images">
           <div
             v-for="image of message.images"
@@ -63,13 +66,15 @@
 </template>
 
 <script>
+import Autolinker from 'autolinker';
+import striptags from 'striptags';
+
 export default {
   props: [
     'message',
   ],
   async mounted() {
     await import('magnific-popup');
-
     $(this.$el).find('[data-lightbox="image"]').magnificPopup({
       type: 'image',
       closeOnContentClick: true,
@@ -78,6 +83,10 @@ export default {
       mainClass: 'mfp-no-margins mfp-fade',
       image: {verticalFit: true},
     });
+  },
+  methods: {
+    autolinker: Autolinker.link,
+    striptags,
   },
 }
 </script>

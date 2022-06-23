@@ -19,8 +19,16 @@ export default {
   }),
   async mounted() {
     const {onPageLoadedAndInteracted} = await import('@/plugins/load-interacted.client.js');
-    onPageLoadedAndInteracted(async event => {
-      ({data: this.loadedMessengersData} = await this.$axios('communications/load-messengers'));
+    await new Promise(resolve => onPageLoadedAndInteracted(event => resolve()));
+
+    ({data: this.loadedMessengersData} = await this.$axios('communications/load-messengers'));
+
+    this.$store.commit('chat/update', {
+      ticket: this.loadedMessengersData.chat?.ticket,
+      messageAudio: new Audio(this.loadedMessengersData.chat?.messageAudio || '/sounds/chat-message.mp3'),
+      messageAudioEnabled: (typeof localStorage !== 'undefined') && (localStorage.messageAudioEnabled !== undefined) ?
+        (localStorage.messageAudioEnabled === 'true') :
+        true,
     });
   },
 }

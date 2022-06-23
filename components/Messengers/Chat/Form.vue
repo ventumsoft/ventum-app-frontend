@@ -1,23 +1,5 @@
 <template>
-  <div class="chat-block-online">
-    <ul class="media-list chat-list content-group chat-messages">
-      <MessengersChatMessage
-        v-if="!ticket?.messages?.length"
-        :message="{
-          own: false,
-          author: welcome.name,
-          avatar: welcome.avatar,
-          message: $store.state.site.settings?.['helpdesk:chat-welcome-online'] || $trans('chat.welcome'),
-          createdAt: new Date,
-        }"
-      />
-      <MessengersChatMessage
-        v-for="message of (ticket?.messages || [])"
-        :key="message.id"
-        :message="message"
-      />
-    </ul>
-    <form class="nobottommargin chat-message-send-form" @submit.prevent="handleChatOnlineSubmit">
+  <form class="nobottommargin chat-message-send-form" @submit.prevent="handleChatOnlineSubmit">
       <textarea
         name="message"
         class="form-control content-group"
@@ -27,60 +9,55 @@
         :class="{error: errors?.message}"
         v-model="formData.message"
       ></textarea>
-      <div class="row">
-        <div class="col-xs-3">
-          <ul class="icons-list">
-            <li>
-              <a
-                class="message-files-button"
-                style="position: relative;"
-                v-bs.tooltip="{
+    <div class="row">
+      <div class="col-xs-3">
+        <ul class="icons-list">
+          <li>
+            <a
+              class="message-files-button"
+              style="position: relative;"
+              v-bs.tooltip="{
                   title: formData.files?.length ? Array.from(formData.files).map(file => file.name).join('<br>') : $trans('chat.sendfile'),
                   html: true,
                   container: '#chat',
                 }"
+            >
+              <i class="icon icon-file-add"></i>
+              <input
+                type="file"
+                multiple
+                style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; opacity: 0;"
+                :accept="$store.state.site.settings?.['helpdesk:upload-files-types']?.map(fileType => '.' + fileType)"
+                @change="handleSelectingFiles"
               >
-                <i class="icon icon-file-add"></i>
-                <input
-                  type="file"
-                  multiple
-                  style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; opacity: 0;"
-                  :accept="$store.state.site.settings?.['helpdesk:upload-files-types']?.map(fileType => '.' + fileType)"
-                  @change="handleSelectingFiles"
-                >
-                <span
-                  v-if="formData.files?.length"
-                  class="badge badge-default message-files-count-badge"
-                  style="display: block;"
-                >{{ formData.files.length }}</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-xs-9 text-right">
-          <TheCaptcha
-            ref="captcha"
-            v-if="$store.state.site.settings?.['helpdesk:chat-captcha'] && ($store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3)"
-            v-model="formData.g_recaptcha_response"
-            :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
-          />
-          <button type="submit" class="button button-rounded button-reveal tright nomargin fright">
-            <i class="icon-email2"></i><span>{{ loading ? $trans('chat.sending') : $trans('chat.send') }}</span>
-          </button>
-        </div>
+              <span
+                v-if="formData.files?.length"
+                class="badge badge-default message-files-count-badge"
+                style="display: block;"
+              >{{ formData.files.length }}</span>
+            </a>
+          </li>
+        </ul>
       </div>
-    </form>
-  </div>
+      <div class="col-xs-9 text-right">
+        <TheCaptcha
+          ref="captcha"
+          v-if="$store.state.site.settings?.['helpdesk:chat-captcha'] && ($store.state.site.settings?.['seo-integration:google-captcha-version'] === CaptchaVersionEnum.RECAPTCHA_V3)"
+          v-model="formData.g_recaptcha_response"
+          :error="errors?.g_recaptcha_response?.join('<br />') || errors?.g_recaptcha_response"
+        />
+        <button type="submit" class="button button-rounded button-reveal tright nomargin fright">
+          <i class="icon-email2"></i><span>{{ loading ? $trans('chat.sending') : $trans('chat.send') }}</span>
+        </button>
+      </div>
+    </div>
+  </form>
 </template>
 
 <script>
 import CaptchaVersionEnum from '@/enums/CaptchaVersionEnum';
 
 export default {
-  props: [
-    'ticket',
-    'welcome',
-  ],
   data: () => ({
     CaptchaVersionEnum,
     formData: {
@@ -126,14 +103,16 @@ export default {
         }
       }
 
+      let ticket, message;
+
       try {
         await this.$auth.getUserOrGuest();
-        await this.$axios.post('communications/chat-message', formData, {
+        ({data: {ticket, message}} = await this.$axios.post('communications/chat-message', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
           silenceException: true,
-        });
+        }));
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
           this.errors = exception.response.data.errors;
@@ -147,6 +126,12 @@ export default {
       }
 
       this.resetFormData();
+
+      if (this.$store.state.chat.ticket?.id !== ticket.id) {
+        this.$store.commit('chat/update', {ticket});
+      }
+
+      this.$store.commit('chat/message', message);
     },
 
     resetFormData() {

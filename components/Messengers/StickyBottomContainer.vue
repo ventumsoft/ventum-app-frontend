@@ -24,8 +24,8 @@
         <div class="chat-block-closed-button" @click="handleChatBlockClosedButton">
           <i :class="chatBlockClosedButtonIcons[chatBlockClosedButtonIconIndex]"></i>
           <i v-if="existsMessengersBlock" class="icon-line-cross hover"></i>
-          <div v-show="loadedMessengersData.chat.ticket?.unreadMessagesCount" class="chat-block-new-count badge">
-            {{ loadedMessengersData.chat.ticket?.unreadMessagesCount || '' }}
+          <div v-if="chatTicket?.unreadMessagesCount" class="chat-block-new-count badge" style="display: block;">
+            {{ chatTicket?.unreadMessagesCount || '' }}
           </div>
         </div>
         <MessengersMenu
@@ -57,16 +57,19 @@
             <span
               class="nocolor chat-block-volume pull-right"
               style="margin-right: 15px;"
-              :data-state="chatSoundEnabled ? 'on' : 'off'"
-              @click="chatSoundEnabled ^= true"
+              :data-state="chatMessageAudioEnabled ? 'on' : 'off'"
+              @click="$store.commit('chat/update', {messageAudioEnabled: !chatMessageAudioEnabled})"
             >
-              <i v-if="chatSoundEnabled" class="icon-line2-volume-2 chat-block-volume-on"></i>
+              <i v-if="chatMessageAudioEnabled" class="icon-line2-volume-2 chat-block-volume-on"></i>
               <i v-else class="icon-line2-volume-off chat-block-volume-off"></i>
             </span>
           </h5>
         </div>
         <div class="panel-body">
-          <MessengersChatOnline v-if="chatMode === 'online'" :ticket="chatTicket" :welcome="chatWelcome" />
+          <div v-if="chatMode === 'online'" class="chat-block-online">
+            <MessengersChatMessages />
+            <MessengersChatForm />
+          </div>
           <MessengersChatOffline v-else-if="chatMode === 'offline'" />
         </div>
       </div>
@@ -75,6 +78,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   props: [
     'loadedMessengersData',
@@ -83,13 +88,15 @@ export default {
     chatBlockClosedButtonIcons: ['icon-chat', 'icon-chat-1', 'icon-chat-2', 'icon-chat-3'],
     chatBlockClosedButtonIconIndex: 3,
     showingMessengersBlock: false,
-    chatSoundEnabled: true,
     chatOpening: false,
-    chatMode: null,
-    chatTicket: null,
-    chatWelcome: null,
   }),
   computed: {
+    ...mapState('chat', {
+      chatMode: 'mode',
+      chatTicket: 'ticket',
+      chatWelcome: 'welcome',
+      chatMessageAudioEnabled: 'messageAudioEnabled',
+    }),
     existsMessengersBlock() {
       return this.loadedMessengersData.buttons || this.loadedMessengersData.callMe;
     },
@@ -128,18 +135,18 @@ export default {
       }
       this.chatOpening = true;
 
+      let mode, ticket, welcome;
+
       try {
         await this.$auth.getUserOrGuest();
-        ({data: {
-          mode: this.chatMode,
-          ticket: this.chatTicket,
-          welcome: this.chatWelcome,
-        }} = await this.$axios.get('communications/open-chat'));
+        ({data: {mode, ticket, welcome}} = await this.$axios.get('communications/open-chat'));
       } catch (exception) {
         return;
       } finally {
         this.chatOpening = false;
       }
+
+      this.$store.commit('chat/update', {mode, ticket, welcome});
 
       await this.$nextTick();
 
@@ -149,7 +156,7 @@ export default {
     hideChat() {
       $(this.$refs.chat).collapse('hide');
 
-      this.chatMode = null;
+      this.$store.commit('chat/update', {mode: null});
     },
   },
 }

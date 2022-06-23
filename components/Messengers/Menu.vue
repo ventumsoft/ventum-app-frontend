@@ -29,16 +29,21 @@
       @click.prevent="$emit('chat')"
     >
       <i class="icon-2x icon-chat"></i>
-      <div v-show="loadedMessengersData.chat.ticket?.unreadMessagesCount" class="chat-block-new-count badge">
-        {{ loadedMessengersData.chat.ticket?.unreadMessagesCount || '' }}
+      <div v-if="chatTicket?.unreadMessagesCount" class="chat-block-new-count badge" style="display: block;">
+        {{ chatTicket?.unreadMessagesCount || '' }}
       </div>
     </a>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
   props: ['loadedMessengersData'],
+  computed: {
+    ...mapState('chat', {chatTicket: 'ticket'}),
+  },
   mounted() {
     $(this.$el).on('click', '.messenger-button', event => {
       $(event.currentTarget).blur();
