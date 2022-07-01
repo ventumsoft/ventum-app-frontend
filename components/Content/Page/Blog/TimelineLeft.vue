@@ -5,7 +5,7 @@
         <div class="timeline-border" style="height:99%;"></div>
         <div v-for="article of articles" class="entry clearfix">
           <div class="entry-timeline">
-            d{{ article.created_at }}<span>M{{ article.created_at }}</span>
+            {{ $dt(article.created_at, 'DD') }}<span>{{ $dt(article.created_at, 'MMM') }}</span>
             <div class="timeline-divider"></div>
           </div>
           <ContentPageBlogPartPreview v-bind="{article}" />
@@ -18,7 +18,7 @@
               </h2>
             </div>
             <ul class="entry-meta clearfix">
-              <li class="content-date"><i class="icon-calendar3"></i> {{ article.created_at }}</li>
+              <li class="content-date"><i class="icon-calendar3"></i> {{ $dt(article.created_at, 'date') }}</li>
             </ul>
             <div class="entry-content">
               <p v-html="article.announcement_text"></p>

@@ -56,7 +56,7 @@
                           v-for="ratingStar of review.ratingStars"
                           :class="(ratingStar.icon === 'icon-star-full2') ? 'icon-star3' : 'icon-star-empty'"
                         ></i>
-                        <span class="content-date">{{ review.created_at }}</span>
+                        <span class="content-date">{{ $dt(review.created_at, 'date') }}</span>
                       </div>
                       <span class="product-rating-info" v-html="$nl2br(review.company_position_etc) || '&nbsp;'"></span>
                       <div class="clearfix"></div>

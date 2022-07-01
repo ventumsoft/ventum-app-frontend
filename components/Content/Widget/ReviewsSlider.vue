@@ -37,7 +37,7 @@
                       class="text-size-base text-success"
                       :class="(ratingStar.icon === 'icon-star-full2') ? 'icon-star3' : 'icon-star-empty'"
                     ></i>
-                    <span class="review-date content-date" style="padding-left: 0;">{{ review.created_at }}</span>
+                    <span class="review-date content-date" style="padding-left: 0;">{{ $dt(review.created_at, 'date') }}</span>
                   </div>
                   <span v-html="review.company_position_etc"></span>
                 </div>

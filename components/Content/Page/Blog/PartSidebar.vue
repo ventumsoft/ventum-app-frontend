@@ -44,7 +44,7 @@
                 </h4>
               </div>
               <ul class="entry-meta">
-                <li class="content-date">{{ article.created_at }}</li>
+                <li class="content-date">{{ $dt(article.created_at, 'date') }}</li>
               </ul>
             </div>
           </div>

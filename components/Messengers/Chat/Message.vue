@@ -3,7 +3,7 @@
     <div class="media-body">
       <div class="media-heading">
         <span class="text-semibold chat-message-user">{{ message.own ? $trans('chat.you') : (message.authorL10nName?.[$store.state.site.language.slug] || message.authorName) }}</span>
-        <span class="media-annotation dotted chat-message-time">{{ message.createdAt }}</span>
+        <span class="media-annotation dotted chat-message-time">{{ $dt(message.createdAt, 'time') }}</span>
       </div>
       <div v-if="message.message || message.images?.length" class="media-content chat-message-content">
         <blockquote

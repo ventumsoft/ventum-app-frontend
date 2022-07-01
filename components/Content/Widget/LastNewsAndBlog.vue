@@ -38,7 +38,7 @@
             <h3><TheLink :to="article.url">{{ article.display_title }}</TheLink></h3>
           </div>
           <ul class="entry-meta">
-            <li class="content-date"><i class="icon-calendar3"></i> {{ article.created_at }}</li>
+            <li class="content-date"><i class="icon-calendar3"></i> {{ $dt(article.created_at, 'date') }}</li>
           </ul>
           <br/>
           <div class="entry-content clear-both">
@@ -90,7 +90,7 @@
               </h4>
             </div>
             <ul class="entry-meta">
-              <li class="content-date"><i class="icon-calendar3"></i> {{ article.created_at }}</li>
+              <li class="content-date"><i class="icon-calendar3"></i> {{ $dt(article.created_at, 'date') }}</li>
             </ul>
           </div>
         </div>

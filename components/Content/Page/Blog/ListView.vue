@@ -15,7 +15,7 @@
             <ul class="entry-meta clearfix">
               <li class="content-date">
                 <i class="icon-calendar3"></i>
-                {{ article.created_at }}
+                {{ $dt(article.created_at, 'date') }}
               </li>
               <li v-if="article.categories?.length">
                 <i class="icon-folder-open"></i>

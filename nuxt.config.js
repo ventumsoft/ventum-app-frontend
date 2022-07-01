@@ -57,6 +57,7 @@ export default {
     '~/plugins/axios-headers.js',
     '~/plugins/fragment',
     '~/plugins/page',
+    '~/plugins/date-time-format-service',
     '~/plugins/load-interacted.client',
     '~/plugins/images-loaded.client',
     '~/plugins/isotope.client',
