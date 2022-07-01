@@ -22,9 +22,20 @@ export const mutations = {
     if (ticket.messages === undefined) {
       ticket.messages = [];
     }
+    const messageIndex = ticket.messages.findIndex(iteratedMessage => iteratedMessage.id === message.id);
+    if (messageIndex !== -1) {
+      ticket.messages[messageIndex] = message;
+      return;
+    }
     ticket.messages.push(message);
     if (!message.own && state.messageAudioEnabled && state.messageAudio) {
       state.messageAudio.play();
+    }
+  },
+
+  increaseTicketSecondsFromLastReply(state) {
+    if (!isNaN(state.ticket?.secondsFromLastReply)) {
+      state.ticket.secondsFromLastReply++;
     }
   },
 }

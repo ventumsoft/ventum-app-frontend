@@ -30,31 +30,6 @@ export default {
         (localStorage.messageAudioEnabled === 'true') :
         true,
     });
-
-    this.listenChatEchoEvents();
-  },
-  watch: {
-    '$auth.user'() {
-      this.listenChatEchoEvents();
-    },
-  },
-  methods: {
-    listenChatEchoEvents() {
-      if (!this.$auth.user) {
-        return;
-      }
-      this.$echo.private('Api.Site.User.' + this.$auth.user.id)
-        .listen('TicketMessageWasBuilded', event => {
-          console.log('TicketMessageWasBuilded', event);
-        })
-        .listen('TicketMessageWasUpdated', event => {
-          console.log('TicketMessageWasUpdated', event);
-        })
-        .listen('TicketWasUpdated', event => {
-          console.log('TicketWasUpdated', event);
-        })
-      ;
-    },
   },
 }
 </script>

@@ -23,7 +23,7 @@
           >
             <a :href="image.link" class="chat-message-image-link" data-lightbox="image">
               <div
-                v-if="image.cmyk"
+                v-if="image.cmyk && $store.state.site.settings?.['helpdesk:discussion-thread:show-cmyk-image-warning']"
                 class="chat-message-image-cmyk"
                 style="display: block;"
                 v-bs.tooltip="{title: $trans('chat.image.cmyk'), container: 'body'}"

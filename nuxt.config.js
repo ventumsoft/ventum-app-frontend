@@ -99,14 +99,12 @@ export default {
   echo: {
     broadcaster: 'socket.io',
     host: process.env.API_ORIGIN,
-    auth: {
-      host: process.env.API_ORIGIN,
-      headers: {'X-Echo-Showcase-Slug': process.env.API_SITE},
-    },
+    auth: {headers: {'X-Echo-Showcase-Slug': process.env.API_SITE}},
     authModule: true,
     connectOnLogin: false,
     disconnectOnLogout: false,
     plugins: ['~/plugins/echo.client.js'],
+    namespace: 'App.Events.Api.Site',
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

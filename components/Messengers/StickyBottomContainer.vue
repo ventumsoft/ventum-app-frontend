@@ -43,7 +43,7 @@
             </span>
             <span class="nocolor chat-block-online">
               <i class="icon-line-clock position-left"></i>
-              <span class="nocolor helpdesk-ticket-timefromlastreply">{{ chatTicket ? chatTicket.timeFromLastReply : '---' }}</span>
+              <MessengersChatTimeFromLastReply :seconds="chatTicket?.secondsFromLastReply" />
             </span>
             <span class="nocolor chat-block-offline">
               {{ $store.state.site.settings?.['helpdesk:chat-welcome-offline'] || $trans('chat.leaveyourmessage') }}
@@ -113,10 +113,15 @@ export default {
     $(window).on('resize', event => {
       this.showingMessengersBlock = false;
     });
+    this.listenChatEchoEvents();
+    setInterval(() => {
+      this.$store.commit('chat/increaseTicketSecondsFromLastReply');
+    }, 1000);
   },
   watch: {
     '$auth.user'() {
       this.hideChat();
+      this.listenChatEchoEvents();
     },
   },
   methods: {
@@ -157,6 +162,34 @@ export default {
       $(this.$refs.chat).collapse('hide');
 
       this.$store.commit('chat/update', {mode: null});
+    },
+
+    listenChatEchoEvents() {
+      if (!this.$auth.user) {
+        return;
+      }
+      this.$echo.private('Api.Site.User.' + this.$auth.user.id)
+        .listen('HelpDesk.TicketMessageWasBuilded', ({message}) => {
+          if ((this.chatMode !== 'online') || (this.chatTicket.id !== message.ticket_id)) {
+            return;
+          }
+          this.$store.commit('chat/message', message);
+        })
+        .listen('HelpDesk.TicketMessageWasUpdated', ({message}) => {
+          if ((this.chatMode !== 'online') || (this.chatTicket.id !== message.ticket_id)) {
+            return;
+          }
+          this.$store.commit('chat/message', message);
+        })
+        .listen('HelpDesk.TicketWasUpdated', ({ticket}) => {
+          if (ticket.channel === 'chat') {
+            if (this.chatMode === 'online') {
+              ticket.messages = this.chatTicket.messages;
+            }
+            this.$store.commit('chat/update', {ticket});
+          }
+        })
+      ;
     },
   },
 }
