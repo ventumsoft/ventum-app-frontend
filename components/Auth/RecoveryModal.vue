@@ -2,7 +2,7 @@
   <BsModal
     v-if="email && code"
     id="RestorePasswordModal"
-    class="modaltop"
+    class="modaltop fade"
     @closed="$emit('closed')"
   >
     <div class="modal-dialog">

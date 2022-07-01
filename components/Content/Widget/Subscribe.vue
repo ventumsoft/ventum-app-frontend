@@ -31,6 +31,7 @@
       ref="modal"
       v-if="isShowingSubscriberModal"
       id="modal-subscribe-block"
+      class="fade"
       @closed="isShowingSubscriberModal = false"
     >
       <div class="modal-dialog">

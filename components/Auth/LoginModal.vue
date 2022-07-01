@@ -2,7 +2,7 @@
   <BsModal
     v-if="$store.state.site.isShowingLoginModal"
     id="loginRegisterModal"
-    class="modaltop"
+    class="modaltop fade"
     @closed="$store.commit('site/setShowingLoginModal', false)"
   >
     <div class="modal-dialog">

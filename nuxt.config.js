@@ -47,6 +47,7 @@ export default {
     '~/assets/css/product.scss',
     '~/assets/css/templates.scss',
     '~/assets/css/reviews.scss',
+    '~/assets/css/search.scss',
     '~/assets/css/custom-styles.scss',
   ],
 

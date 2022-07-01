@@ -1,5 +1,5 @@
 <template>
-  <BsModal id="modal-call-me-form" @closed="$emit('closed')">
+  <BsModal id="modal-call-me-form" class="fade" @closed="$emit('closed')">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header nobottomborder nobottompadding clearfix">

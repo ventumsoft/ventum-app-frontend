@@ -1,5 +1,5 @@
 <template>
-  <BsModal id="writeTestimonialModal" style="top: 0%;" @closed="$emit('closed')">
+  <BsModal id="writeTestimonialModal" class="fade" style="top: 0%;" @closed="$emit('closed')">
     <template v-slot:title>
       {{ $trans('reviews.modal.label') }}
     </template>

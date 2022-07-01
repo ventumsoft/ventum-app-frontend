@@ -1,6 +1,7 @@
 <template>
   <BsModal
     v-if="integration"
+    class="fade"
     @closed="$store.commit('product/setCurrentActiveEmbeddedIntegration', null)"
   >
     <template v-slot:title>

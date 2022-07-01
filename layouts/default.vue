@@ -11,6 +11,7 @@
     <AuthLoginModal />
     <AuthRecoveryModal />
     <PageMessengers />
+    <SearchModal />
   </div>
 </template>
 
