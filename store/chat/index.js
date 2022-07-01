@@ -34,7 +34,7 @@ export const mutations = {
   },
 
   increaseTicketSecondsFromLastReply(state) {
-    if (!isNaN(state.ticket?.secondsFromLastReply)) {
+    if (typeof state.ticket?.secondsFromLastReply === 'number') {
       state.ticket.secondsFromLastReply++;
     }
   },
