@@ -53,7 +53,7 @@
             <ul class="portfolio-meta">
               <li><span>ID:</span> {{ template.id }}</li>
               <li v-if="template.designer"><span><i class="icon-user"></i>{{ $trans('product.template.designer') }}</span> {{ template.designer }}</li>
-              <li><span><i class="icon-calendar3"></i>{{ $trans('product.template.created_by') }}</span>{{ template.created_at }}</li>
+              <li><span><i class="icon-calendar3"></i>{{ $trans('product.template.created_by') }}</span>{{ $dt(template.created_at, 'date') }}</li>
               <li v-if="template.usages !== undefined"><span><i class="icon-heart3"></i>{{ $trans('product.template.used') }}</span> {{ template.usages }} {{ $trans('product.template.times') }}</li>
             </ul>
             <div v-if="template.categories?.length" class="tagcloud">

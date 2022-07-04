@@ -22,22 +22,28 @@
       </div>
     </template>
     <template v-slot:body>
-      <div class="site-search-result-block"></div>
+      <div class="site-search-result-block">
+        <SearchResult />
+      </div>
     </template>
   </BsModal>
 </template>
 
 <script>
-import {mapState} from "vuex";
+import _throttle from 'lodash/throttle';
+import {mapState} from 'vuex';
 
 export default {
   computed: {
     ...mapState('search', ['showing', 'query']),
   },
   watch: {
-    query(value) {
-      console.log('watch search query', value);
+    $route() {
+      this.$store.commit('search/update', {showing: false});
     },
+    query: _throttle(function () {
+      this.$store.dispatch('search/fetch');
+    }, 334, {leading: false}),
   },
 }
 </script>

@@ -144,7 +144,7 @@ export default {
       }, 1000);
     },
     setTimeSlide($owlCarousel, currentSlide) {
-      const time = currentSlide.find('.item-content').data('time');
+      const time = this.slide_time;
       $owlCarousel.trigger('stop.owl.autoplay');
       setTimeout(function() {$owlCarousel.trigger('play.owl.autoplay')}, (time > 0) ? time : 100000000)
     },
