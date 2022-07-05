@@ -111,7 +111,6 @@ export default {
     },
     toggleSearch(value) {
       document.body.classList.toggle('top-search-open', value);
-      //$topCart.toggleClass('top-cart-open', false);
       //$('#primary-menu > ul, #primary-menu > div > ul').toggleClass('show', false);
       //$pagemenu.toggleClass('pagemenu-active', false);
       if (document.body.classList.contains('top-search-open')) {
@@ -129,7 +128,6 @@ export default {
       if (!event.target.closest('#top-search')) {
         this.toggleSearch(false);
       }
-      //if (!$(event.target).closest('#top-cart').length) { $topCart.toggleClass('top-cart-open', false); }
       //if (!$(event.target).closest('#page-menu').length) { $pagemenu.toggleClass('pagemenu-active', false); }
       //if (!$(event.target).closest('#side-panel').length) { $body.toggleClass('side-panel-open', false); }
     },

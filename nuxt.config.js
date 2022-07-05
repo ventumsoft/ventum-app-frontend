@@ -138,7 +138,7 @@ export default {
       },
     },
     redirect: {
-      login: false,
+      login: '/',
       home: false,
     },
   },

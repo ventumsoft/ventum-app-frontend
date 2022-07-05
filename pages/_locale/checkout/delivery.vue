@@ -1,3 +1,3 @@
 <template>
-  <CartStepItems />
+  <CartStepDelivery />
 </template>
