@@ -11,7 +11,7 @@
       <div class="content-wrap">
         <div class="container clearfix">
           <div id="processTabs" style="margin-top: 30px;">
-            <CartSteps />
+            <CartSteps :active="$route.meta.step" />
             <NuxtChild />
           </div>
         </div>
@@ -40,11 +40,21 @@ export default {
   }),
   async fetch({ store }) {
     if (process.client) {
-      await store.dispatch('cart/fetch');
+      await store.dispatch('cart/fetch', {summary: true});
     }
   },
   computed: {
     ...mapState('cart', ['items']),
+  },
+  watch: {
+    '$auth.user'() {
+      if (this.$route.meta.step !== 'items') {
+        this.$router.push(this.$page({name: 'checkout/cart'}));
+      }
+    },
+    $route() {
+      this.$store.dispatch('cart/fetch', {summary: true});
+    },
   },
   mounted() {
     //

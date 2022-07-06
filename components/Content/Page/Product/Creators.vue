@@ -40,7 +40,7 @@
               <span class="subtitle">
                 {{ integration.description }}
                 <span v-if="usingPriceByIntegration[integration.id]" class="product-creator-integration-using-price">
-                  (+{{ usingPriceByIntegration[integration.id] }})
+                  (+{{ $currency(usingPriceByIntegration[integration.id]) }})
                 </span>
               </span>
             </h3>

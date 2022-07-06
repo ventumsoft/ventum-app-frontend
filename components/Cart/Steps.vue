@@ -1,16 +1,17 @@
 <template>
   <ul class="process-steps bottommargin clearfix">
-    <li class="active" data-step="cart-step">
-      <a href="#" class="i-circled i-bordered i-alt divcenter"  @click.prevent>1</a>
-      <h5>{{ $trans('checkout.goods_step_title') }}</h5>
-    </li>
-    <li :class="{disabled: !items.length}" data-action="change-step" data-step="delivery">
-      <a href="#" class="i-circled i-bordered i-alt divcenter"  @click.prevent>2</a>
-      <h5>{{ $trans('checkout.delivery_step_title') }}</h5>
-    </li>
-    <li class="disabled" data-step="payment-step">
-      <a href="#" class="i-circled i-bordered i-alt divcenter" @click.prevent>3</a>
-      <h5>{{ $trans('checkout.payment_step_title') }}</h5>
+    <li
+      v-for="(step, stepIndex) of steps"
+      :class="{
+        active: step === active,
+        disabled: steps.indexOf(active) + 1 < stepIndex,
+      }"
+    >
+      <TheLink
+        :to="$page({name: 'checkout/' + (route[step] || step)})"
+        class="i-circled i-bordered i-alt divcenter"
+      >{{ stepIndex + 1 }}</TheLink>
+      <h5>{{ $trans('checkout.' + (i18n[step] || step) + '_step_title') }}</h5>
     </li>
   </ul>
 </template>
@@ -19,6 +20,14 @@
 import {mapState} from 'vuex';
 
 export default {
+  props: [
+    'active',
+  ],
+  data: () => ({
+    steps: ['items', 'delivery', 'payment'],
+    route: {items: 'cart'},
+    i18n: {items: 'goods'},
+  }),
   computed: {
     ...mapState('cart', ['items']),
   },

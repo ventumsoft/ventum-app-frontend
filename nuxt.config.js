@@ -58,6 +58,7 @@ export default {
     '~/plugins/axios-headers.js',
     '~/plugins/fragment',
     '~/plugins/page',
+    '~/plugins/currency-format-service',
     '~/plugins/date-time-format-service',
     '~/plugins/load-interacted.client',
     '~/plugins/images-loaded.client',
@@ -65,6 +66,7 @@ export default {
     '~/plugins/nl2br',
     '~/plugins/trans',
     '~/plugins/bs.client',
+    '~/plugins/mfp.client',
     '~/plugins/fitvids.client',
     '~/plugins/mask.client',
     '~/plugins/noty.client',
@@ -81,6 +83,7 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    'nuxt-route-meta',
     '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/bootstrap
     // 'bootstrap-vue/nuxt',

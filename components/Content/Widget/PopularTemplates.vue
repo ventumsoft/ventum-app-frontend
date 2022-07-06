@@ -36,7 +36,7 @@
                   <i v-if="index === 0" class="icon-line-plus"></i>
                 </a>
               </template>
-              <a v-else :href="templateData.previewImageFull" class="center-icon" data-lightbox="image">
+              <a v-else :href="templateData.previewImageFull" class="center-icon" v-mfp:image>
                 <i class="icon-line-plus"></i>
               </a>
             </div>
@@ -72,7 +72,6 @@ export default {
   },
   async mounted() {
     await import('owl.carousel/dist/owl.carousel');
-    await import('magnific-popup');
 
     const $carousel = $(this.$refs.carousel);
     $carousel.owlCarousel({
@@ -97,14 +96,6 @@ export default {
   methods: {
     carouselInitialized(event) {
       const $carousel = $(this.$refs.carousel);
-      $carousel.find('[data-lightbox="image"]').magnificPopup({
-        type: 'image',
-        closeOnContentClick: true,
-        closeBtnInside: false,
-        fixedContentPos: true,
-        mainClass: 'mfp-no-margins mfp-fade',
-        image: {verticalFit: true},
-      });
       $carousel.find('[data-lightbox="gallery"]').each(function () {
         let element = $(this);
         element.magnificPopup({

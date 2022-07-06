@@ -1,5 +1,5 @@
 <template>
   <div class="tab-content checkout-payment-block">
-    cart delivery step
+    cart payment step
   </div>
 </template>

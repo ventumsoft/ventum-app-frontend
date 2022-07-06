@@ -21,7 +21,7 @@
             class="chat-message-image"
             style="display: inline-block; margin: 10px;"
           >
-            <a :href="image.link" class="chat-message-image-link" data-lightbox="image">
+            <a :href="image.link" class="chat-message-image-link" v-mfp:image>
               <div
                 v-if="image.cmyk && $store.state.site.settings?.['helpdesk:discussion-thread:show-cmyk-image-warning']"
                 class="chat-message-image-cmyk"
@@ -73,17 +73,6 @@ export default {
   props: [
     'message',
   ],
-  async mounted() {
-    await import('magnific-popup');
-    $(this.$el).find('[data-lightbox="image"]').magnificPopup({
-      type: 'image',
-      closeOnContentClick: true,
-      closeBtnInside: false,
-      fixedContentPos: true,
-      mainClass: 'mfp-no-margins mfp-fade',
-      image: {verticalFit: true},
-    });
-  },
   methods: {
     autolinker: Autolinker.link,
     striptags,

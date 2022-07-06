@@ -1,7 +1,11 @@
 export const state = () => ({
   items: [],
-  totalWithoutDiscount: null,
-  totalWithDiscount: null,
+  itemsTotalWithoutDiscount: null,
+  itemsTotalWithDiscount: null,
+  discounts: null,
+  bonus: null,
+  vat: null,
+  total: null,
 });
 
 export const mutations = {
@@ -13,21 +17,35 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetch({commit}) {
-    let items = [], totalWithoutDiscount, totalWithDiscount;
+  async fetch({commit}, {summary} = {}) {
+    let items = [],
+      itemsTotalWithoutDiscount,
+      itemsTotalWithDiscount,
+      discounts,
+      bonus,
+      vat,
+      total;
     try {
       ({data: {
         items,
-        totalWithoutDiscount,
-        totalWithDiscount,
-      }} = (await this.$axios.get('cart/data')));
+        itemsTotalWithoutDiscount,
+        itemsTotalWithDiscount,
+        discounts,
+        bonus,
+        vat,
+        total,
+      }} = (await this.$axios.get('cart/data', {params: {summary}})));
     } catch (exception) {
       //
     }
     commit('update', {
       items,
-      totalWithoutDiscount,
-      totalWithDiscount,
+      itemsTotalWithoutDiscount,
+      itemsTotalWithDiscount,
+      discounts,
+      bonus,
+      vat,
+      total,
     });
   },
 }

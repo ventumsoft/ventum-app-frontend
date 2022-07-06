@@ -92,8 +92,9 @@
                           class="center-icon"
                           :class="{'two-icons': !$store.state.site.settings?.['constructor:templates:disable-template-page']}"
                           :href="template.image"
-                          :data-lightbox="template.pagesImages ? 'gallery' : 'image'"
+                          :data-lightbox="template.pagesImages ? 'gallery' : undefined"
                           :data-items="template.pagesImages ? JSON.stringify(template.pagesImages.map(templatePageImage => ({src: templatePageImage.full}))) : undefined"
+                          v-mfp:image="!template.pagesImages"
                         ><i class="icon-line-plus"></i></a>
                         <TheLink
                           v-if="!$store.state.site.settings?.['constructor:templates:disable-template-page']"
@@ -197,14 +198,6 @@ export default {
   methods: {
     magnificPopupInitialize() {
       const $container = $(this.$refs.templatesContainer);
-      $container.find('[data-lightbox="image"]').magnificPopup({
-        type: 'image',
-        closeOnContentClick: true,
-        closeBtnInside: false,
-        fixedContentPos: true,
-        mainClass: 'mfp-no-margins mfp-fade',
-        image: {verticalFit: true},
-      });
       $container.find('[data-lightbox="gallery"]').each(function () {
         const $element = $(this);
         $element.magnificPopup({
