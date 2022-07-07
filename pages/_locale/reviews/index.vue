@@ -3,7 +3,7 @@
     <PageTitle
       :title="$trans('reviews.page_title')"
       :breadcrumbs="[
-        {title: $trans('default.breadcrumbs.main'), url: $page({name: 'locale'})},
+        {title: $trans('default.breadcrumbs.main'), url: $page({name: 'index'})},
         {title: $trans('reviews.page_title')},
       ]"
     />
@@ -73,7 +73,7 @@
               class="button btn-success button-large timeline-add"
               @click.prevent="$store.dispatch('reviews/fetch', {page: page + 1, append: true});"
             >
-              <div class="form-process" style="left: 0;" :style="{display: loading ? 'block' : 'none'}"></div>
+              <div v-if="loading" class="form-process" style="left: 0;"></div>
               {{ $trans('blog.look_yet') }}
             </a>
           </div>

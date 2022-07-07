@@ -4,7 +4,7 @@
       {{ $trans('reviews.modal.label') }}
     </template>
     <template v-slot:body>
-      <div v-show="loading" class="form-process" style="display: block; left: 0; top: 0;"></div>
+      <div v-show="loading" class="form-process" style="left: 0; top: 0;"></div>
       <form
         class="nobottommargin modal-review-form"
         @change="errors = null"

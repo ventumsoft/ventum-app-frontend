@@ -8,7 +8,7 @@
         @input="errors = null"
         @submit.prevent="handleFeedbackSubmit"
       >
-        <div v-if="loading" class="form-process" style="display: block;"></div>
+        <div v-if="loading" class="form-process"></div>
         <div class="col_half">
           <label for="template-contactform-name">{{ $trans('contacts.form.name') }} <small>*</small></label>
           <input

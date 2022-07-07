@@ -1,11 +1,13 @@
 export const state = () => ({
-  items: [],
+  items: null,
   itemsTotalWithoutDiscount: null,
   itemsTotalWithDiscount: null,
   discounts: null,
   bonus: null,
-  vat: null,
-  total: null,
+  vatWithoutDiscount: null,
+  vatWithDiscount: null,
+  deliveryMethods: null,
+  deliveryData: null,
 });
 
 export const mutations = {
@@ -17,14 +19,24 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetch({commit}, {summary} = {}) {
+  async fetch({state, commit}, {summary, delivery} = {}) {
+    console.log('cart/fetch', {summary, delivery});
+    if (!this.$auth.user) {
+      commit('update', Object.keys(state).reduce((result, key) => {
+        result[key] = null;
+        return result;
+      }, {}));
+      return;
+    }
     let items = [],
       itemsTotalWithoutDiscount,
       itemsTotalWithDiscount,
       discounts,
       bonus,
-      vat,
-      total;
+      vatWithoutDiscount,
+      vatWithDiscount,
+      deliveryMethods,
+      deliveryData;
     try {
       ({data: {
         items,
@@ -32,9 +44,14 @@ export const actions = {
         itemsTotalWithDiscount,
         discounts,
         bonus,
-        vat,
-        total,
-      }} = (await this.$axios.get('cart/data', {params: {summary}})));
+        vatWithoutDiscount,
+        vatWithDiscount,
+        deliveryMethods,
+        deliveryData,
+      }} = (await this.$axios.get('cart/data', {params: {
+        summary,
+        delivery,
+      }})));
     } catch (exception) {
       //
     }
@@ -44,8 +61,10 @@ export const actions = {
       itemsTotalWithDiscount,
       discounts,
       bonus,
-      vat,
-      total,
+      vatWithoutDiscount,
+      vatWithDiscount,
+      deliveryMethods,
+      deliveryData,
     });
   },
 }

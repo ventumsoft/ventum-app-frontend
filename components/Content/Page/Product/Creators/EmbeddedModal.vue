@@ -132,7 +132,7 @@
         </div>
         <div class="col_full">
           <div class="fleft btn-link product-creator-embedded-price">
-            <div v-if="priceData.formatted === null" class="form-process" style="display: block;"></div>
+            <div v-if="priceData.formatted === null" class="form-process"></div>
             <Transition><span v-if="priceData.formatted !== null">{{ priceData.formatted }}</span></Transition>
           </div>
           <button

@@ -5,7 +5,7 @@
         :to="$page({...$route, params: {...$route.params, append: true}, query: {...$route.query, page: page + 1}})"
         class="button button-large pagination-download-more-button"
       >
-        <div class="form-process" style="left: 0;" :style="{display: loading ? 'block' : 'none'}"></div>
+        <div v-if="loading" class="form-process" style="left: 0;"></div>
         {{ $trans('blog.pagination.button.download_more_news') }}
       </TheLink>
     </div>

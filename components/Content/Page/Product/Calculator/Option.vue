@@ -161,7 +161,7 @@ export default {
       }
       let elementsPrices;
       try {
-        ({data: elementsPrices} = await this.$axios.post('products/option-elements-pridces', {
+        ({data: elementsPrices} = await this.$axios.post('products/option-elements-prices', {
           productId: this.product.id,
           params: this.params,
           usingPrice: this.$store.state.product.currentActiveEmbeddedIntegration?.usingPrice || undefined,

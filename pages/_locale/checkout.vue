@@ -3,7 +3,7 @@
     <PageTitle
       :title="$trans('checkout.page_title')"
       :breadcrumbs="[
-        {title: $trans('default.breadcrumbs.main'), url: $page({name: 'locale'})},
+        {title: $trans('default.breadcrumbs.main'), url: $page({name: 'index'})},
         {title: $trans('checkout.breadcrumb_title')},
       ]"
     />
@@ -38,11 +38,6 @@ export default {
   data: () => ({
     //
   }),
-  async fetch({ store }) {
-    if (process.client) {
-      await store.dispatch('cart/fetch', {summary: true});
-    }
-  },
   computed: {
     ...mapState('cart', ['items']),
   },
@@ -51,9 +46,6 @@ export default {
       if (this.$route.meta.step !== 'items') {
         this.$router.push(this.$page({name: 'checkout/cart'}));
       }
-    },
-    $route() {
-      this.$store.dispatch('cart/fetch', {summary: true});
     },
   },
   mounted() {

@@ -181,6 +181,9 @@ export default {
     extendRoutes: (routes, resolve) => {
       const removeLocaleFromRoutesNames = routes => {
         for (const route of routes) {
+          if (route.name === 'locale') {
+            route.name = 'index';
+          }
           if (route.name?.startsWith('locale/')) {
             route.name = route.name.substr('locale/'.length);
           }

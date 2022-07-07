@@ -7,7 +7,7 @@
   >
     <div class="modal-dialog">
       <div class="modal-content">
-        <div v-show="loading" class="form-process" style="display: block;"></div>
+        <div v-show="loading" class="form-process"></div>
         <div class="modal-header noborder">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>

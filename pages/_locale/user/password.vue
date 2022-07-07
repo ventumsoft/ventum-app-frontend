@@ -15,6 +15,6 @@
 
 <script>
 export default {
-  middleware: 'auth',
+  middleware: 'authenticate',
 }
 </script>

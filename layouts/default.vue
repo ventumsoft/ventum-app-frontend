@@ -129,6 +129,10 @@ html.flex-footer {
   }
 }
 
+.form-process {
+  display: block;
+}
+
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;

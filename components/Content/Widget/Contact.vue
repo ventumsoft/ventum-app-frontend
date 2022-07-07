@@ -8,7 +8,7 @@
         @input="errors = null"
         @submit.prevent="handleFeedbackSubmit"
       >
-        <div v-if="loading" class="form-process" style="display: block;"></div>
+        <div v-if="loading" class="form-process"></div>
         <div class="input-group divcenter">
           <span class="input-group-addon"><i class="icon-user"></i></span>
           <input

@@ -1,6 +1,6 @@
 <template>
   <div class="tab-content">
-    <form id="cart-from" v-if="items.length" @submit.prevent>
+    <form id="cart-from" v-if="items?.length" @submit.prevent>
       <table class="table cart table-responsive">
         <thead>
         <tr class="hidden-xs">
@@ -56,7 +56,7 @@
                     <i class="icon-gift"></i><span>{{ $trans('checkout.goods_step.btn_apply_coupon') }}</span>
                   </a>
                 </div>
-                <div class="form-process" style="left: 0;"></div>
+                <div v-if="false" class="form-process" style="left: 0;"></div>
               </div>
             </div>
           </td>
@@ -94,7 +94,7 @@
             <strong>{{ $store.state.site.settings?.['pricing:tax-name-str'] }}:</strong>
           </td>
           <td class="cart-product-subtotal">
-            <span class="amount"><strong>{{ vat }}</strong></span>
+            <span class="amount"><strong>{{ vatWithDiscount }}</strong></span>
           </td>
         </tr>
         <tr class="cart_total">
@@ -104,7 +104,7 @@
             <strong>{{ $trans('checkout.goods_step.total') }}</strong>
           </td>
           <td class="cart-product-subtotal">
-            <span class="amount color lead"><strong>{{ total }}</strong></span>
+            <span class="amount color lead"><strong>{{ itemsTotalWithDiscount }}</strong></span>
           </td>
         </tr>
         <tr class="">
@@ -113,7 +113,7 @@
               <TheLink :to="$page({name: 'checkout/delivery'})" class="button button-rounded button-reveal tright nomargin fright">
                 <i class="icon-arrow-right2"></i><span>{{ $trans('checkout.goods_step.next_step_btn') }}</span>
               </TheLink>
-              <TheLink :to="$page({name: 'locale'})" class="button button-rounded button-reveal  button-amber notopmargin fright">
+              <TheLink :to="$page({name: 'index'})" class="button button-rounded button-reveal  button-amber notopmargin fright">
                 <i class="icon-arrow-left2"></i><span>{{ $trans('checkout.goods_step.order_more_btn') }}</span>
               </TheLink>
             </div>
@@ -126,7 +126,7 @@
       <div class="alert alert-info">{{ $trans('checkout.empty_cart') }}</div>
       <div class="row clearfix">
         <div class="col-md-12">
-          <TheLink :to="$page({name: 'locale'})" class="button button-rounded button-reveal button-amber notopmargin pull-right">
+          <TheLink :to="$page({name: 'index'})" class="button button-rounded button-reveal button-amber notopmargin pull-right">
             <i class="icon-arrow-left2"></i>
             <span>{{ $trans('checkout.goods_step.order_more_btn') }}</span>
           </TheLink>
@@ -143,16 +143,17 @@ export default {
   computed: {
     ...mapState('cart', [
       'items',
+      'itemsTotalWithDiscount',
       'discounts',
       'bonus',
-      'vat',
-      'total',
+      'vatWithDiscount',
     ]),
   },
   methods: {
     async removeCartItem(item) {
+      // await confirm
       await this.$axios.delete('cart/remove', {params: {id: item.id}});
-      await this.$store.dispatch('cart/fetch', {summary: true});
+      await this.$store.dispatch('cart/fetch');
     },
   },
 }

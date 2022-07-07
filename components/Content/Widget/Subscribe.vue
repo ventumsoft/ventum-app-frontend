@@ -7,7 +7,7 @@
       </div>
       <div id="widget-subscribe-form2-result" data-notify-type="success" data-notify-msg=""></div>
       <form id="widget-subscribe-form2" class="nobottommargin" @submit.prevent="checkSubscriberEmail">
-        <div v-if="loading" class="form-process" style="display: block; left: 0; top: 0;"></div>
+        <div v-if="loading" class="form-process" style="left: 0; top: 0;"></div>
         <div class="divcenter" style="max-width:600px;">
           <div class="input-group input-group-lg">
             <span class="input-group-addon"><i class="icon-email3"></i></span>
@@ -46,7 +46,7 @@
                   class="subscribe-form nobottommargin"
                   @submit.prevent="handleSubscriberSubmit"
                 >
-                  <div v-if="loading" class="form-process" style="display: block; left: 0; top: 0;"></div>
+                  <div v-if="loading" class="form-process" style="left: 0; top: 0;"></div>
                   <div class="col_full">
                     <label>{{ $trans('widgets.subscribe.modal_name') }}</label>
                     <input

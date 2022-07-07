@@ -1,6 +1,6 @@
 <template>
   <div class="panel panel-default nobottommargin noborder">
-    <div v-show="loading" class="form-process" style="display: block;"></div>
+    <div v-show="loading" class="form-process"></div>
     <div class="panel-body" id="password-recovery-container">
       <form class="account-recovery-form" @submit.prevent="handleRecoverySubmit">
         <div class="alert alert-info">
