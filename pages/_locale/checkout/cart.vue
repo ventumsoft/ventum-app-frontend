@@ -8,8 +8,7 @@ export default {
     step: 'items',
   },
   async middleware({store}) {
-    console.log('checkout/cart middleware');
-    await store.dispatch('cart/fetch', {summary: true});
+    await store.dispatch('cart/fetch', {checkout: true});
   },
 }
 </script>

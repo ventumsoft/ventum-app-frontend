@@ -94,7 +94,7 @@
             <strong>{{ $store.state.site.settings?.['pricing:tax-name-str'] }}:</strong>
           </td>
           <td class="cart-product-subtotal">
-            <span class="amount"><strong>{{ vatWithDiscount }}</strong></span>
+            <span class="amount"><strong>{{ vat }}</strong></span>
           </td>
         </tr>
         <tr class="cart_total">
@@ -104,7 +104,7 @@
             <strong>{{ $trans('checkout.goods_step.total') }}</strong>
           </td>
           <td class="cart-product-subtotal">
-            <span class="amount color lead"><strong>{{ itemsTotalWithDiscount }}</strong></span>
+            <span class="amount color lead"><strong>{{ totalWithDiscount }}</strong></span>
           </td>
         </tr>
         <tr class="">
@@ -143,10 +143,10 @@ export default {
   computed: {
     ...mapState('cart', [
       'items',
-      'itemsTotalWithDiscount',
+      'totalWithDiscount',
       'discounts',
       'bonus',
-      'vatWithDiscount',
+      'vat',
     ]),
   },
   methods: {

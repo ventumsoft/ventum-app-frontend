@@ -10,8 +10,7 @@ export default {
   middleware: [
     'authenticate',
     async function ({store}) {
-      console.log('checkout/delivery middleware');
-      await store.dispatch('cart/fetch', {summary: true, delivery: true});
+      await store.dispatch('cart/fetch', {checkout: true, delivery: true});
     },
   ],
 }

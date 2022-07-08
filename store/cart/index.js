@@ -1,11 +1,10 @@
 export const state = () => ({
   items: null,
-  itemsTotalWithoutDiscount: null,
-  itemsTotalWithDiscount: null,
+  totalWithoutDiscount: null,
+  totalWithDiscount: null,
   discounts: null,
   bonus: null,
-  vatWithoutDiscount: null,
-  vatWithDiscount: null,
+  vat: null,
   deliveryMethods: null,
   deliveryData: null,
 });
@@ -19,52 +18,21 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetch({state, commit}, {summary, delivery} = {}) {
-    console.log('cart/fetch', {summary, delivery});
-    if (!this.$auth.user) {
-      commit('update', Object.keys(state).reduce((result, key) => {
-        result[key] = null;
-        return result;
-      }, {}));
-      return;
+  async fetch({state, commit}, {checkout, delivery} = {}) {
+    let data = Object.keys(state).reduce((result, key) => {
+      result[key] = null;
+      return result;
+    }, {});
+    if (this.$auth.user) {
+      try {
+        ({data} = (await this.$axios.get('cart/data', {params: {
+          checkout,
+          delivery,
+        }})));
+      } catch (exception) {
+        //
+      }
     }
-    let items = [],
-      itemsTotalWithoutDiscount,
-      itemsTotalWithDiscount,
-      discounts,
-      bonus,
-      vatWithoutDiscount,
-      vatWithDiscount,
-      deliveryMethods,
-      deliveryData;
-    try {
-      ({data: {
-        items,
-        itemsTotalWithoutDiscount,
-        itemsTotalWithDiscount,
-        discounts,
-        bonus,
-        vatWithoutDiscount,
-        vatWithDiscount,
-        deliveryMethods,
-        deliveryData,
-      }} = (await this.$axios.get('cart/data', {params: {
-        summary,
-        delivery,
-      }})));
-    } catch (exception) {
-      //
-    }
-    commit('update', {
-      items,
-      itemsTotalWithoutDiscount,
-      itemsTotalWithDiscount,
-      discounts,
-      bonus,
-      vatWithoutDiscount,
-      vatWithDiscount,
-      deliveryMethods,
-      deliveryData,
-    });
+    commit('update', data);
   },
 }

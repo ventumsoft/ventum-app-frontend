@@ -2,9 +2,9 @@
   <div id="top-cart">
     <a href="#" id="top-cart-trigger" @click.prevent="toggleTopCartShowing">
       <i class="icon-shopping-cart"></i>
-      <span>{{ items.length }}</span>
+      <span>{{ items?.length || 0 }}</span>
     </a>
-    <div class="top-cart-content">
+    <div v-if="items" class="top-cart-content">
       <div class="top-cart-title">
         <h4>{{ $trans('order.cart.title') }}</h4>
       </div>
@@ -26,8 +26,8 @@
       </div>
       <div v-if="items.length" class="top-cart-action clearfix">
         <span class="fleft">
-            <span v-if="itemsTotalWithoutDiscount !== itemsTotalWithDiscount" class="top-checkout-striked-price">{{ itemsTotalWithoutDiscount }}</span>
-            <span class="top-checkout-price">{{ itemsTotalWithDiscount }}</span>
+            <span v-if="totalWithoutDiscount !== totalWithDiscount" class="top-checkout-striked-price">{{ totalWithoutDiscount }}</span>
+            <span class="top-checkout-price">{{ totalWithDiscount }}</span>
         </span>
         <TheLink v-if="items.length" :to="$page({name: 'checkout/cart'})" class="fright">
           <button class="button button-rounded button-reveal button-small nomargin tright fright">
@@ -53,8 +53,8 @@ export default {
   computed: {
     ...mapState('cart', [
       'items',
-      'itemsTotalWithoutDiscount',
-      'itemsTotalWithDiscount',
+      'totalWithoutDiscount',
+      'totalWithDiscount',
     ]),
   },
   mounted() {

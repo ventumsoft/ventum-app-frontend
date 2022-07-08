@@ -35,9 +35,6 @@ export default {
       ],
     };
   },
-  data: () => ({
-    //
-  }),
   computed: {
     ...mapState('cart', ['items']),
   },
@@ -47,9 +44,6 @@ export default {
         this.$router.push(this.$page({name: 'checkout/cart'}));
       }
     },
-  },
-  mounted() {
-    //
   },
 }
 </script>
