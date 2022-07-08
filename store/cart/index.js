@@ -1,4 +1,5 @@
 export const state = () => ({
+  loading: false,
   items: null,
   totalWithoutDiscount: null,
   totalWithDiscount: null,
@@ -24,6 +25,7 @@ export const actions = {
       return result;
     }, {});
     if (this.$auth.user) {
+      commit('update', {loading: true});
       try {
         ({data} = (await this.$axios.get('cart/data', {params: {
           checkout,
@@ -31,6 +33,8 @@ export const actions = {
         }})));
       } catch (exception) {
         //
+      } finally {
+        commit('update', {loading: false});
       }
     }
     commit('update', data);

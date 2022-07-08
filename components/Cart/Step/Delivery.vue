@@ -5,10 +5,9 @@
         <div class="col-md-6 block-delivery-price">
           <h3>{{ $trans('checkout.delivery_step.choose_system_title') }}</h3>
           <form id="shipping-select" class="nobottommargin" @submit.prevent>
-            <div v-if="false" class="form-process"></div>
+            <div v-if="loading" class="form-process"></div>
             <div
               v-for="deliveryMethod of deliveryMethods"
-              v-if="!(void 'limitations')"
               class="bottommargin-sm"
             >
               <input
@@ -17,7 +16,6 @@
                 type="radio"
                 :data-id="deliveryMethod.id"
                 :data-delivery-system-type="deliveryMethod.type"
-                :disabled="!!(void 'limitations')"
                 :checked="currentDeliveryMethod?.id === deliveryMethod.id"
                 @change="currentDeliveryMethod = deliveryMethod"
               >
@@ -29,20 +27,19 @@
                   class="delivery-system-logo"
                 >
                 {{ deliveryMethod.name }}
-                <span v-if="void 'is_recipient_payer'" class="lowercase">({{ $trans('checkout.delivery_step.pay_according_carrier_tariffs') }})</span>
-                <span v-else-if="void 'pendingAddressForPrice'" class="lowercase">({{ $trans('checkout.delivery_step.price_from_depends_on_address').replace(':value', deliveryMethod.checkout.deliveryPrice) }})</span>
+                <span v-if="deliveryMethod.checkout.isRecipientPayer" class="lowercase">({{ $trans('checkout.delivery_step.pay_according_carrier_tariffs') }})</span>
+                <span v-else-if="deliveryMethod.checkout.pendingAddressForPrice" class="lowercase">({{ $trans('checkout.delivery_step.price_from_depends_on_address').replace(':value', deliveryMethod.checkout.deliveryPrice) }})</span>
                 <span v-else class="lowercase">(+{{ deliveryMethod.checkout.deliveryPrice }})</span>
               </label>
               <p class="nobottommargin">{{ deliveryMethod.description }}</p>
-              <div v-if="void 'limitations'" class="alert alert-warning">
-                <i class="icon-warning-sign"></i>
-                {{ $trans('checkout.delivery_step.not_available_for_products').replace(':products', 'limitations products list') }}
-              </div>
-              <div v-else-if="void 'unavailableDueAddress'" class="alert alert-warning">
+              <div v-if="deliveryMethod.checkout.unavailableDueAddress" class="alert alert-warning">
                 <i class="icon-warning-sign"></i>
                 {{ $trans('checkout.delivery_step.not_available_for_address') }}
               </div>
-              <div v-else-if="deliveryMethod.type === 'pickup_point'">pickup_point-listSubitle</div>
+              <CartDeliveryPickupPointListSubTitle
+                v-else-if="deliveryMethod.pickupPoint"
+                v-bind="{deliveryMethod}"
+              />
             </div>
           </form>
           <div class="table-responsive shipping-price-table">
@@ -56,12 +53,12 @@
                   <span class="amount">{{ totalWithoutDiscount }}</span>
                 </td>
               </tr>
-              <tr v-if="currentDeliveryMethod" class="delivery-price-row">
+              <tr v-if="currentDeliveryMethod && !currentDeliveryMethod.checkout.isRecipientPayer" class="delivery-price-row">
                 <td class="cart-product-name">
                   <strong>{{ $trans('checkout.delivery_step.table_delivery_price') }}:</strong>
                 </td>
                 <td class="cart-product-subtotal">
-                  <span class="amount">{{ currentDeliveryMethod.checkout.deliveryPrice }}</span>
+                  <span class="amount">{{ currentDeliveryMethod.checkout.pendingAddressForPrice ? $trans('checkout.delivery_step.price_from_depends_on_address').replace(':value', currentDeliveryMethod.checkout.deliveryPrice) : currentDeliveryMethod.checkout.deliveryPrice }}</span>
                 </td>
               </tr>
               <tr v-for="discount of (currentDeliveryMethod ? currentDeliveryMethod.checkout.discounts : discounts)" class="cart-discount-delivery">
@@ -102,15 +99,11 @@
         </div>
         <div class="col-md-6 shipping-forms">
           <h3>{{ $trans('checkout.delivery_step.buyer_data') }}</h3>
-          <div v-if="false" class="row clearfix shipping-not-available">
-            <div class="col-lg-12 alert alert-danger">
-              <i class="icon-warning-sign"></i>
-              {{ $trans('checkout.delivery_step.delivery_not_found') }}
-            </div>
-            <div v-for="deliveryMethod of deliveryMethods">
-              delivery method {{ deliveryMethod.id }} form
-            </div>
-          </div>
+          <component
+            v-if="currentDeliveryMethod && deliverySystemFormComponentByType[currentDeliveryMethod.type]"
+            :is="deliverySystemFormComponentByType[currentDeliveryMethod.type]"
+            :deliveryMethod="currentDeliveryMethod"
+          />
         </div>
       </div>
       <TheLink :to="$page({name: 'checkout/payment'})" class="button button-rounded button-reveal tright nomargin fright disabled">
@@ -127,14 +120,37 @@
 </template>
 
 <script>
+import DeliverySystemTypeEnum from '@/enums/DeliverySystemTypeEnum';
+import UniversalCalc from '@/components/Cart/Delivery/UniversalCalc';
+import PickupPoint from '@/components/Cart/Delivery/PickupPoint';
+import NovaPoshta from '@/components/Cart/Delivery/NovaPoshta';
+import NovaPoshtaCourier from '@/components/Cart/Delivery/NovaPoshtaCourier';
+import ApiShipToPoint from '@/components/Cart/Delivery/ApiShipToPoint';
+import ApiShipToDoor from '@/components/Cart/Delivery/ApiShipToDoor';
+import EvropochtaToPoint from '@/components/Cart/Delivery/EvropochtaToPoint';
+import EvropochtaToDoor from '@/components/Cart/Delivery/EvropochtaToDoor';
+import VirtualProduct from '@/components/Cart/Delivery/VirtualProduct';
 import {mapState} from 'vuex';
 
 export default {
   data: () => ({
+    DeliverySystemTypeEnum,
+    deliverySystemFormComponentByType: {
+      [DeliverySystemTypeEnum.UNIVERSAL_CALC]: UniversalCalc,
+      [DeliverySystemTypeEnum.PICKUP_POINT]: PickupPoint,
+      [DeliverySystemTypeEnum.NOVA_POSHTA]: NovaPoshta,
+      [DeliverySystemTypeEnum.NOVA_POSHTA_COURIER]: NovaPoshtaCourier,
+      [DeliverySystemTypeEnum.API_SHIP_TO_POINT]: ApiShipToPoint,
+      [DeliverySystemTypeEnum.API_SHIP_TO_DOOR]: ApiShipToDoor,
+      [DeliverySystemTypeEnum.EVROPOCHTA_TO_POINT]: EvropochtaToPoint,
+      [DeliverySystemTypeEnum.EVROPOCHTA_TO_DOOR]: EvropochtaToDoor,
+      [DeliverySystemTypeEnum.VIRTUAL_PRODUCT]: VirtualProduct,
+    },
     currentDeliveryMethod: null,
   }),
   computed: {
     ...mapState('cart', [
+      'loading',
       'items',
       'totalWithoutDiscount',
       'totalWithDiscount',
