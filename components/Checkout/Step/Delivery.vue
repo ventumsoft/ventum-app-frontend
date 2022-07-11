@@ -1,13 +1,13 @@
 <template>
   <div class="tab-content">
-    <template v-if="deliveryMethods?.length">
+    <template v-if="deliverySystems?.length">
       <div class="row clearfix">
         <div class="col-md-6 block-delivery-price">
           <h3>{{ $trans('checkout.delivery_step.choose_system_title') }}</h3>
           <form id="shipping-select" class="nobottommargin" @submit.prevent>
-            <div v-if="loading" class="form-process"></div>
+            <div v-if="deliveryStepLoading" class="form-process"></div>
             <div
-              v-for="deliveryMethod of deliveryMethods"
+              v-for="deliveryMethod of deliverySystems"
               class="bottommargin-sm"
             >
               <input
@@ -17,7 +17,7 @@
                 :data-id="deliveryMethod.id"
                 :data-delivery-system-type="deliveryMethod.type"
                 :checked="currentDeliveryMethod?.id === deliveryMethod.id"
-                @change="currentDeliveryMethod = deliveryMethod"
+                @change="changeDeliverySystem(deliveryMethod)"
               >
               <label :for="'delivery-type-' + deliveryMethod.id" class="radio-style-2-label radio-small">
                 <img
@@ -36,7 +36,7 @@
                 <i class="icon-warning-sign"></i>
                 {{ $trans('checkout.delivery_step.not_available_for_address') }}
               </div>
-              <CartDeliveryPickupPointListSubTitle
+              <CheckoutDeliveryPickupPointListSubTitle
                 v-else-if="deliveryMethod.pickupPoint"
                 v-bind="{deliveryMethod}"
               />
@@ -121,15 +121,15 @@
 
 <script>
 import DeliverySystemTypeEnum from '@/enums/DeliverySystemTypeEnum';
-import UniversalCalc from '@/components/Cart/Delivery/UniversalCalc';
-import PickupPoint from '@/components/Cart/Delivery/PickupPoint';
-import NovaPoshta from '@/components/Cart/Delivery/NovaPoshta';
-import NovaPoshtaCourier from '@/components/Cart/Delivery/NovaPoshtaCourier';
-import ApiShipToPoint from '@/components/Cart/Delivery/ApiShipToPoint';
-import ApiShipToDoor from '@/components/Cart/Delivery/ApiShipToDoor';
-import EvropochtaToPoint from '@/components/Cart/Delivery/EvropochtaToPoint';
-import EvropochtaToDoor from '@/components/Cart/Delivery/EvropochtaToDoor';
-import VirtualProduct from '@/components/Cart/Delivery/VirtualProduct';
+import UniversalCalc from '@/components/Checkout/Delivery/UniversalCalc';
+import PickupPoint from '@/components/Checkout/Delivery/PickupPoint';
+import NovaPoshta from '@/components/Checkout/Delivery/NovaPoshta';
+import NovaPoshtaCourier from '@/components/Checkout/Delivery/NovaPoshtaCourier';
+import ApiShipToPoint from '@/components/Checkout/Delivery/ApiShipToPoint';
+import ApiShipToDoor from '@/components/Checkout/Delivery/ApiShipToDoor';
+import EvropochtaToPoint from '@/components/Checkout/Delivery/EvropochtaToPoint';
+import EvropochtaToDoor from '@/components/Checkout/Delivery/EvropochtaToDoor';
+import VirtualProduct from '@/components/Checkout/Delivery/VirtualProduct';
 import {mapState} from 'vuex';
 
 export default {
@@ -150,19 +150,33 @@ export default {
   }),
   computed: {
     ...mapState('cart', [
-      'loading',
       'items',
       'totalWithoutDiscount',
       'totalWithDiscount',
       'discounts',
       'bonus',
       'vat',
-      'deliveryMethods',
+    ]),
+    ...mapState('checkout', [
+      'deliveryStepLoading',
+      'deliverySystems',
       'deliveryData',
     ]),
   },
   mounted() {
-    this.currentDeliveryMethod = this.deliveryMethods?.[0];
+    this.currentDeliveryMethod = this.deliverySystems?.find(deliverySystem => deliverySystem.id == this.deliveryData?.delivery_system_id) ||
+      this.deliverySystems?.[0];
+  },
+  methods: {
+    async changeDeliverySystem(deliverySystem) {
+      this.currentDeliveryMethod = deliverySystem;
+      this.$store.commit('checkout/deliveryData', {delivery_system_id: deliverySystem.id});
+      if (true) {
+        await this.$store.dispatch('checkout/fetchDeliveryStepData', {
+          delivery_system_id: deliverySystem.id,
+        });
+      }
+    },
   },
 }
 </script>

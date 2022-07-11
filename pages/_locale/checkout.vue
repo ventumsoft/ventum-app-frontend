@@ -11,7 +11,7 @@
       <div class="content-wrap">
         <div class="container clearfix">
           <div id="processTabs" style="margin-top: 30px;">
-            <CartSteps :active="$route.meta.step" />
+            <CheckoutSteps :active="$route.meta.step" />
             <NuxtChild />
           </div>
         </div>

@@ -6,8 +6,6 @@ export const state = () => ({
   discounts: null,
   bonus: null,
   vat: null,
-  deliveryMethods: null,
-  deliveryData: null,
 });
 
 export const mutations = {
@@ -19,7 +17,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetch({state, commit}, {checkout, delivery} = {}) {
+  async fetch({state, commit}, {checkout} = {}) {
     let data = Object.keys(state).reduce((result, key) => {
       result[key] = null;
       return result;
@@ -29,7 +27,6 @@ export const actions = {
       try {
         ({data} = (await this.$axios.get('cart/data', {params: {
           checkout,
-          delivery,
         }})));
       } catch (exception) {
         //

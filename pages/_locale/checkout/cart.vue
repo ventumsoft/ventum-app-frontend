@@ -1,5 +1,5 @@
 <template>
-  <CartStepItems />
+  <CheckoutStepCart />
 </template>
 
 <script>

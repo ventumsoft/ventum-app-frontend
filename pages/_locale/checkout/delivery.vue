@@ -1,5 +1,5 @@
 <template>
-  <CartStepDelivery />
+  <CheckoutStepDelivery />
 </template>
 
 <script>
@@ -20,7 +20,8 @@ export default {
   middleware: [
     'authenticate',
     async function ({store}) {
-      await store.dispatch('cart/fetch', {checkout: true, delivery: true});
+      await store.dispatch('cart/fetch', {checkout: true});
+      await store.dispatch('checkout/fetchDeliveryStepData');
     },
   ],
 }
