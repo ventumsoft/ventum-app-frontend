@@ -1,20 +1,12 @@
 <template>
   <form class="nobottommargin" @submit.prevent>
-    <CheckoutDeliveryDataName />
-    <CheckoutDeliveryDataMiddleName />
+    <CheckoutDeliveryFieldName />
+    <CheckoutDeliveryFieldMiddleName />
     <div class="clear"></div>
-    <CheckoutDeliveryDataCountry v-if="$store.state.site.settings?.['general:multicountry']" />
-    <CheckoutDeliveryDataPhone />
-    <CheckoutDeliveryDataEmail />
+    <CheckoutDeliveryFieldCountry />
+    <CheckoutDeliveryFieldEmail />
+    <CheckoutDeliveryFieldPhone />
     <div class="clear"></div>
-    <CheckoutDeliveryDataMessage />
+    <CheckoutDeliveryFieldMessage />
   </form>
 </template>
-
-<script>
-export default {
-  props: [
-    'deliveryMethod',
-  ],
-}
-</script>

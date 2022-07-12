@@ -1,35 +1,17 @@
 <template>
   <form class="nobottommargin" @submit.prevent>
-    <CheckoutDeliveryDataRecipientType v-if="void 'enabledRecipientType'" />
-    <CheckoutDeliveryDataName :onlyCyrillic="true" />
-    <CheckoutDeliveryDataMiddleName :onlyCyrillic="true" />
-    <CheckoutDeliveryDataSecondName :onlyCyrillic="true" />
-    <CheckoutDeliveryDataCompanyName v-if="(void 'enabledRecipientType') && ('business' === void 'recipient_type')" />
-    <CheckoutDeliveryDataEdrpou v-if="(void 'enabledRecipientType') && ('business' === void 'recipient_type')" />
-    <div class="col_full address" :class="{'has-error': false}">
-      <label>{{ $trans('checkout.delivery_step.form_city') }}:</label>
-      <select name="delivery-form-city" class="form-control select2 select-delivery-city" required>
-        <option v-if="void 'city'" :value="city">{{ city.Description || city.Present || '' }}</option>
-      </select>
-    </div>
-    <div class="col_full address" :class="{'has-error': false}">
-      <label>{{ $trans('checkout.delivery_step.form_warehouse') }}</label>
-      <select name="delivery-form-warehouse" class="form-control select2 select-delivery-warehouse" required>
-        <option v-if="void 'warehouse'" :value="warehouse">{{ warehouse.Description || '' }}</option>
-      </select>
-    </div>
+    <CheckoutDeliveryFieldRecipientType />
+    <CheckoutDeliveryFieldName :onlyCyrillic="true" />
+    <CheckoutDeliveryFieldMiddleName :onlyCyrillic="true" />
+    <CheckoutDeliveryFieldSecondName :onlyCyrillic="true" />
+    <CheckoutDeliveryFieldCompanyName />
+    <CheckoutDeliveryFieldEdrpou />
+    <CheckoutDeliveryFieldNovaPoshtaCity />
+    <CheckoutDeliveryFieldNovaPoshtaWarehouse />
     <div class="clear"></div>
-    <CheckoutDeliveryDataPhone />
-    <CheckoutDeliveryDataEmail />
+    <CheckoutDeliveryFieldEmail />
+    <CheckoutDeliveryFieldPhone />
     <div class="clear"></div>
-    <CheckoutDeliveryDataMessage />
+    <CheckoutDeliveryFieldMessage />
   </form>
 </template>
-
-<script>
-export default {
-  props: [
-    'deliveryMethod',
-  ],
-}
-</script>

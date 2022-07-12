@@ -1,19 +1,11 @@
 <template>
   <form class="nobottommargin" @submit.prevent>
-    <CheckoutDeliveryDataName />
-    <CheckoutDeliveryDataSecondName />
+    <CheckoutDeliveryFieldName />
+    <CheckoutDeliveryFieldSecondName />
     <div class="clear"></div>
-    <CheckoutDeliveryDataPhone />
-    <CheckoutDeliveryDataEmail />
+    <CheckoutDeliveryFieldEmail />
+    <CheckoutDeliveryFieldPhone />
     <div class="clear"></div>
-    <CheckoutDeliveryDataMessage />
+    <CheckoutDeliveryFieldMessage />
   </form>
 </template>
-
-<script>
-export default {
-  props: [
-    'deliveryMethod',
-  ],
-}
-</script>

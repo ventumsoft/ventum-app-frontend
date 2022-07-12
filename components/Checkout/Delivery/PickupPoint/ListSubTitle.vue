@@ -1,6 +1,6 @@
 <template>
   <fragment>
-    <p class="nobottommargin">{{ deliveryMethod.pickupPoint.address }}</p>
+    <p class="nobottommargin">{{ deliverySystem.pickupPoint.address }}</p>
     <p>
       <a href="#" role="button" @click.prevent="showingModal = true">
         {{ $trans('checkout.delivery_step.pickup_point.open_map') }}
@@ -13,18 +13,18 @@
       @closed="showingModal = false"
     >
       <template v-slot:title>
-        {{ deliveryMethod.pickupPoint.mapAddress }}
+        {{ deliverySystem.pickupPoint.mapAddress }}
       </template>
       <template v-slot:body>
         <script ref="mapMarkerContentTemplate" type="text/template">
           <div id="content">
             <div id="bodyContent">
               <p>
-                <b>{{ deliveryMethod.name }}</b>
+                <b>{{ deliverySystem.name }}</b>
                 <br>
-                {{ deliveryMethod.description }}
+                {{ deliverySystem.description }}
                 <br>
-                {{ deliveryMethod.pickupPoint.mapAddress }}
+                {{ deliverySystem.pickupPoint.mapAddress }}
               </p>
             </div>
           </div>
@@ -38,7 +38,7 @@
 <script>
 export default {
   props: [
-    'deliveryMethod'
+    'deliverySystem'
   ],
   data: () => ({
     showingModal: false,
@@ -47,8 +47,8 @@ export default {
     showModalMap() {
       const map = new google.maps.Map(this.$refs.mapContainer, {
         center: new google.maps.LatLng(
-          this.deliveryMethod.pickupPoint.mapLocation?.lat,
-          this.deliveryMethod.pickupPoint.mapLocation?.lng,
+          this.deliverySystem.pickupPoint.mapLocation?.lat,
+          this.deliverySystem.pickupPoint.mapLocation?.lng,
         ),
         zoom: 17,
         mapTypeControl: false,
@@ -60,7 +60,7 @@ export default {
 
       const marker = new google.maps.Marker({
         position: new google.maps.LatLng(location.lat, location.lng),
-        title: this.deliveryMethod.name,
+        title: this.deliverySystem.name,
       });
 
       marker.setMap(map);

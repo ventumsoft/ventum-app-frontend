@@ -1,8 +1,13 @@
 <template>
-  <div class="col_full" :class="{'has-error': false}">
+  <div
+    v-if="selectedDeliverySystem.isEnabledRecipientType"
+    class="col_full"
+    :class="{'has-error': false}"
+  >
     <label>{{ $trans('checkout.delivery_step.form_recipient_type') }}</label>
-    <select
+    <Select2
       class="form-control select-delivery-recipient-type"
+      @input="$store.commit('checkout/deliveryData', {recipient_type: $event})"
       required
     >
       <option
@@ -10,6 +15,16 @@
         :value="deliveryUserType"
         :selected="deliveryUserType === ($store.state.checkout.deliveryData?.recipient_type || 'private')"
       >{{ $trans('checkout.delivery_step.form_recipient_type.' + deliveryUserType) }}</option>
-    </select>
+    </Select2>
   </div>
 </template>
+
+<script>
+import {mapState} from 'vuex';
+
+export default {
+  computed: {
+    ...mapState('checkout', ['selectedDeliverySystem']),
+  },
+}
+</script>

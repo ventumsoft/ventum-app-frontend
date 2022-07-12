@@ -4,7 +4,6 @@
     <input
       type="text"
       id="delivery-form-address"
-      name="delivery-form-address"
       class="form-control"
       :class="{error: false}"
       :value="$store.state.checkout.deliveryData?.address"
