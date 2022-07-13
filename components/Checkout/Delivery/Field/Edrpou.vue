@@ -7,7 +7,7 @@
     <input
       type="text"
       class="form-control"
-      :class="{error: false}"
+      :class="{error: $store.state.checkout.deliveryErrors?.edrpou}"
       :value="$store.state.checkout.deliveryData?.edrpou"
       @input="$store.commit('checkout/deliveryData', {edrpou: $event.target.value})"
     >

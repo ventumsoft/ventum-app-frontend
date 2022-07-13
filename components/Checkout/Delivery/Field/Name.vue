@@ -5,7 +5,7 @@
       type="text"
       id="delivery-form-name"
       class="form-control"
-      :class="{error: false}"
+      :class="{error: $store.state.checkout.deliveryErrors?.name}"
       :value="$store.state.checkout.deliveryData?.name"
       @input="$store.commit('checkout/deliveryData', {name: $event.target.value})"
       required

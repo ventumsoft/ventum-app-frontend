@@ -5,7 +5,7 @@
       type="text"
       id="delivery-form-phone"
       class="form-control"
-      :class="{error: false}"
+      :class="{error: $store.state.checkout.deliveryErrors?.phone}"
       :value="$store.state.checkout.deliveryData?.phone"
       @input="$store.commit('checkout/deliveryData', {phone: $event.target.value})"
       required

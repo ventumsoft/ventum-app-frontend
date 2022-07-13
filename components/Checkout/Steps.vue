@@ -4,7 +4,9 @@
       v-for="(step, stepIndex) of steps"
       :class="{
         active: step === active,
-        disabled: steps.indexOf(active) + 1 < stepIndex,
+        disabled: (steps.indexOf(active) + 1 < stepIndex) ||
+          (step === 'delivery') && !items?.length ||
+          (step === 'payment') && selectedDeliverySystem?.checkout?.pendingAddressForPrice,
       }"
     >
       <TheLink
@@ -30,6 +32,7 @@ export default {
   }),
   computed: {
     ...mapState('cart', ['items']),
+    ...mapState('checkout', ['selectedDeliverySystem']),
   },
 }
 </script>

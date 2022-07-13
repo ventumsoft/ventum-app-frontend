@@ -105,7 +105,7 @@
           />
         </div>
       </div>
-      <TheLink :to="$page({name: 'checkout/payment'})" class="button button-rounded button-reveal tright nomargin fright disabled">
+      <TheLink :to="$page({name: 'checkout/payment'})" :class="'button button-rounded button-reveal tright nomargin fright ' + (selectedDeliverySystem.checkout.pendingAddressForPrice ? 'disabled' : '')">
         <i class="icon-arrow-right2"></i><span>{{ $trans('checkout.delivery_step.next_step_btn') }}</span>
       </TheLink>
       <TheLink :to="$page({name: 'checkout/cart'})" class="button button-rounded button-reveal button-amber notopmargin fright">
@@ -165,8 +165,8 @@ export default {
   methods: {
     async changeDeliverySystem(deliverySystem) {
       this.$store.commit('checkout/update', {selectedDeliverySystem: deliverySystem});
-      this.$store.commit('checkout/deliveryData', {delivery_system_id: deliverySystem.id});
-      await this.$store.dispatch('checkout/fetchDeliveryStepData', {forPriceUpdate: true});
+      this.$store.commit('checkout/deliveryData', {delivery_system_id: deliverySystem.id, city: null, warehouse: null, street: null});
+      await this.$store.dispatch('checkout/fetchDeliveryStepData', {withoutDeliveryData: true});
     },
   },
 }

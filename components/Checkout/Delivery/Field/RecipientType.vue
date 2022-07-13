@@ -2,7 +2,7 @@
   <div
     v-if="selectedDeliverySystem.isEnabledRecipientType"
     class="col_full"
-    :class="{'has-error': false}"
+    :class="{'has-error': $store.state.checkout.deliveryErrors?.recipient_type}"
   >
     <label>{{ $trans('checkout.delivery_step.form_recipient_type') }}</label>
     <Select2

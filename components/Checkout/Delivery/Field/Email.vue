@@ -5,7 +5,7 @@
       type="email"
       id="delivery-form-email"
       class="form-control"
-      :class="{error: false}"
+      :class="{error: $store.state.checkout.deliveryErrors?.email}"
       :value="$store.state.checkout.deliveryData?.email"
       @input="$store.commit('checkout/deliveryData', {email: $event.target.value})"
       required

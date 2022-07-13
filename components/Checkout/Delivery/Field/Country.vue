@@ -2,7 +2,7 @@
   <div
     v-if="$store.state.site.settings?.['general:multicountry']"
     class="col_full"
-    :class="{'has-error': false}"
+    :class="{'has-error': $store.state.checkout.deliveryErrors?.country_id}"
   >
     <label>{{ $trans('checkout.delivery_step.form_country') }}:</label>
     <Select2

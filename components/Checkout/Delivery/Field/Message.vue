@@ -3,7 +3,7 @@
     <label for="delivery-form-message">{{ $trans('checkout.delivery_step.form_message') }}</label>
     <textarea
       class="form-control"
-      :class="{error: false}"
+      :class="{error: $store.state.checkout.deliveryErrors?.message}"
       id="delivery-form-message"
       rows="6"
       cols="30"

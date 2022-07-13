@@ -19,8 +19,12 @@ export default {
   },
   middleware: [
     'authenticate',
-    async function ({store}) {
+    async function ({store, redirect, $page}) {
       await store.dispatch('cart/fetch', {checkout: true});
+      if (!store.state.cart.items?.length) {
+        redirect($page({name: 'checkout/cart'}));
+        return;
+      }
       await store.dispatch('checkout/fetchDeliveryStepData');
     },
   ],

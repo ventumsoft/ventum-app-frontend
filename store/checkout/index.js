@@ -30,7 +30,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchDeliveryStepData({state, commit}, {forPriceUpdate} = {}) {
+  async fetchDeliveryStepData({state, commit}, {forPriceUpdate, withoutDeliveryData} = {}) {
     if (forPriceUpdate) {
       if (!isNeededFetchDeliveryStepDataForPriceUpdating(state.selectedDeliverySystem, state.deliveryData)) {
         return;
@@ -39,22 +39,37 @@ export const actions = {
     commit('update', {deliveryStepLoading: true});
     let data;
     try {
-      ({data} = (await this.$axios.get('checkout/step/delivery', {params: {
+      ({data} = (await this.$axios.post('checkout/step/delivery', {
         delivery_system_id: state.selectedDeliverySystem?.id,
         city: state.deliveryData?.city,
         warehouse: state.deliveryData?.warehouse,
         street: state.deliveryData?.street,
         building: state.deliveryData?.building,
-      }})));
+      }, {progress: false})));
     } catch (exception) {
       return;
     } finally {
       commit('update', {deliveryStepLoading: false});
     }
-    if (forPriceUpdate) {
+    if (withoutDeliveryData) {
       delete data.deliveryData;
     }
     commit('update', data);
+  },
+
+  async saveDeliveryData({state, commit}) {
+    commit('update', {deliveryErrors: null});
+    try {
+      await this.$axios.post('checkout/delivery/data', state.deliveryData, {silenceException: true});
+    } catch (exception) {
+      if ('object' === typeof exception.response?.data?.errors) {
+        commit('update', {deliveryErrors: exception.response.data.errors});
+      } else {
+        this.$noty(exception.response?.data?.message || exception.message, 'error');
+      }
+      return false;
+    }
+    return true;
   },
 }
 

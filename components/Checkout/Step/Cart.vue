@@ -110,7 +110,7 @@
         <tr class="">
           <td class="noborder" colspan="6">
             <div class="row clearfix">
-              <TheLink :to="$page({name: 'checkout/delivery'})" class="button button-rounded button-reveal tright nomargin fright">
+              <TheLink :to="$page({name: 'checkout/delivery'})" :class="'button button-rounded button-reveal tright nomargin fright ' + (!items?.length ? 'disabled' : '')">
                 <i class="icon-arrow-right2"></i><span>{{ $trans('checkout.goods_step.next_step_btn') }}</span>
               </TheLink>
               <TheLink :to="$page({name: 'index'})" class="button button-rounded button-reveal  button-amber notopmargin fright">

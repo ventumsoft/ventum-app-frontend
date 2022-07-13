@@ -50,12 +50,14 @@ export default {
               url: params.url,
               data: (params.method !== 'GET') && params.data || undefined,
               params: (params.method === 'GET') && params.data || undefined,
+              progress: false,
+              silenceException: true,
             }));
           } catch (exception) {
             failure(exception);
             return;
           }
-          success(data);
+          success({results: data});
         };
       }
       return options;

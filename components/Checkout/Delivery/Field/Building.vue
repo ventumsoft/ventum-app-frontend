@@ -5,7 +5,7 @@
       type="text"
       id="delivery-form-building"
       class="form-control"
-      :class="{error: false}"
+      :class="{error: $store.state.checkout.deliveryErrors?.building}"
       :value="$store.state.checkout.deliveryData?.building"
       @input="$store.commit('checkout/deliveryData', {building: $event.target.value})"
       required

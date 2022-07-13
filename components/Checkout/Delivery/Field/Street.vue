@@ -1,11 +1,11 @@
 <template>
-  <div class="col_full address" :class="{'has-error': false}">
+  <div class="col_full address" :class="{'has-error': $store.state.checkout.deliveryErrors?.street}">
     <label>{{ $trans('checkout.delivery_step.form_street') }}</label>
     <Select2
       class="form-control select2 select-delivery-street"
       required
       :options="{ajax: select2Ajax, ...select2Options}"
-      @input="$store.commit('checkout/deliveryData', {street: $event}); $store.dispatch('checkout/fetchDeliveryStepData', {forPriceUpdate: true});"
+      @input="$store.commit('checkout/deliveryData', {street: $event}); $store.dispatch('checkout/fetchDeliveryStepData', {forPriceUpdate: true, withoutDeliveryData: true});"
     >
       <option
         v-if="deliveryData.street && streetData"
@@ -32,7 +32,7 @@ export default {
       return {
         delay: 200,
         method: 'POST',
-        url: 'checkout/delivery/streets',
+        url: 'delivery/streets',
         placeholder: 'Search street',
         data: params => ({
           delivery_system_id: this.selectedDeliverySystem.id,
