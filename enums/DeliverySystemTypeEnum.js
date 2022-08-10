@@ -8,4 +8,5 @@ export default Object.freeze({
   API_SHIP_TO_DOOR: 'api_ship_to_door',
   EVROPOCHTA_TO_POINT: 'evropochta_to_point',
   EVROPOCHTA_TO_DOOR: 'evropochta_to_door',
+  UPS: 'ups',
 });

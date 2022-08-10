@@ -122,13 +122,14 @@
 import DeliverySystemTypeEnum from '@/enums/DeliverySystemTypeEnum';
 import UniversalCalc from '@/components/Checkout/Delivery/UniversalCalc';
 import PickupPoint from '@/components/Checkout/Delivery/PickupPoint';
+import VirtualProduct from '@/components/Checkout/Delivery/VirtualProduct';
 import NovaPoshta from '@/components/Checkout/Delivery/NovaPoshta';
 import NovaPoshtaCourier from '@/components/Checkout/Delivery/NovaPoshtaCourier';
 import ApiShipToPoint from '@/components/Checkout/Delivery/ApiShipToPoint';
 import ApiShipToDoor from '@/components/Checkout/Delivery/ApiShipToDoor';
 import EvropochtaToPoint from '@/components/Checkout/Delivery/EvropochtaToPoint';
 import EvropochtaToDoor from '@/components/Checkout/Delivery/EvropochtaToDoor';
-import VirtualProduct from '@/components/Checkout/Delivery/VirtualProduct';
+import Ups from '@/components/Checkout/Delivery/Ups';
 import {mapState} from 'vuex';
 
 export default {
@@ -137,13 +138,14 @@ export default {
     deliverySystemFormComponentByType: {
       [DeliverySystemTypeEnum.UNIVERSAL_CALC]: UniversalCalc,
       [DeliverySystemTypeEnum.PICKUP_POINT]: PickupPoint,
+      [DeliverySystemTypeEnum.VIRTUAL_PRODUCT]: VirtualProduct,
       [DeliverySystemTypeEnum.NOVA_POSHTA]: NovaPoshta,
       [DeliverySystemTypeEnum.NOVA_POSHTA_COURIER]: NovaPoshtaCourier,
       [DeliverySystemTypeEnum.API_SHIP_TO_POINT]: ApiShipToPoint,
       [DeliverySystemTypeEnum.API_SHIP_TO_DOOR]: ApiShipToDoor,
       [DeliverySystemTypeEnum.EVROPOCHTA_TO_POINT]: EvropochtaToPoint,
       [DeliverySystemTypeEnum.EVROPOCHTA_TO_DOOR]: EvropochtaToDoor,
-      [DeliverySystemTypeEnum.VIRTUAL_PRODUCT]: VirtualProduct,
+      [DeliverySystemTypeEnum.UPS]: Ups,
     },
   }),
   computed: {

@@ -1,0 +1,44 @@
+.cart tr.cart_item td {
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.vat-status-icon {
+    padding-top: 4px;
+    padding-right: 10px;
+    font-size: 18px;
+}
+
+.delivery-system-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 8px;
+}
+
+.checkout-payment-block {
+    &>.form-process {
+        display: block;
+        opacity: 0;
+        pointer-events: none;
+        user-select: none;
+        transition: opacity 0.3s ease;
+    }
+    &.checkout-payment-block-loading {
+        .checkout-payment-block-content {
+            pointer-events: none;
+            user-select: none;
+        }
+        .form-process {
+            opacity: 1;
+        }
+    }
+}
+
+.delivery-zip-input {
+    &.has-error {
+        border-color: #D84315!important;
+    }
+    &.has-loader {
+        background: url(/images/loading.gif) center right / contain no-repeat;
+    }
+}

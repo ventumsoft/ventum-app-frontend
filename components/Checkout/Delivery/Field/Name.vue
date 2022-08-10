@@ -1,5 +1,5 @@
 <template>
-  <div class="col_full">
+  <div :class="{col_full: !customCol}">
     <label for="delivery-form-name">{{ $trans('checkout.delivery_step.form_first_name') }}</label>
     <input
       type="text"
@@ -16,6 +16,6 @@
 
 <script>
 export default {
-  props: ['onlyCyrillic'],
+  props: ['customCol', 'onlyCyrillic'],
 }
 </script>

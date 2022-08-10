@@ -41,6 +41,8 @@ export const actions = {
     try {
       ({data} = (await this.$axios.post('checkout/step/delivery', {
         delivery_system_id: state.selectedDeliverySystem?.id,
+        zip: state.deliveryData?.zip,
+        state: state.deliveryData?.state,
         city: state.deliveryData?.city,
         warehouse: state.deliveryData?.warehouse,
         street: state.deliveryData?.street,
@@ -83,6 +85,7 @@ function isNeededFetchDeliveryStepDataForPriceUpdating(selectedDeliverySystem, d
     DeliverySystemTypeEnum.API_SHIP_TO_DOOR,
     DeliverySystemTypeEnum.EVROPOCHTA_TO_POINT,
     DeliverySystemTypeEnum.EVROPOCHTA_TO_DOOR,
+    DeliverySystemTypeEnum.UPS,
   ].includes(deliverySystemType)) {
     return false;
   }
@@ -94,6 +97,14 @@ function isNeededFetchDeliveryStepDataForPriceUpdating(selectedDeliverySystem, d
     DeliverySystemTypeEnum.API_SHIP_TO_DOOR,
   ].includes(deliverySystemType)) {
     if (!deliveryData?.city) {
+      return false;
+    }
+  }
+
+  if ([
+    DeliverySystemTypeEnum.UPS,
+  ].includes(deliverySystemType)) {
+    if (!deliveryData?.zip || !deliveryData?.state || !deliveryData?.city) {
       return false;
     }
   }
