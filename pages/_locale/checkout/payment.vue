@@ -7,6 +7,16 @@ export default {
   meta: {
     step: 'payment',
   },
+  head() {
+    return {
+      script: [
+        {
+          src: 'https://js.stripe.com/v3/',
+          body: true,
+        },
+      ],
+    };
+  },
   middleware: [
     'authenticate',
     async function ({from, store, redirect, $page}) {
@@ -21,7 +31,7 @@ export default {
         redirect($page({name: 'checkout/cart'}));
         return;
       }
-      await store.dispatch('checkout/fetchDeliveryStepData');
+      await store.dispatch('checkout/payment/fetchPaymentStepData');
     },
   ],
 }

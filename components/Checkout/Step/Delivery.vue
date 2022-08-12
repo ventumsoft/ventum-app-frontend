@@ -6,10 +6,7 @@
           <h3>{{ $trans('checkout.delivery_step.choose_system_title') }}</h3>
           <form id="shipping-select" class="nobottommargin" @submit.prevent>
             <div v-if="deliveryStepLoading" class="form-process"></div>
-            <div
-              v-for="deliverySystem of deliverySystems"
-              class="bottommargin-sm"
-            >
+            <div v-for="deliverySystem of deliverySystems" class="bottommargin-sm">
               <input
                 :id="'delivery-type-' + deliverySystem.id"
                 class="radio-style"

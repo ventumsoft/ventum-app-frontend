@@ -8,8 +8,12 @@ export default ({app, store}, inject) => {
 
     const formattedNumber = numberFormat(value, currencyFormat?.decimals, currencyFormat?.dec_point, currencyFormat?.thousands_sep);
 
-    return (currencyAbbrPosition === 'postfix') ?
-      (formattedNumber + ' ' + currencyAbbr) :
-      (currencyAbbr + ' ' + formattedNumber);
+    if (currencyAbbrPosition === 'prefix_wo_space') {
+      return currencyAbbr + formattedNumber;
+    } else if (currencyAbbrPosition === 'prefix') {
+      return currencyAbbr + ' ' + formattedNumber;
+    } else {
+      return formattedNumber + ' ' + currencyAbbr;
+    }
   });
 }

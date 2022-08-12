@@ -16,7 +16,7 @@
       >
         <TheLink :to="$page({name: 'user/' + tab})">
           {{ $trans('account.tabs.' + tab) }}
-          <div v-if="(tab === PersonalAccountTabEnum.BALANCE) && $auth.user.balanceValue" class="pull-right"><div class="badge badge-default">{{ $auth.user.balanceValue }}</div></div>
+          <div v-if="(tab === PersonalAccountTabEnum.BALANCE) && $auth.user.balanceValue" class="pull-right"><div class="badge badge-default">{{ $currency($auth.user.balanceValue) }}</div></div>
         </TheLink>
       </li>
       <li>
