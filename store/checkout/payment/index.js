@@ -2,7 +2,9 @@ export const state = () => ({
   paymentStepLoading: false,
   deliveryPrice: null,
   paymentSystems: null,
+  paymentRoutes: null,
   selectedPaymentSystem: null,
+  useBonuses: false,
   paymentData: null,
   errors: null,
 });

@@ -19,12 +19,13 @@
             </label>
             <p class="nobottommargin">{{ paymentSystem.description }}</p>
           </div>
-          <div v-if="$auth.user.balanceValue" class="bottommargin-sm">
+          <div v-if="$auth.user.balanceValue && selectedPaymentSystem?.checkout?.allowedUsingBonuses" class="bottommargin-sm">
             <input
               id="bonus_account"
               class="checkbox-style"
               type="checkbox"
-              :checked="void 'use_bonus'"
+              :checked="useBonuses"
+              @change="$store.commit('checkout/payment/update', {useBonuses: !useBonuses})"
             >
             <label for="bonus_account" class="checkbox-style-2-label checkbox-small">
               {{ $trans('checkout.payment_step.bonus_account_name') }}
@@ -74,12 +75,12 @@
                 <span class="amount">- {{ discount.value }}</span>
               </td>
             </tr>
-            <tr v-if="void 'use_bonus'" class="payment-use-bonus-row">
+            <tr v-if="useBonuses" class="payment-use-bonus-row">
               <td class="cart-product-name">
                 <strong>{{ $trans('checkout.payment_step.used_sum_bonus') }}:</strong>
               </td>
               <td class="cart-product-subtotal">
-                <span class="amount">{{ 'use_bonus' }}</span>
+                <span class="amount">{{ selectedPaymentSystem.checkout.allowedUsingBonuses }}</span>
               </td>
             </tr>
             <tr v-if="selectedPaymentSystem ? selectedPaymentSystem.checkout.bonus : bonus" class="cart-discount-payment">
@@ -103,7 +104,7 @@
                 <strong>{{ $trans('checkout.payment_step.table_total') }}:</strong>
               </td>
               <td class="cart-product-subtotal">
-                <span class="amount color lead"><strong>{{ selectedPaymentSystem ? selectedPaymentSystem.checkout.totalWithDiscount : totalWithDiscount }}</strong></span>
+                <span class="amount color lead"><strong>{{ selectedPaymentSystem ? (useBonuses ? selectedPaymentSystem.checkout.totalWithDiscountAndUsedBonuses : selectedPaymentSystem.checkout.totalWithDiscount) : totalWithDiscount }}</strong></span>
               </td>
             </tr>
             </tbody>
@@ -113,10 +114,6 @@
       <div class="col-md-6 payment-forms">
         <h3>{{ $trans('checkout.payment_step.buyer_data') }}</h3>
         <CheckoutPaymentForm />
-        <!--component
-          v-if="selectedPaymentSystem && paymentSystemFormComponentByType[selectedPaymentSystem.type]"
-          :is="paymentSystemFormComponentByType[selectedPaymentSystem.type]"
-        /-->
       </div>
     </div>
     <TheLink v-if="true" :to="'#'" :class="'button button-rounded button-reveal tright nomargin fright ' + (true ? 'disabled' : '')">
@@ -129,30 +126,12 @@
 </template>
 
 <script>
-//import PaymentSystemTypeEnum from '@/enums/PaymentSystemTypeEnum';
-//import CashOnDelivery from "@/components/Checkout/Payment/CashOnDelivery";
-//import BankAccount from "@/components/Checkout/Payment/BankAccount";
-//import PayPal from "@/components/Checkout/Payment/PayPal";
-//import Stripe from "@/components/Checkout/Payment/Stripe";
-//import Adyen from "@/components/Checkout/Payment/Adyen";
-//import WayForPay from "@/components/Checkout/Payment/WayForPay";
-//import WebPay from "@/components/Checkout/Payment/WebPay";
-//import YandexCheckout from "@/components/Checkout/Payment/YandexCheckout";
+import PaymentSystemTypeEnum from '@/enums/PaymentSystemTypeEnum';
 import {mapState} from 'vuex';
 
 export default {
   data: () => ({
-    //PaymentSystemTypeEnum,
-    //paymentSystemFormComponentByType: {
-    //  [PaymentSystemTypeEnum.CASH_ON_DELIVERY]: CashOnDelivery,
-    //  [PaymentSystemTypeEnum.BANK_ACCOUNT]: BankAccount,
-    //  [PaymentSystemTypeEnum.PAY_PAL]: PayPal,
-    //  [PaymentSystemTypeEnum.STRIPE]: Stripe,
-    //  [PaymentSystemTypeEnum.ADYEN]: Adyen,
-    //  [PaymentSystemTypeEnum.WAYFORPAY]: WayForPay,
-    //  [PaymentSystemTypeEnum.WEBPAY]: WebPay,
-    //  [PaymentSystemTypeEnum.YANDEX_CHECKOUT]: YandexCheckout,
-    //},
+    PaymentSystemTypeEnum,
   }),
   computed: {
     ...mapState('cart', [
@@ -168,12 +147,13 @@ export default {
       'deliveryPrice',
       'paymentSystems',
       'selectedPaymentSystem',
+      'useBonuses',
       'paymentData',
     ]),
   },
   methods: {
     async changePaymentSystem(paymentSystem) {
-      this.$store.commit('checkout/payment/update', {selectedPaymentSystem: paymentSystem});
+      this.$store.commit('checkout/payment/update', {selectedPaymentSystem: paymentSystem/*, useBonuses: false*/});
       this.$store.commit('checkout/payment/paymentData', {payment_system_id: paymentSystem.id});
       await this.$store.dispatch('checkout/payment/fetchPaymentStepData', {withoutPaymentData: true});
     },
