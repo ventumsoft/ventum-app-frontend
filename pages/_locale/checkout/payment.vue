@@ -21,7 +21,7 @@ export default {
     'authenticate',
     async function ({from, store, redirect, $page}) {
       if (from?.name === 'checkout/delivery') {
-        if (!await store.dispatch('checkout/saveDeliveryData')) {
+        if (!await store.dispatch('checkout/delivery/saveDeliveryData')) {
           redirect($page({name: 'checkout/delivery'}));
           return;
         }

@@ -32,7 +32,7 @@ export default {
   }),
   computed: {
     ...mapState('cart', ['items']),
-    ...mapState('checkout', ['selectedDeliverySystem']),
+    ...mapState('checkout/delivery', ['selectedDeliverySystem']),
   },
 }
 </script>

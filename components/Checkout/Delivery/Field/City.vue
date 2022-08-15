@@ -1,7 +1,7 @@
 <template>
   <div
     class="address"
-    :class="{col_full: !customCol, 'has-error': $store.state.checkout.deliveryErrors?.city}"
+    :class="{col_full: !customCol, 'has-error': $store.state.checkout.delivery.errors?.city}"
   >
     <label>{{ customLabel || $trans('checkout.delivery_step.form_city') }}:</label>
     <Select2
@@ -33,7 +33,10 @@ export default {
     lookupOnChange: {type: Boolean},
   },
   computed: {
-    ...mapState('checkout', ['selectedDeliverySystem', 'deliveryData']),
+    ...mapState('checkout/delivery', [
+      'selectedDeliverySystem',
+      'deliveryData',
+    ]),
     cityData() {
       try {
         return JSON.parse(this.deliveryData?.city);
@@ -58,7 +61,7 @@ export default {
   },
   methods: {
     async handleChange(city) {
-      this.$store.commit('checkout/deliveryData', {city, warehouse: null, street: null});
+      this.$store.commit('checkout/delivery/deliveryData', {city, warehouse: null, street: null});
       if (this.lookupOnChange) {
         const {data: {zip}} = await this.$axios.post('delivery/city', {
           delivery_system_id: this.selectedDeliverySystem.id,
@@ -69,10 +72,10 @@ export default {
           silenceException: true,
         });
         if (zip) {
-          this.$store.commit('checkout/deliveryData', {zip});
+          this.$store.commit('checkout/delivery/deliveryData', {zip});
         }
       }
-      this.$store.dispatch('checkout/fetchDeliveryStepData', {forPriceUpdate: true, withoutDeliveryData: true});
+      this.$store.dispatch('checkout/delivery/fetchDeliveryStepData', {forPriceUpdate: true, withoutDeliveryData: true});
     },
   },
 }

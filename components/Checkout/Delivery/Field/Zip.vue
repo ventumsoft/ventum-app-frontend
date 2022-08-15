@@ -5,8 +5,8 @@
       type="text"
       id="delivery-form-zip"
       class="form-control delivery-zip-input"
-      :class="{error: $store.state.checkout.deliveryErrors?.zip, 'has-error': error, 'has-loader': loading}"
-      :value="$store.state.checkout.deliveryData?.zip"
+      :class="{error: $store.state.checkout.delivery.errors?.zip, 'has-error': error, 'has-loader': loading}"
+      :value="$store.state.checkout.delivery.deliveryData?.zip"
       @input="handleChange($event.target.value)"
       required
     />
@@ -24,12 +24,15 @@ export default {
     error: false,
   }),
   computed: {
-    ...mapState('checkout', ['selectedDeliverySystem', 'deliveryData']),
+    ...mapState('checkout/delivery', [
+      'selectedDeliverySystem',
+      'deliveryData',
+    ]),
   },
   methods: {
     async handleChange(zip) {
       this.error = false;
-      this.$store.commit('checkout/deliveryData', {zip});
+      this.$store.commit('checkout/delivery/deliveryData', {zip});
       if (this.lookupOnChange) {
         this.lookupDebounced(zip);
       }
@@ -55,12 +58,12 @@ export default {
         this.loading = false;
       }
       if (city) {
-        this.$store.commit('checkout/deliveryData', {city});
+        this.$store.commit('checkout/delivery/deliveryData', {city});
       }
       if (state) {
-        this.$store.commit('checkout/deliveryData', {state});
+        this.$store.commit('checkout/delivery/deliveryData', {state});
       }
-      this.$store.dispatch('checkout/fetchDeliveryStepData', {forPriceUpdate: true, withoutDeliveryData: true});
+      this.$store.dispatch('checkout/delivery/fetchDeliveryStepData', {forPriceUpdate: true, withoutDeliveryData: true});
     }, 1000),
   },
 }

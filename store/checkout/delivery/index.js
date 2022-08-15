@@ -5,7 +5,7 @@ export const state = () => ({
   deliverySystems: null,
   selectedDeliverySystem: null,
   deliveryData: null,
-  deliveryErrors: null,
+  errors: null,
 });
 
 export const mutations = {
@@ -60,12 +60,12 @@ export const actions = {
   },
 
   async saveDeliveryData({state, commit}) {
-    commit('update', {deliveryErrors: null});
+    commit('update', {errors: null});
     try {
       await this.$axios.post('checkout/delivery/data', state.deliveryData, {silenceException: true});
     } catch (exception) {
       if ('object' === typeof exception.response?.data?.errors) {
-        commit('update', {deliveryErrors: exception.response.data.errors});
+        commit('update', {errors: exception.response.data.errors});
       } else {
         this.$noty(exception.response?.data?.message || exception.message, 'error');
       }

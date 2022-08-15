@@ -8,7 +8,7 @@
       i18nMessageInputTooShort: $trans('checkout.delivery_step.select2_message.input_too_short'),
       tags: true,
     }"
-    :select2AjaxParams="() => ({state: $store.state.checkout.deliveryData?.state})"
+    :select2AjaxParams="() => ({state: $store.state.checkout.delivery.deliveryData?.state})"
     :titleFormatter="city => city"
     :lookupOnChange="true"
   />

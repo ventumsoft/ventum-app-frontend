@@ -5,9 +5,9 @@
       type="text"
       id="delivery-form-name"
       class="form-control"
-      :class="{error: $store.state.checkout.deliveryErrors?.name}"
-      :value="$store.state.checkout.deliveryData?.name"
-      @input="$store.commit('checkout/deliveryData', {name: $event.target.value})"
+      :class="{error: $store.state.checkout.delivery.errors?.name}"
+      :value="$store.state.checkout.delivery.deliveryData?.name"
+      @input="$store.commit('checkout/delivery/deliveryData', {name: $event.target.value})"
       required
     />
     <span v-if="onlyCyrillic" class="help-block">{{ $trans('checkout.delivery_step.validation_first_name_') }}</span>

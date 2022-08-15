@@ -154,7 +154,7 @@ export default {
       'bonus',
       'vat',
     ]),
-    ...mapState('checkout', [
+    ...mapState('checkout/delivery', [
       'deliveryStepLoading',
       'deliverySystems',
       'selectedDeliverySystem',
@@ -163,9 +163,9 @@ export default {
   },
   methods: {
     async changeDeliverySystem(deliverySystem) {
-      this.$store.commit('checkout/update', {selectedDeliverySystem: deliverySystem});
-      this.$store.commit('checkout/deliveryData', {delivery_system_id: deliverySystem.id, city: null, warehouse: null, street: null});
-      await this.$store.dispatch('checkout/fetchDeliveryStepData', {withoutDeliveryData: true});
+      this.$store.commit('checkout/delivery/update', {selectedDeliverySystem: deliverySystem});
+      this.$store.commit('checkout/delivery/deliveryData', {delivery_system_id: deliverySystem.id, city: null, warehouse: null, street: null});
+      await this.$store.dispatch('checkout/delivery/fetchDeliveryStepData', {withoutDeliveryData: true});
     },
   },
 }

@@ -25,7 +25,7 @@ export default {
         redirect($page({name: 'checkout/cart'}));
         return;
       }
-      await store.dispatch('checkout/fetchDeliveryStepData');
+      await store.dispatch('checkout/delivery/fetchDeliveryStepData');
     },
   ],
 }
