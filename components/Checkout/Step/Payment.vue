@@ -33,7 +33,7 @@
             </label>
             <p class="nobottommargin">{{ $trans('checkout.payment_step.bonus_account_help_text').replace(':limit', $store.state.site.settings?.['orders:bonus-payment-limit'] + '%') }}. </p>
           </div>
-          <div v-if="void '!filteredPaymentSystems.length'" class="alert alert-danger payment-route-not-found">
+          <div v-if="!availablePaymentRoutes?.length" class="alert alert-danger payment-route-not-found">
             {{ $trans('checkout.payment_step.payment_not_found_for_delivery') }}
           </div>
         </form>
@@ -127,7 +127,7 @@
 
 <script>
 import PaymentSystemTypeEnum from '@/enums/PaymentSystemTypeEnum';
-import {mapState} from 'vuex';
+import {mapGetters, mapState} from 'vuex';
 
 export default {
   data: () => ({
@@ -150,6 +150,14 @@ export default {
       'useBonuses',
       'paymentData',
     ]),
+    ...mapGetters('checkout/payment', [
+      'availablePaymentRoutes',
+    ]),
+  },
+  watch: {
+    availablePaymentRoutes() {
+      console.log('watch availablePaymentRoutes, first: ', JSON.stringify(this.availablePaymentRoutes?.[0]));
+    },
   },
   methods: {
     async changePaymentSystem(paymentSystem) {

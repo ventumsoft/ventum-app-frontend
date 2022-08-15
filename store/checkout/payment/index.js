@@ -30,6 +30,16 @@ export const mutations = {
   },
 }
 
+export const getters = {
+  availablePaymentRoutes: state => state.paymentRoutes?.filter(paymentRoute =>
+    ((paymentRoute.userType === 'all') || (paymentRoute.userType === paymentData?.type_user)) &&
+    ((paymentRoute.taxPayer === 'all') || (paymentRoute.taxPayer === 'tax_payer') && (taxPayer === 'vat') || (paymentRoute.taxPayer === 'not_tax_payer') && (taxPayer === 'tax')) &&
+    ((paymentRoute.paymentSystemsIds === 'all') || paymentRoute.paymentSystemsIds?.includes(state.selectedPaymentSystem?.id)) &&
+    ((paymentRoute.countriesIds === 'all') || paymentRoute.countriesIds?.includes(paymentData?.country_id)) &&
+    ((paymentRoute.taxationSystemsIds === 'all') || paymentRoute.taxationSystemsIds?.includes(paymentData?.taxation_system_id))
+  ),
+}
+
 export const actions = {
   async fetchPaymentStepData({state, commit}, {withoutPaymentData} = {}) {
     commit('update', {paymentStepLoading: true});
