@@ -5,6 +5,7 @@ export const state = () => ({
   paymentRoutes: null,
   selectedPaymentSystem: null,
   useBonuses: false,
+  userTypesFields: null,
   paymentData: null,
   errors: null,
 });
@@ -33,7 +34,7 @@ export const mutations = {
 export const getters = {
   availablePaymentRoutes: state => state.paymentRoutes?.filter(paymentRoute =>
     ((paymentRoute.userType === 'all') || (paymentRoute.userType === paymentData?.type_user)) &&
-    ((paymentRoute.taxPayer === 'all') || (paymentRoute.taxPayer === 'tax_payer') && (taxPayer === 'vat') || (paymentRoute.taxPayer === 'not_tax_payer') && (taxPayer === 'tax')) &&
+    ((paymentRoute.taxPayer === 'all') || (paymentRoute.taxPayer === 'tax_payer') && (paymentData?.is_vat_payer === 'vat') || (paymentRoute.taxPayer === 'not_tax_payer') && (paymentData?.is_vat_payer === 'tax')) &&
     ((paymentRoute.paymentSystemsIds === 'all') || paymentRoute.paymentSystemsIds?.includes(state.selectedPaymentSystem?.id)) &&
     ((paymentRoute.countriesIds === 'all') || paymentRoute.countriesIds?.includes(paymentData?.country_id)) &&
     ((paymentRoute.taxationSystemsIds === 'all') || paymentRoute.taxationSystemsIds?.includes(paymentData?.taxation_system_id))

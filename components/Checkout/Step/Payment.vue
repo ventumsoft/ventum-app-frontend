@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     async changePaymentSystem(paymentSystem) {
-      this.$store.commit('checkout/payment/update', {selectedPaymentSystem: paymentSystem/*, useBonuses: false*/});
+      this.$store.commit('checkout/payment/update', {selectedPaymentSystem: paymentSystem});
       this.$store.commit('checkout/payment/paymentData', {payment_system_id: paymentSystem.id});
       await this.$store.dispatch('checkout/payment/fetchPaymentStepData', {withoutPaymentData: true});
     },
