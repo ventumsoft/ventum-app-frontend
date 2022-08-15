@@ -6,6 +6,7 @@ export const state = () => ({
   selectedPaymentSystem: null,
   useBonuses: false,
   userTypesFields: null,
+  taxationSystems: null,
   paymentData: null,
   errors: null,
 });

@@ -59,7 +59,7 @@
                 <span class="amount">{{ deliveryPrice }}</span>
               </td>
             </tr>
-            <tr v-if="selectedPaymentSystem" class="payment-price-row">
+            <tr v-if="selectedPaymentSystem && selectedPaymentSystem.checkout.paymentPrice" class="payment-price-row">
               <td class="cart-product-name">
                 <strong>{{ $trans('checkout.payment_step.table_payment_price') }}</strong>
               </td>
@@ -116,9 +116,9 @@
         <CheckoutPaymentForm />
       </div>
     </div>
-    <TheLink v-if="true" :to="'#'" :class="'button button-rounded button-reveal tright nomargin fright ' + (true ? 'disabled' : '')">
+    <a v-if="availablePaymentRoutes?.length" href="#" :class="'button button-rounded button-reveal tright nomargin fright ' + (!selectedPaymentSystem ? 'disabled' : '')" @click.prevent="checkout">
       <i class="icon-arrow-right2"></i><span>{{ $trans('checkout.payment_step.next_step_btn') }}</span>
-    </TheLink>
+    </a>
     <TheLink :to="$page({name: 'checkout/delivery'})" class="button button-rounded button-reveal  button-amber notopmargin fright">
       <i class="icon-arrow-left2"></i><span>{{ $trans('checkout.payment_step.delivery_step_btn') }}</span>
     </TheLink>
@@ -154,16 +154,22 @@ export default {
       'availablePaymentRoutes',
     ]),
   },
+  mounted() {
+    this.$store.commit('checkout/payment/paymentData', {payment_route_id: this.availablePaymentRoutes?.[0]?.id || null});
+  },
   watch: {
     availablePaymentRoutes() {
-      console.log('watch availablePaymentRoutes, first: ', JSON.stringify(this.availablePaymentRoutes?.[0]));
+      this.$store.commit('checkout/payment/paymentData', {payment_route_id: this.availablePaymentRoutes?.[0]?.id || null});
     },
   },
   methods: {
     async changePaymentSystem(paymentSystem) {
       this.$store.commit('checkout/payment/update', {selectedPaymentSystem: paymentSystem});
       this.$store.commit('checkout/payment/paymentData', {payment_system_id: paymentSystem.id});
-      await this.$store.dispatch('checkout/payment/fetchPaymentStepData', {withoutPaymentData: true});
+    },
+    async checkout() {
+      await this.$store.dispatch('checkout/payment/savePaymentData');
+      // @fixme
     },
   },
 }

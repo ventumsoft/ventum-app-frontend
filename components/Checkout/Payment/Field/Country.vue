@@ -7,7 +7,7 @@
     <label>{{ $trans('checkout.payment_step.cash_on_delivery.country') }}</label>
     <Select2
       class="form-control"
-      @input="$store.commit('checkout/payment/paymentData', {country_id: Number($event)})"
+      @input="$store.commit('checkout/payment/paymentData', {country_id: Number($event) || null})"
     >
       <option
         v-for="country of countries"

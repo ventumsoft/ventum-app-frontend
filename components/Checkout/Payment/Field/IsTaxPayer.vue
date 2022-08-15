@@ -38,6 +38,7 @@
           class="form-control"
           :class="{error: Boolean(errors?.['tax_number'])}"
           :value="paymentData.tax_number"
+          @input="$store.commit('checkout/payment/paymentData', {tax_number: $event.target.value})"
         >
       </div>
       <div v-if="paymentData?.['is_vat_payer'] === 'vat'" class="col_two_third col_last vat-number form-group">
@@ -49,6 +50,8 @@
             class="form-control"
             :class="{error: Boolean(errors?.['vat_number'])}"
             :value="paymentData.vat_number"
+            v-mask="'####################'"
+            @input="$store.commit('checkout/payment/paymentData', {vat_number: $event.target.value})"
           >
           <span v-show="false" class="form-control-feedback icon-ok vat-status-icon" aria-hidden="true" data-status="success"></span>
           <span v-show="false" class="form-control-feedback icon-remove-sign vat-status-icon" aria-hidden="true" data-status="fail"></span>

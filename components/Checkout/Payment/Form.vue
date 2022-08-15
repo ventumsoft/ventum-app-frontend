@@ -49,6 +49,8 @@ import upperFirst from 'lodash/upperFirst';
 import IsTaxPayer from './Field/IsTaxPayer';
 import Country from './Field/Country';
 import CompanyCountry from './Field/CompanyCountry';
+import Phone from './Field/Phone';
+import TaxationSystem from './Field/TaxationSystem';
 
 export default {
   data: () => ({
@@ -57,6 +59,8 @@ export default {
       IsTaxPayer,
       Country,
       CompanyCountry,
+      Phone,
+      TaxationSystem,
     },
   }),
   computed: {
