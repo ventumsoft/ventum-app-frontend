@@ -7,7 +7,8 @@
     <label>{{ $trans('checkout.payment_step.cash_on_delivery.country') }}</label>
     <Select2
       class="form-control"
-      @input="$store.commit('checkout/payment/paymentData', {country_id: Number($event) || null})"
+      :data-payment-data-field="'country_id'"
+      @input="$store.commit('checkout/payment/paymentData', {country_id: Number($event) || ''})"
     >
       <option
         v-for="country of countries"
@@ -25,6 +26,9 @@ export default {
   }),
   async mounted() {
     ({data: this.countries} = await this.$axios.post('geo/countries'));
+    if (!this.paymentData?.country_id && this.countries?.length) {
+      this.$store.commit('checkout/payment/paymentData', {country_id: this.countries[0].id || ''});
+    }
   },
 }
 </script>

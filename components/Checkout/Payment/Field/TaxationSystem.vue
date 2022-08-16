@@ -6,7 +6,8 @@
     <label>{{ $trans('checkout.payment_step.cash_on_delivery.fields.taxation_system') }}</label>
     <Select2
       class="form-control"
-      @input="$store.commit('checkout/payment/paymentData', {taxation_system_id: Number($event) || null})"
+      :data-payment-data-field="'taxation_system_id'"
+      @input="$store.commit('checkout/payment/paymentData', {taxation_system_id: Number($event) || ''})"
     >
       <option value="">{{ $trans('checkout.payment_step.cash_on_delivery.empty.taxation_system') }}</option>
       <option
@@ -29,10 +30,10 @@ export default {
       'errors',
     ])
   },
-  //mounted() {
-  //  if (!this.paymentData?.taxation_system_id && this.taxationSystems?.length) {
-  //    this.$store.commit('checkout/payment/paymentData', {taxation_system_id: this.taxationSystems[0].id});
-  //  }
-  //},
+  mounted() {
+    if (!this.paymentData?.taxation_system_id && this.taxationSystems?.length) {
+      this.$store.commit('checkout/payment/paymentData', {taxation_system_id: this.taxationSystems[0].id || ''});
+    }
+  },
 }
 </script>

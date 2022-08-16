@@ -31,6 +31,9 @@ export default {
         redirect($page({name: 'checkout/cart'}));
         return;
       }
+      if (from?.name !== 'checkout/delivery') {
+        await store.dispatch('checkout/delivery/fetchDeliveryStepData');
+      }
       await store.dispatch('checkout/payment/fetchPaymentStepData');
     },
   ],

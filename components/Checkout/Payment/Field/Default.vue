@@ -6,6 +6,7 @@
       type="text"
       class="form-control"
       :class="{error: Boolean(errors?.[field])}"
+      :data-payment-data-field="field"
       :value="paymentData?.[field] || ''"
       @input="$store.commit('checkout/payment/paymentData', {[field]: $event.target.value})"
     >

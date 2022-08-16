@@ -9,7 +9,7 @@
       :value="$store.state.checkout.delivery.deliveryData?.phone"
       @input="$store.commit('checkout/delivery/deliveryData', {phone: $event.target.value})"
       required
-      v-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : ''"
+      v-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : null"
     />
   </div>
 </template>

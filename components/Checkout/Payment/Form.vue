@@ -10,6 +10,7 @@
               class="radio-style"
               :id="'payment-form-type-user-' + iteratedUserType"
               name="payment-form-type-user"
+              :data-payment-data-field="'type_user'"
               :value="iteratedUserType"
               :checked="iteratedUserType === userType"
               @input="$store.commit('checkout/payment/paymentData', {type_user: iteratedUserType})"

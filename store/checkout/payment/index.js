@@ -1,3 +1,5 @@
+import _pick from 'lodash/pick';
+
 export const state = () => ({
   paymentStepLoading: false,
   deliveryPrice: null,
@@ -27,7 +29,11 @@ export const mutations = {
       state.paymentData = {};
     }
     for (const [key, value] of Object.entries(data)) {
-      state.paymentData[key] = value;
+      if (value !== null) {
+        state.paymentData[key] = value;
+      } else {
+        delete state.paymentData[key];
+      }
     }
   },
 }
@@ -61,10 +67,14 @@ export const actions = {
     commit('update', data);
   },
 
-  async savePaymentData({state, commit}) {
+  async savePaymentData({state, getters, commit}, {paymentDataFields}) {
     commit('update', {errors: null});
     try {
-      await this.$axios.post('checkout/payment/data', state.paymentData, {silenceException: true});
+      await this.$axios.post('checkout/payment/data', {
+        payment_system_id: state.selectedPaymentSystem?.id,
+        payment_route_id: getters.availablePaymentRoutes?.[0]?.id,
+        ..._pick(state.paymentData, paymentDataFields),
+      }, {silenceException: true});
     } catch (exception) {
       if ('object' === typeof exception.response?.data?.errors) {
         commit('update', {errors: exception.response.data.errors});

@@ -168,8 +168,15 @@ export default {
       this.$store.commit('checkout/payment/paymentData', {payment_system_id: paymentSystem.id});
     },
     async checkout() {
-      await this.$store.dispatch('checkout/payment/savePaymentData');
-      // @fixme
+      if (!await this.$store.dispatch('checkout/payment/savePaymentData', {
+        paymentDataFields: [...this.$el.querySelectorAll('[data-payment-data-field]')].map(element => element.dataset.paymentDataField),
+      })) {
+        return;
+      }
+      if (!await this.$store.dispatch('checkout/makeOrder')) {
+        return;
+      }
+      this.$router.push(this.$page({name: 'checkout/success'}));
     },
   },
 }
