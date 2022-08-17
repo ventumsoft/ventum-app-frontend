@@ -1,5 +1,76 @@
 <template>
   <div>
-    Checkout Success Page
+    <div
+      v-if="paymentResult"
+      class="alert"
+      :class="'alert-' + paymentResultClass"
+      v-html="$trans('order.payment.message.' + paymentResult).replace(':order_number', order.number).replace(':client_account_url', $router.resolve($page({name: 'user/' + PersonalAccountTabEnum.ORDERS})).href)"
+    ></div>
+    <div
+      v-else class="alert alert-success"
+      v-html="$trans('checkout.finish_message').replace(':order_number', order.number).replace(':client_account_url', $router.resolve($page({name: 'user/' + PersonalAccountTabEnum.ORDERS})).href)"
+    ></div>
+    <template v-if="void 'paymentSystem.type === PaymentSystemTypeEnum.BANK_ACCOUNT'">
+      <div v-if="void 'order.documents.length'" class="text-center">
+        <TheLink :to="(void 'account.document.download-archive') || '#'" class="button button-rounded button-reveal notopmargin" target="_blank">
+          <i class="icon-download"></i>
+          <span>{{ $trans('checkout.finish_step.documents') }}</span>
+        </TheLink>
+      </div>
+      <div v-else-if="void 'order.paymentRoute.documentTemplate.filter(documentTemplate => documentTemplate.type === PROFORMA).length'" class="text-center checkout-finish-documents-loading-block">
+        <button type="button" class="button button-rounded notopmargin disabled checkout-finish-documents-loading-button" :data-reload-route="void 'front.checkout.finish.documents'">
+          <i class="icon-cog spinner"></i>
+          <span>{{ $trans('checkout.finish_step.documents') }}</span>
+        </button>
+      </div>
+    </template>
+    <div v-if="agentShowcaseUrl">
+      <TheLink :to="agentShowcaseUrl" class="button button-rounded button-reveal  button-amber notopmargin fright">
+        <i class="icon-arrow-left2"></i><span>{{ $trans('checkout.goods_step.order_more_btn') }}</span>
+      </TheLink>
+    </div>
   </div>
 </template>
+
+<script>
+import PaymentSystemTypeEnum from '@/enums/PaymentSystemTypeEnum';
+import PaymentResultEnum from '@/enums/PaymentResultEnum';
+import PersonalAccountTabEnum from '@/enums/PersonalAccountTabEnum';
+import {mapState} from 'vuex';
+
+export default {
+  middleware: [
+    'authenticate',
+    async function ({params, store, redirect, $page}) {
+      if (!params.orderNumber) {
+        redirect($page({name: 'checkout/cart'}));
+        return;
+      }
+      await store.dispatch('checkout/success/fetchOrderResultData', {
+        orderNumber: params.orderNumber,
+        paymentResult: params.paymentResult,
+      });
+    },
+  ],
+  data: ({$route}) => ({
+    PaymentSystemTypeEnum,
+    PersonalAccountTabEnum,
+    //orderNumber: $route.params.orderNumber,
+    //paymentResult: $route.params.paymentResult,
+  }),
+  computed: {
+    ...mapState('checkout/success', [
+      'order',
+      'paymentResult',
+      'agentShowcaseUrl',
+    ]),
+    paymentResultClass() {
+      return {
+        [PaymentResultEnum.PENDING]: 'info',
+        [PaymentResultEnum.SUCCESS]: 'success',
+        [PaymentResultEnum.FAIL]: 'danger',
+      };
+    },
+  },
+}
+</script>

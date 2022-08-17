@@ -173,10 +173,7 @@ export default {
       })) {
         return;
       }
-      if (!await this.$store.dispatch('checkout/makeOrder')) {
-        return;
-      }
-      this.$router.push(this.$page({name: 'checkout/success'}));
+      await this.$store.dispatch('checkout/makeOrder');
     },
   },
 }

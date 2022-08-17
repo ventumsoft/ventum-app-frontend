@@ -27,6 +27,12 @@ export const mutations = {
       state.deliveryData[key] = value;
     }
   },
+  clear(state) {
+    state.deliverySystems = null;
+    state.selectedDeliverySystem = null;
+    state.deliveryData = null;
+    state.errors = null;
+  },
 }
 
 export const actions = {

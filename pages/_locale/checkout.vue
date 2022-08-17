@@ -11,7 +11,7 @@
       <div class="content-wrap">
         <div class="container clearfix">
           <div id="processTabs" style="margin-top: 30px;">
-            <CheckoutSteps :active="$route.meta.step" />
+            <CheckoutSteps v-if="$route.meta.step" :active="$route.meta.step" />
             <NuxtChild />
           </div>
         </div>
@@ -40,7 +40,7 @@ export default {
   },
   watch: {
     '$auth.user'() {
-      if (this.$route.meta.step !== 'items') {
+      if (this.$route.meta.step && (this.$route.meta.step !== 'items')) {
         this.$router.push(this.$page({name: 'checkout/cart'}));
       }
     },

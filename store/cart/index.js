@@ -14,6 +14,14 @@ export const mutations = {
       state[key] = value;
     }
   },
+  clear(state) {
+    state.items = null;
+    state.totalWithoutDiscount = null;
+    state.totalWithDiscount = null;
+    state.discounts = null;
+    state.bonus = null;
+    state.vat = null;
+  },
 }
 
 export const actions = {

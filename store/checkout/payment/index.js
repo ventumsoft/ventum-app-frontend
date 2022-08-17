@@ -36,6 +36,17 @@ export const mutations = {
       }
     }
   },
+  clear(state) {
+    state.deliveryPrice = null;
+    state.paymentSystems = null;
+    state.paymentRoutes = null;
+    state.selectedPaymentSystem = null;
+    state.useBonuses = false;
+    state.userTypesFields = null;
+    state.taxationSystems = null;
+    state.paymentData = null;
+    state.errors = null;
+  },
 }
 
 export const getters = {
