@@ -1,6 +1,8 @@
 export const state = () => ({
-  order: null,
+  orderNumber: null,
   paymentResult: null,
+  documentsExists: null,
+  documentsPending: null,
   agentShowcaseUrl: null,
 });
 
@@ -10,6 +12,13 @@ export const mutations = {
       state[key] = value;
     }
   },
+  clear(state) {
+    state.orderNumber = null;
+    state.paymentResult = null;
+    state.documentsExists = null;
+    state.documentsPending = null;
+    state.agentShowcaseUrl = null;
+  },
 }
 
 export const actions = {
@@ -18,15 +27,14 @@ export const actions = {
     paymentResult,
     paymentId,
   }) {
-    console.log('fetchOrderResultData', {
+    commit('update', {
       orderNumber,
       paymentResult,
+    });
+    const {data: resultData} = await this.$axios.get('checkout/result', {params: {
+      orderNumber,
       paymentId,
-    });
-    commit('update', {
-      order: {number: orderNumber},
-      paymentResult: paymentResult,
-      agentShowcaseUrl: null,
-    });
+    }});
+    commit('update', resultData);
   },
 }

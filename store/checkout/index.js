@@ -2,7 +2,7 @@ import MobileDetect from 'mobile-detect';
 import PaymentResultEnum from '@/enums/PaymentResultEnum';
 
 export const actions = {
-  async makeOrder({state, commit, getters, dispatch}) {
+  async makeOrder({state, getters}) {
     const {data: {
       clientRedirect,
       redirectUrl,
@@ -16,13 +16,8 @@ export const actions = {
       device_type: (new MobileDetect(window.navigator.userAgent)).mobile() ? 'mobile' : 'desktop',
     });
 
-    commit('cart/clear', undefined, {root: true});
-    dispatch('cart/fetch', undefined, {root: true});
-    commit('delivery/clear');
-    commit('payment/clear');
-
-    if (clientRedirect) {
-      console.log({clientRedirect});
+    if (clientRedirect?.public_key && clientRedirect?.session?.id) {
+      Stripe(response.public_key).redirectToCheckout({sessionId: clientRedirect.session.id});
       return;
     }
 
@@ -35,5 +30,12 @@ export const actions = {
       orderNumber,
       paymentResult: success ? null : PaymentResultEnum.FAIL,
     }}));
+  },
+
+  async clear({commit, dispatch}) {
+    commit('cart/clear', undefined, {root: true});
+    dispatch('cart/fetch', undefined, {root: true});
+    commit('delivery/clear');
+    commit('payment/clear');
   },
 }

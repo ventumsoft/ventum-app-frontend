@@ -45,5 +45,8 @@ export default {
       }
     },
   },
+  beforeDestroy() {
+    this.$store.dispatch('checkout/clear');
+  },
 }
 </script>

@@ -116,7 +116,7 @@
         <CheckoutPaymentForm />
       </div>
     </div>
-    <a v-if="availablePaymentRoutes?.length" href="#" :class="'button button-rounded button-reveal tright nomargin fright ' + (!selectedPaymentSystem ? 'disabled' : '')" @click.prevent="checkout">
+    <a v-if="availablePaymentRoutes?.length" href="#" :class="'button button-rounded button-reveal tright nomargin fright ' + ((!selectedPaymentSystem || makingOrder) ? 'disabled' : '')" @click.prevent="checkout">
       <i class="icon-arrow-right2"></i><span>{{ $trans('checkout.payment_step.next_step_btn') }}</span>
     </a>
     <TheLink :to="$page({name: 'checkout/delivery'})" class="button button-rounded button-reveal  button-amber notopmargin fright">
@@ -132,6 +132,7 @@ import {mapGetters, mapState} from 'vuex';
 export default {
   data: () => ({
     PaymentSystemTypeEnum,
+    makingOrder: false,
   }),
   computed: {
     ...mapState('cart', [
@@ -168,9 +169,11 @@ export default {
       this.$store.commit('checkout/payment/paymentData', {payment_system_id: paymentSystem.id});
     },
     async checkout() {
+      this.makingOrder = true;
       if (!await this.$store.dispatch('checkout/payment/savePaymentData', {
         paymentDataFields: [...this.$el.querySelectorAll('[data-payment-data-field]')].map(element => element.dataset.paymentDataField),
       })) {
+        this.makingOrder = false;
         return;
       }
       await this.$store.dispatch('checkout/makeOrder');
