@@ -21,6 +21,7 @@
             >{{ $trans('checkout.payment_step.cash_on_delivery.user_type.' + iteratedUserType) }}</label>
           </div>
         </div>
+        <input v-else type="hidden" :data-payment-data-field="'type_user'" :value="userType">
         <component
           v-for="(title, field) of userTypesFields[userType]"
           v-if="(field !== 'tax_number') || !userTypesFields[userType]['is_tax_payer']"
@@ -75,6 +76,11 @@ export default {
     userType() {
       return this.paymentData?.type_user || this.userTypes && this.userTypes[0] || null;
     },
+  },
+  mounted() {
+    if (this.userType) {
+      this.$store.commit('checkout/payment/paymentData', {type_user: this.userType});
+    }
   },
   methods: {
     camelCase,

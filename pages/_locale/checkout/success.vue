@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import _pick from 'lodash/pick';
 import PaymentResultEnum from '@/enums/PaymentResultEnum';
 import PersonalAccountTabEnum from '@/enums/PersonalAccountTabEnum';
 import {mapState} from 'vuex';
@@ -39,15 +38,12 @@ import {mapState} from 'vuex';
 export default {
   middleware: [
     'authenticate',
-    async function ({params, store, redirect, $page}) {
-      if (!params.orderNumber) {
+    async function ({store, redirect, $page}) {
+      if (!store.state.checkout.success.orderNumber) {
         redirect($page({name: 'checkout/cart'}));
         return;
       }
-      await store.dispatch('checkout/success/fetchOrderResultData', _pick(params, [
-        'orderNumber',
-        'paymentResult',
-      ]));
+      await store.dispatch('checkout/success/fetchOrderResultData');
     },
   ],
   data: () => ({
@@ -66,7 +62,7 @@ export default {
         [PaymentResultEnum.PENDING]: 'info',
         [PaymentResultEnum.SUCCESS]: 'success',
         [PaymentResultEnum.FAIL]: 'danger',
-      };
+      }[this.paymentResult] || 'info';
     },
   },
   mounted() {

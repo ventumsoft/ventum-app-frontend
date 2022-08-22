@@ -1,5 +1,8 @@
+import _pick from 'lodash/pick';
+
 export const state = () => ({
   orderNumber: null,
+  paymentId: null,
   paymentResult: null,
   documentsExists: null,
   documentsPending: null,
@@ -14,6 +17,7 @@ export const mutations = {
   },
   clear(state) {
     state.orderNumber = null;
+    state.paymentId = null;
     state.paymentResult = null;
     state.documentsExists = null;
     state.documentsPending = null;
@@ -22,19 +26,11 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchOrderResultData({state, commit}, {
-    orderNumber,
-    paymentResult,
-    paymentId,
-  }) {
-    commit('update', {
-      orderNumber,
-      paymentResult,
-    });
-    const {data: resultData} = await this.$axios.get('checkout/result', {params: {
-      orderNumber,
-      paymentId,
-    }});
+  async fetchOrderResultData({state, commit}) {
+    const {data: resultData} = await this.$axios.get('checkout/result', {params: _pick(state, [
+      'orderNumber',
+      'paymentId',
+    ])});
     commit('update', resultData);
   },
 }

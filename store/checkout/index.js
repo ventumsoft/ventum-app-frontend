@@ -2,7 +2,7 @@ import MobileDetect from 'mobile-detect';
 import PaymentResultEnum from '@/enums/PaymentResultEnum';
 
 export const actions = {
-  async makeOrder({state, getters}) {
+  async makeOrder({state, getters, commit}) {
     const {data: {
       clientRedirect,
       redirectUrl,
@@ -17,7 +17,7 @@ export const actions = {
     });
 
     if (clientRedirect?.public_key && clientRedirect?.session?.id) {
-      Stripe(response.public_key).redirectToCheckout({sessionId: clientRedirect.session.id});
+      Stripe(clientRedirect.public_key).redirectToCheckout({sessionId: clientRedirect.session.id});
       return;
     }
 
@@ -26,10 +26,11 @@ export const actions = {
       return;
     }
 
-    this.$router.push(this.$page({name: 'checkout/success', params: {
+    commit('success/update', {
       orderNumber,
       paymentResult: success ? null : PaymentResultEnum.FAIL,
-    }}));
+    });
+    this.$router.push(this.$page({name: 'checkout/success'}));
   },
 
   async clear({commit, dispatch}) {

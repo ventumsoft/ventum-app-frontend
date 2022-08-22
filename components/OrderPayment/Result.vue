@@ -1,10 +1,10 @@
 <template>
   <fragment>
     <PageTitle
-      :title="$trans('order.payment.page-title')"
+      :title="$trans('order.payment.page-title').replace(':order_number', orderNumber)"
       :breadcrumbs="[
         {title: $trans('default.breadcrumbs.main'), url: $page({name: 'index'})},
-        {title: $trans('order.payment.breadcrumb-title')},
+        {title: $trans('order.payment.breadcrumb-title').replace(':order_number', orderNumber)},
       ]"
     />
     <section id="content">
