@@ -29,6 +29,7 @@
             id="chat-form-phone"
             class="form-control"
             :class="{error: errors?.phone}"
+            :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace(/#/g, '_') : ''"
             v-model="formData.phone"
             v-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : null"
           />

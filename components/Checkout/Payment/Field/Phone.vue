@@ -6,6 +6,7 @@
       type="text"
       class="form-control"
       :class="{error: $store.state.checkout.payment.errors?.phone}"
+      :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace(/#/g, '_') : ''"
       :data-payment-data-field="'phone'"
       :value="$store.state.checkout.payment.paymentData?.phone"
       @input="$store.commit('checkout/payment/paymentData', {phone: $event.target.value})"

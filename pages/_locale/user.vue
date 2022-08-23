@@ -1,0 +1,45 @@
+<template>
+  <fragment>
+    <PageTitle
+      :title="$trans('account.page-title')"
+      :breadcrumbs="[
+        {title: $trans('default.breadcrumbs.main'), url: $page({name: 'index'})},
+        {title: $trans('account.page-title')},
+      ]"
+    />
+    <section id="content">
+      <div class="content-wrap">
+        <div class="container clearfix">
+          <div class="postcontent nobottommargin clearfix fullwidth postcontent-account">
+            <ul id="portfolio-filter" class="clearfix">
+              <li
+                v-for="tab of PersonalAccountTabEnum"
+                v-if="(tab !== PersonalAccountTabEnum.CREATORS_TEMPLATES) && (tab !== PersonalAccountTabEnum.CREATORS_TEMPLATES_PAYMENTS) || $auth.user.isDesigner"
+                :class="{activeFilter: $route.name === 'user/' + tab}"
+              >
+                <TheLink :to="$page({name: 'user/' + tab})" class="account-tab-toggler">
+                  {{ $trans('account.tabs.' + tab) }}
+                </TheLink>
+              </li>
+            </ul>
+            <div class="clear"></div>
+            <div id="client-account" class="client-account account-tab-content">
+              <NuxtChild />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </fragment>
+</template>
+
+<script>
+import PersonalAccountTabEnum from '@/enums/PersonalAccountTabEnum';
+
+export default {
+  middleware: 'authenticate',
+  data: () => ({
+    PersonalAccountTabEnum,
+  }),
+}
+</script>

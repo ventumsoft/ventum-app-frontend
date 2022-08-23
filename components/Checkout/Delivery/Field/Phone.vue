@@ -6,6 +6,7 @@
       id="delivery-form-phone"
       class="form-control"
       :class="{error: $store.state.checkout.delivery.errors?.phone}"
+      :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace(/#/g, '_') : ''"
       :value="$store.state.checkout.delivery.deliveryData?.phone"
       @input="$store.commit('checkout/delivery/deliveryData', {phone: $event.target.value})"
       required
