@@ -5,12 +5,12 @@ export default ({app, store}, inject) => {
   inject('dt', (value, format = 'datetime') => {
     const timezone = store.state.site.settings?.timezone || moment.tz.guess();
     const dateFormat = store.state.site.settings?.date_format || 'YYYY-MM-DD';
-    const timeFormat = store.state.site.settings?.timeFormat || 24;
+    const timeFormat = store.state.site.settings?.time_format || 24;
 
     const dateTimeMoment = moment.tz(value, timezone).tz(timezone);
 
     if (format === 'datetime') {
-      return formatDateTime(dateTimeMoment, dateFormat);
+      return formatDateTime(dateTimeMoment, dateFormat, timeFormat);
     } else if (format === 'date') {
       return formatDate(dateTimeMoment, dateFormat);
     } else if (format === 'time') {

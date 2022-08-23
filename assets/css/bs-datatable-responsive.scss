@@ -1,0 +1,95 @@
+/* ------------------------------------------------------------------------------
+*
+*  # Responsive extension
+*
+*  Optimise the table's layout for different screen sizes through the dynamic
+*  insertion and removal of columns from the table
+*
+*  Version: 1.0
+*  Latest update: May 25, 2015
+*
+* ---------------------------------------------------------------------------- */
+.dtr-inline.collapsed tbody tr td:before,
+.dtr-inline.collapsed tbody tr th:before {
+  margin-right: 10px;
+}
+.dtr-inline.collapsed tbody tr td:first-child,
+.dtr-inline.collapsed tbody tr th:first-child {
+  position: relative;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dtr-inline.collapsed tbody tr td:first-child.dataTables_empty:before,
+.dtr-inline.collapsed tbody tr th:first-child.dataTables_empty:before {
+  display: none;
+}
+.dtr-column tbody td.control,
+.dtr-column tbody th.control {
+  position: relative;
+  cursor: pointer;
+}
+.dtr-inline.collapsed tbody tr td:first-child:before,
+.dtr-inline.collapsed tbody tr th:first-child:before,
+.dtr-column tbody tr td.control:before,
+.dtr-column tbody tr th.control:before {
+  content: '\e044';
+  font-family: lined-icons;
+  display: inline-block;
+  speak: none;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;
+  text-transform: none;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale
+}
+.dataTable.dtr-inline.collapsed tbody tr.parent td:first-child:before,
+.dataTable.dtr-inline.collapsed tbody tr.parent th:first-child:before,
+.dataTable.dtr-column tbody tr.parent td.control:before,
+.dataTable.dtr-column tbody tr.parent th.control:before {
+  content: '\e045';
+}
+.dtr-inline.collapsed tbody tr.child td:before {
+  display: none;
+}
+.dataTable tr.child:hover {
+  background-color: transparent;
+}
+.dataTable tr.child .dtr-title {
+  display: table-cell;
+  font-weight: 500;
+  padding-right: 40px;
+}
+.dataTable tr.child .dtr-data {
+  display: table-cell;
+  padding: 8px 0;
+}
+.dataTable tr td.child {
+  white-space: normal;
+  position: relative;
+}
+.dataTable tr td.child > ul {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dataTable tr td.child > ul > li {
+  display: table-row;
+}
+@media (max-width: 480px) {
+  .dataTable tr td.child > ul > li .dropdown,
+  .dataTable tr td.child > ul > li .dropup,
+  .dataTable tr td.child > ul > li .btn-group {
+    position: static;
+  }
+  .dataTable tr td.child > ul > li .dropdown-menu {
+    left: 0;
+    right: 0;
+    border-radius: 0;
+    border-width: 1px 0;
+  }
+}

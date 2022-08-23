@@ -18,7 +18,7 @@
             v-model="formData.firstname"
             required
           >
-          <label v-if="errors?.firstname" class="help-error">{{ JSON.stringify(errors.firstname) }}</label>
+          <label v-for="error of (errors?.firstname?.length ? errors.firstname : [])" class="help-error">{{ error }}</label>
         </div>
         <div class="col_full">
           <label for="profile-form-surname">{{ $trans('account.profile.surname') }}:</label>
@@ -29,7 +29,7 @@
             :class="{error: errors?.surname}"
             v-model="formData.surname"
           >
-          <label v-if="errors?.surname" class="help-error">{{ JSON.stringify(errors.surname) }}</label>
+          <label v-for="error of (errors?.surname?.length ? errors.surname : [])" class="help-error">{{ error }}</label>
         </div>
         <div class="col_full">
           <label for="profile-form-email">{{ $trans('account.profile.email') }}:</label>
@@ -41,7 +41,7 @@
             v-model="formData.email"
             required
           >
-          <label v-if="errors?.email" class="help-error">{{ JSON.stringify(errors.email) }}</label>
+          <label v-for="error of (errors?.email?.length ? errors.email : [])" class="help-error">{{ error }}</label>
         </div>
         <div class="col_full">
           <label for="profile-form-phone">{{ $trans('account.profile.phone') }}:</label>
@@ -54,7 +54,7 @@
             v-model="formData.phone"
             v-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : null"
           >
-          <label v-if="errors?.phone" class="help-error">{{ JSON.stringify(errors.phone) }}</label>
+          <label v-for="error of (errors?.phone?.length ? errors.phone : [])" class="help-error">{{ error }}</label>
         </div>
         <div class="col_full nobottommargin">
           <label>{{ $trans('account.profile.avatar') }}</label>
@@ -159,7 +159,33 @@ export default {
       }
     },
     async handleProfileDelete() {
-      //
+      if (!await this.$confirm({
+        mainTitle: this.$trans('account.profile.delete.confirmation.mainTitle'),
+        mainSubTitle: this.$trans('account.profile.delete.confirmation.mainSubTitle'),
+        mainYesBtn: this.$trans('account.profile.delete.confirmation.mainYesBtn'),
+        mainNoBtn: this.$trans('account.profile.delete.confirmation.mainNoBtn'),
+        yesTitle: this.$trans('account.profile.delete.confirmation.yesTitle'),
+        yesSubTitle: this.$trans('account.profile.delete.confirmation.yesSubTitle'),
+        noTitle: this.$trans('account.profile.delete.confirmation.noTitle'),
+        noSubTitle: this.$trans('account.profile.delete.confirmation.noSubTitle'),
+      })) {
+        return;
+      }
+      this.loading = true;
+      let success;
+      try {
+        ({data: {
+            success,
+          }} = await this.$axios.delete('user/profile', {silenceException: true}));
+      } catch (exception) {
+        this.$noty(exception.response?.data?.message || exception.message, 'error');
+        return;
+      } finally {
+        this.loading = false;
+      }
+      if (success) {
+        await this.$auth.logout();
+      }
     },
   },
 }

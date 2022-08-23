@@ -37,7 +37,15 @@
 import PersonalAccountTabEnum from '@/enums/PersonalAccountTabEnum';
 
 export default {
-  middleware: 'authenticate',
+  middleware: [
+    'authenticate',
+    async function ({route, redirect, $page}) {
+      if (route.name === 'user') {
+        redirect($page({name: 'user/' + PersonalAccountTabEnum.ORDERS}));
+        return;
+      }
+    },
+  ],
   data: () => ({
     PersonalAccountTabEnum,
   }),

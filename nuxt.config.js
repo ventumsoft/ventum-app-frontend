@@ -28,6 +28,11 @@ export default {
     'magnific-popup/dist/magnific-popup.css',
     'noty/src/noty.scss',
     '~/assets/css/noty-mint-theme.scss',
+    //'sweetalert/dist/sweetalert.css',
+    '~/assets/css/sweetalert.scss',
+    '~/assets/css/bs-datatable.scss',
+    //'datatables.net-responsive-dt/css/responsive.dataTables',
+    '~/assets/css/bs-datatable-responsive.scss',
     'select2/dist/css/select2.css',
     'bootstrap-fileinput/css/fileinput.css',
     'bootstrap-star-rating/css/star-rating.css',
@@ -71,6 +76,7 @@ export default {
     '~/plugins/fitvids.client',
     '~/plugins/mask.client',
     '~/plugins/noty.client',
+    '~/plugins/confirm.client',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
