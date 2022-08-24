@@ -18,6 +18,9 @@ export default {
     const $fnDataTable = $.fn.dataTable;
     await import('datatables.net-responsive-dt');
     $.fn.dataTable = $fnDataTable;
+    if (this.$el.querySelector('.empty-table-message')) {
+      return;
+    }
     const dataTable = $(this.$refs.dataTable).DataTable({
       info: false,
       bLengthChange: false,
@@ -30,9 +33,6 @@ export default {
     dataTable.on('processing', event => {
       $('html, body').animate({scrollTop: 0}, 500, 'swing');
     });
-    //dataTable.on('responsive-display.dt', function (e, datatable, row, showHide, update) {
-    //  SEMICOLON.initialize.lightbox(); // @fixme
-    //});
   },
 }
 </script>

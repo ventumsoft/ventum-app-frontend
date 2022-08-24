@@ -8,7 +8,6 @@
           searching: false,
           paging: false,
         }"
-        data-paging="false"
       >
         <thead>
         <tr>
@@ -85,7 +84,12 @@
 <script>
 export default {
   async asyncData({query, $axios}) {
-    const {data: {data: layouts, pagination}} = await $axios.get('user/constructor-layouts', {params: {page: Number(query.page) || 1}});
+    const {data: {
+      data: layouts,
+      pagination,
+    }} = await $axios.get('user/constructor-layouts', {params: {
+      page: Number(query.page) || 1,
+    }});
     return {
       layouts,
       pagination,
