@@ -45,6 +45,7 @@ export default {
     '~/assets/css/main.scss',
     '~/assets/css/font-icons.scss',
     '~/assets/css/select-boxes.scss',
+    '~/assets/css/creators.scss',
     '~/assets/css/common.scss',
     '~/assets/css/checkout.scss',
     '~/assets/css/messengers.scss',

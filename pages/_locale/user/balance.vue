@@ -2,7 +2,26 @@
   <div class="client-account-item account-personalaccount account-tab-balance">
     <h3>{{ $trans('account.balance.currentbalance') }}: <span>{{ $currency($auth.user.balanceValue) }}</span></h3>
     <div class="table-responsive">
-      <table ref="dataTable" id="datatable-account" class="table order" cellspacing="0" width="100%">
+      <DataTable
+        id="datatable-account"
+        :options="{
+          ordering: false,
+          searching: false,
+          language: {
+            processing: $trans('account.balance.datatable.processing'),
+            info: $trans('account.balance.datatable.info'),
+            infoEmpty: $trans('account.balance.datatable.infoEmpty'),
+            loadingRecords: $trans('account.balance.datatable.loadingRecords'),
+            emptyTable: $trans('account.balance.datatable.emptyTable'),
+            paginate: {
+              first: $trans('account.balance.datatable.paginate.first'),
+              previous: $trans('account.balance.datatable.paginate.previous'),
+              next: $trans('account.balance.datatable.paginate.next'),
+              last: $trans('account.balance.datatable.paginate.last'),
+            },
+          },
+        }"
+      >
         <thead>
         <tr>
           <th>{{ $trans('account.balance.date') }}</th>
@@ -37,7 +56,7 @@
           </td>
         </tr>
         </tbody>
-      </table>
+      </DataTable>
     </div>
   </div>
 </template>
@@ -45,33 +64,10 @@
 <script>
 export default {
   async asyncData({$axios}) {
-    const {data: transactions} = await $axios.get('user/balance-transactions');
+    const {data: transactions} = await $axios.get('user/bonus-transactions');
     return {
       transactions,
     };
-  },
-  async mounted() {
-    await import('datatables/media/js/jquery.dataTables');
-    await import('datatables-bootstrap3-plugin/media/js/datatables-bootstrap3');
-    const $fnDataTable = $.fn.dataTable;
-    await import('datatables.net-responsive-dt');
-    $.fn.dataTable = $fnDataTable;
-    const dataTable = $(this.$refs.dataTable).DataTable({
-      info: false,
-      bLengthChange: false,
-      ordering: false,
-      searching: false,
-      responsive: true,
-    });
-    dataTable.on('page.dt', event => {
-      $('html, body').animate({scrollTop: 0}, 500, 'swing');
-    });
-    dataTable.on('processing', event => {
-      $('html, body').animate({scrollTop: 0}, 500, 'swing');
-    });
-    //dataTable.on('responsive-display.dt', function (e, datatable, row, showHide, update) {
-    //  SEMICOLON.initialize.lightbox();
-    //});
   },
 }
 </script>
