@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import UserTypeEnum from '@/enums/UserTypeEnum';
 import {mapState} from 'vuex';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
@@ -56,7 +55,6 @@ import TaxationSystem from './Field/TaxationSystem';
 
 export default {
   data: () => ({
-    UserTypeEnum,
     Fields: {
       IsTaxPayer,
       Country,
