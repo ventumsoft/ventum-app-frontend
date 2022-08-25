@@ -38,6 +38,11 @@
 import PersonalAccountTabEnum from '@/enums/PersonalAccountTabEnum';
 
 export default {
+  head() {
+    return {
+      title: this.$trans('account.page-meta-title'),
+    };
+  },
   middleware: [
     'authenticate',
     async function ({route, redirect, $page}) {
