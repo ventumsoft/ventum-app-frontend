@@ -9,6 +9,7 @@
       :list="items"
       :options="{masonry: true}"
       class="col_full masonry-thumbs col-6 bottommargin-lg clearfix"
+      v-mfp:gallery
     >
       <a
         v-for="(item, index) of items"
@@ -32,24 +33,6 @@ export default {
   props: {
     title: {type: String},
     items: {type: Array},
-  },
-  async mounted() {
-    await import('magnific-popup');
-
-    $(this.$refs.gallery.$el).magnificPopup({
-      type: 'image',
-      delegate: 'a[data-lightbox="gallery-item"]',
-      closeOnContentClick: true,
-      closeBtnInside: false,
-      fixedContentPos: true,
-      mainClass: 'mfp-no-margins mfp-fade',
-      image: {verticalFit: true},
-      gallery: {
-        enabled: true,
-        navigateByImgClick: true,
-        preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
-      },
-    });
   },
 }
 </script>

@@ -92,8 +92,7 @@
                           class="center-icon"
                           :class="{'two-icons': !$store.state.site.settings?.['constructor:templates:disable-template-page']}"
                           :href="template.image"
-                          :data-lightbox="template.pagesImages ? 'gallery' : undefined"
-                          :data-items="template.pagesImages ? JSON.stringify(template.pagesImages.map(templatePageImage => ({src: templatePageImage.full}))) : undefined"
+                          v-mfp:gallery="template.pagesImages ? {items: template.pagesImages.map(templatePageImage => ({src: templatePageImage.full}))} : false"
                           v-mfp:image="!template.pagesImages"
                         ><i class="icon-line-plus"></i></a>
                         <TheLink
@@ -183,7 +182,6 @@ export default {
   },
   async mounted() {
     this.TemplateColorEnum = TemplateColorEnum;
-    await import('magnific-popup');
     await import('jquery-lazyload');
     await this.$nextTick();
     this.magnificPopupInitialize();
@@ -198,23 +196,6 @@ export default {
   methods: {
     magnificPopupInitialize() {
       const $container = $(this.$refs.templatesContainer);
-      $container.find('[data-lightbox="gallery"]').each(function () {
-        const $element = $(this);
-        $element.magnificPopup({
-          type: 'image',
-          items: $element.data('items'),
-          closeOnContentClick: true,
-          closeBtnInside: false,
-          fixedContentPos: true,
-          mainClass: 'mfp-no-margins mfp-fade',
-          image: {verticalFit: true},
-          gallery: {
-            enabled: true,
-            navigateByImgClick: true,
-            preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
-          },
-        });
-      });
       $container.find('img.lazy').lazyload({event: 'turnPage'});
       $container.find('img.lazy').lazyload({threshold: 200});
     },

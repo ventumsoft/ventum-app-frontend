@@ -9,7 +9,7 @@
         <div class="container clearfix">
           <div class="col_half bottommargin">
             <div ref="preview" class="product-template-preview-container">
-              <div class="product-template-preview-content" :data-lightbox="template.pagesImages ? 'gallery' : undefined">
+              <div class="product-template-preview-content" v-mfp:gallery="Boolean(template.pagesImages)">
                 <template v-if="template.pagesImages">
                   <a
                     v-for="(templatePageImage, index) of template.pagesImages"
@@ -116,7 +116,7 @@
                         loading="lazy"
                       >
                     </TheLink>
-                    <div class="portfolio-overlay" :data-lightbox="similarTemplate.pagesImages ? 'gallery' : undefined">
+                    <div class="portfolio-overlay" v-mfp:gallery="Boolean(similarTemplate.pagesImages)">
                       <template v-if="similarTemplate.pagesImages">
                         <a
                           v-for="(templatePageImage, index) of similarTemplate.pagesImages"
@@ -206,7 +206,6 @@ export default {
   },
   async mounted() {
     await import('owl.carousel/dist/owl.carousel');
-    await import('magnific-popup');
 
     if (this.$refs.carousel) {
       const $carousel = $(this.$refs.carousel);
@@ -226,48 +225,8 @@ export default {
           800: {items: 3},
           1200: {items: 4},
         },
-        onInitialized: this.carouselInitialized,
-        onChanged: this.carouselInitialized,
       });
     }
-
-    const $templatePreview = $(this.$refs.preview)
-    $templatePreview.find('[data-lightbox="gallery"]').magnificPopup({
-      type: 'image',
-      delegate: 'a[data-lightbox="gallery-item"]',
-      closeOnContentClick: true,
-      closeBtnInside: false,
-      fixedContentPos: true,
-      mainClass: 'mfp-no-margins mfp-fade',
-      image: {verticalFit: true},
-      gallery: {
-        enabled: true,
-        navigateByImgClick: true,
-        preload: [0,1], // Will preload 0 - before current, and 1 after the current image
-      },
-    });
-  },
-  methods: {
-    carouselInitialized(event) {
-      const $carousel = $(this.$refs.carousel);
-      $carousel.find('[data-lightbox="gallery"]').each(function () {
-        let element = $(this);
-        element.magnificPopup({
-          type: 'image',
-          delegate: 'a[data-lightbox="gallery-item"]',
-          closeOnContentClick: true,
-          closeBtnInside: false,
-          fixedContentPos: true,
-          mainClass: 'mfp-no-margins mfp-fade',
-          image: {verticalFit: true},
-          gallery: {
-            enabled: true,
-            navigateByImgClick: true,
-            preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
-          },
-        });
-      });
-    },
   },
 }
 </script>

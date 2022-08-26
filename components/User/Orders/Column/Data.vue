@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="item of order.items" class="order-product-data">
-      <div class="order-product-preview" :data-lightbox="item.approvedImages?.length ? 'gallery' : undefined">
+      <div class="order-product-preview" v-mfp:gallery="Boolean(item.approvedImages?.length)">
         <template v-if="item.approvedImages?.length">
           <a
             v-for="(itemApprovedImage, index) of item.approvedImages"

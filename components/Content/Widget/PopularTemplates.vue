@@ -25,7 +25,7 @@
                 loading="lazy"
               >
             </TheLink>
-            <div class="portfolio-overlay" :data-lightbox="templateData.pagesImagesUrls ? 'gallery' : undefined">
+            <div class="portfolio-overlay" v-mfp:gallery="Boolean(templateData.pagesImagesUrls)">
               <template v-if="templateData.pagesImagesUrls">
                 <a
                   v-for="(templatePageImageUrl, index) of templateData.pagesImagesUrls"
@@ -90,30 +90,7 @@ export default {
         800: {items: 3},
         1200: {items: 4},
       },
-      onInitialized: this.carouselInitialized,
     });
-  },
-  methods: {
-    carouselInitialized(event) {
-      const $carousel = $(this.$refs.carousel);
-      $carousel.find('[data-lightbox="gallery"]').each(function () {
-        let element = $(this);
-        element.magnificPopup({
-          type: 'image',
-          delegate: 'a[data-lightbox="gallery-item"]',
-          closeOnContentClick: true,
-          closeBtnInside: false,
-          fixedContentPos: true,
-          mainClass: 'mfp-no-margins mfp-fade',
-          image: {verticalFit: true},
-          gallery: {
-            enabled: true,
-            navigateByImgClick: true,
-            preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
-          },
-        });
-      });
-    },
   },
 }
 </script>

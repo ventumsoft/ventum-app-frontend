@@ -13,7 +13,8 @@
               className: 'order-number',
               sortable: true,
               data: 'number',
-              render: (data, type, order) => getColumnRender(columns.Number, {order}),
+              render: (data, type, order) => '',
+              fnCreatedCell: (nTd, sData, oData, iRow, iCol) => handleDataTableCellCreating(columns.Number, nTd, {order: oData}),
               responsivePriority: 1,
             },
             {
@@ -21,7 +22,8 @@
               className: 'order-date',
               sortable: false,
               data: 'createdAt',
-              render: (data, type, order) => getColumnRender(columns.Date, {order}),
+              render: (data, type, order) => '',
+              fnCreatedCell: (nTd, sData, oData, iRow, iCol) => handleDataTableCellCreating(columns.Date, nTd, {order: oData}),
               responsivePriority: 3,
             },
             {
@@ -29,7 +31,8 @@
               className: 'order-product-thumbnail',
               sortable: false,
               data: 'number',
-              render: (data, type, order) => getColumnRender(columns.Data, {order}),
+              render: (data, type, order) => '',
+              fnCreatedCell: (nTd, sData, oData, iRow, iCol) => handleDataTableCellCreating(columns.Data, nTd, {order: oData}),
               responsivePriority: 4,
             },
             {
@@ -38,7 +41,8 @@
               sortable: false,
               data: 'price',
               type: 'currency',
-              render: (data, type, order) => getColumnRender(columns.Price, {order}),
+              render: (data, type, order) => '',
+              fnCreatedCell: (nTd, sData, oData, iRow, iCol) => handleDataTableCellCreating(columns.Price, nTd, {order: oData}),
               responsivePriority: 2,
             },
             {
@@ -46,7 +50,8 @@
               className: 'order-status text-nowrap',
               sortable: false,
               data: 'number',
-              render: (data, type, order) => getColumnRender(columns.Status, {order}),
+              render: (data, type, order) => '',
+              fnCreatedCell: (nTd, sData, oData, iRow, iCol) => handleDataTableCellCreating(columns.Status, nTd, {order: oData}),
               responsivePriority: 2,
             },
             {
@@ -54,7 +59,8 @@
               className: 'order-messages',
               sortable: false,
               data: 'number',
-              render: (data, type, order) => getColumnRender(columns.Messages, {order}),
+              render: (data, type, order) => '',
+              fnCreatedCell: (nTd, sData, oData, iRow, iCol) => handleDataTableCellCreating(columns.Messages, nTd, {order: oData}),
               responsivePriority: 1,
             },
           ],
@@ -134,10 +140,6 @@ export default {
         page: (aoData.find(param => param.name === 'start')?.value || 0) / (aoData.find(param => param.name === 'length')?.value || 10) + 1,
         sort: aoData.find(param => param.name === 'order')?.value?.[0]?.dir || 'desc',
       }});
-      console.log({
-        orders,
-        pagination,
-      });
       fnCallback({
         data: orders,
         draw: aoData.find(param => param.name === 'draw')?.value,
@@ -145,17 +147,14 @@ export default {
         recordsTotal: pagination.total,
       });
     },
-    getColumnRender(columnComponent, data) {
+    handleDataTableCellCreating (columnComponent, cellElement, data) {
       const tempApp = new Vue({
         ...columnComponent,
         parent: this,
         propsData: data,
       });
       tempApp.$mount();
-      //return tempApp.$el;
-      const result = tempApp.$el.outerHTML;
-      tempApp.$destroy();
-      return result;
+      cellElement.append(tempApp.$el);
     },
   },
 }
