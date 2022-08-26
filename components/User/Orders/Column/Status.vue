@@ -38,10 +38,10 @@ export default {
   methods: {
     async cancelOrder(order) {
       this.cancelling = true;
-      await this.$axios.post('user/order/cancel', {id: order.id});
+      const {data: updatedOrder} = await this.$axios.post('user/order/cancel', {id: order.id});
       this.$noty(this.$trans('account.orders.rows.cancelled'));
       this.cancelling = false;
-      // replace order in datatable
+      this.$emit('update', updatedOrder);
     },
     async repeatOrder(order) {
       this.repeating = true;
@@ -51,7 +51,7 @@ export default {
       });
       this.$noty(this.$trans('account.orders.rows.repeated'));
       this.repeating = false;
-      // reload datatable
+      this.$emit('reload');
     },
   },
 }

@@ -33,6 +33,7 @@ export default {
     dataTable.on('processing', event => {
       $('html, body').animate({scrollTop: 0}, 500, 'swing');
     });
+    this.$dataTable = dataTable;
   },
 }
 </script>

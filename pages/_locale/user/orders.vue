@@ -2,6 +2,7 @@
   <div class="client-account-item account-orders account-tab-orders">
     <div class="table-responsive">
       <DataTable
+        ref="dataTable"
         id="datatable-orders"
         :options="{
           processing: true,
@@ -131,6 +132,13 @@ export default {
       Messages,
     },
   }),
+  mounted() {
+    this.$echo.private('Api.Site.User.' + this.$auth.user.id)
+      .listen('OrderWasSaved', ({order}) => {
+        this.updateOrderInDataTable(order);
+      })
+    ;
+  },
   methods: {
     async fetchOrdersForDataTable (sSource, aoData, fnCallback, oSettings) {
       const {data: {
@@ -153,8 +161,24 @@ export default {
         parent: this,
         propsData: data,
       });
+      tempApp.$on('update', this.updateOrderInDataTable);
+      tempApp.$on('reload', this.reloadDataTable);
       tempApp.$mount();
       cellElement.append(tempApp.$el);
+    },
+    updateOrderInDataTable(updatedOrder) {
+      const dataTableRow = this.$refs.dataTable.$dataTable.row((index, order, element) => order.id === updatedOrder.id);
+      if (dataTableRow?.length) {
+        dataTableRow.data(updatedOrder);
+        dataTableRow.invalidate();
+        const nTr = dataTableRow.node();
+        for (const [iCol, nTd] of [...nTr.children].entries()) {
+          dataTableRow.context[0].aoColumns[iCol].fnCreatedCell(nTd, null, dataTableRow.data(), dataTableRow.index(), iCol);
+        }
+      }
+    },
+    reloadDataTable() {
+      this.$refs.dataTable.$dataTable.draw();
     },
   },
 }
