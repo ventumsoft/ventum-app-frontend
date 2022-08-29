@@ -181,7 +181,7 @@ import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 
 import IsTaxPayer from '@/components/User/Payment/Field/IsTaxPayer';
-import Country from '@/components/OrderPayment/Field/Country';
+import Country from '@/components/User/Payment/Field/Country';
 import CompanyCountry from '@/components/User/Payment/Field/CompanyCountry';
 import Phone from '@/components/User/Payment/Field/Phone';
 import TaxationSystem from '@/components/User/Payment/Field/TaxationSystem';
