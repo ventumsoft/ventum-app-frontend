@@ -11,10 +11,14 @@
       v-html="$trans('checkout.finish_message').replace(':order_number', orderNumber).replace(':client_account_url', $router.resolve($page({name: 'user/' + PersonalAccountTabEnum.ORDERS})).href)"
     ></div>
     <div v-if="documentsExists" class="text-center">
-      <TheLink :to="'#'" class="button button-rounded button-reveal notopmargin" target="_blank">
+      <a
+        href="#"
+        class="button button-rounded button-reveal notopmargin"
+        @click.prevent="$download('user/order/documents', {number: orderNumber}, 'archive-documents-' + orderNumber + '.zip')"
+      >
         <i class="icon-download"></i>
         <span>{{ $trans('checkout.finish_step.documents') }}</span>
-      </TheLink>
+      </a>
     </div>
     <div v-else-if="documentsPending" class="text-center checkout-finish-documents-loading-block">
       <button type="button" class="button button-rounded notopmargin disabled checkout-finish-documents-loading-button">

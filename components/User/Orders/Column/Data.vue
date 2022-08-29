@@ -5,11 +5,13 @@
         <template v-if="item.approvedImages?.length">
           <a
             v-for="(itemApprovedImage, index) of item.approvedImages"
+            v-if="itemApprovedImage.full"
             v-show="index === 0"
             :href="itemApprovedImage.full"
             data-lightbox="gallery-item"
           >
             <img
+              v-if="itemApprovedImage.preview"
               :src="itemApprovedImage.preview"
               :srcset="itemApprovedImage.preview2x && (itemApprovedImage.preview + ', ' + itemApprovedImage.preview2x + '2x')"
             >

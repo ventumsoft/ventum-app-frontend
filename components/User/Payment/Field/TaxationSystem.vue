@@ -19,14 +19,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-
 export default {
-  props: ['paymentData', 'errors'],
-  computed: {
-    ...mapState('checkout/payment', [
-      'taxationSystems',
-    ])
-  },
+  props: ['taxationSystems', 'paymentData', 'errors'],
 }
 </script>

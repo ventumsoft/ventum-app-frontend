@@ -34,7 +34,7 @@
             :is="Fields[upperFirst(camelCase(field))] || 'UserPaymentFieldDefault'"
             :field="field"
             :title="title"
-            v-bind="{paymentData, errors}"
+            v-bind="{taxationSystems, paymentData, errors}"
           />
         </template>
         <template v-else>
@@ -66,10 +66,12 @@ export default {
   async asyncData({$axios}) {
     const {data: {
       userTypesFields,
+      taxationSystems,
       paymentData,
     }} = await $axios.get('user/payment-data');
     return {
       userTypesFields,
+      taxationSystems,
       paymentData,
     };
   },

@@ -67,6 +67,7 @@ export default {
     '~/plugins/page',
     '~/plugins/currency-format-service',
     '~/plugins/date-time-format-service',
+    '~/plugins/download.client',
     '~/plugins/load-interacted.client',
     '~/plugins/images-loaded.client',
     '~/plugins/isotope.client',
