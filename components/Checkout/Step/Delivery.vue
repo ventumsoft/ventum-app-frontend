@@ -24,7 +24,7 @@
                   class="delivery-system-logo"
                 >
                 {{ deliverySystem.name }}
-                <span v-if="deliverySystem.checkout.isRecipientPayer" class="lowercase">({{ $trans('checkout.delivery_step.pay_according_carrier_tariffs') }})</span>
+                <span v-if="!deliverySystem.checkout.isCalcPriceEnabled" class="lowercase">({{ deliverySystem.checkout.textOnPrice || $trans('checkout.delivery_step.pay_according_carrier_tariffs') }})</span>
                 <span v-else-if="deliverySystem.checkout.pendingAddressForPrice" class="lowercase">({{ $trans('checkout.delivery_step.price_from_depends_on_address').replace(':value', deliverySystem.checkout.deliveryPrice) }})</span>
                 <span v-else class="lowercase">(+{{ deliverySystem.checkout.deliveryPrice }})</span>
               </label>
@@ -50,7 +50,7 @@
                   <span class="amount">{{ totalWithoutDiscount }}</span>
                 </td>
               </tr>
-              <tr v-if="selectedDeliverySystem && !selectedDeliverySystem.checkout.isRecipientPayer" class="delivery-price-row">
+              <tr v-if="selectedDeliverySystem && selectedDeliverySystem.checkout.isCalcPriceEnabled" class="delivery-price-row">
                 <td class="cart-product-name">
                   <strong>{{ $trans('checkout.delivery_step.table_delivery_price') }}:</strong>
                 </td>
