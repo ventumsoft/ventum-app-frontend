@@ -7,6 +7,7 @@
     <label>{{ $trans('account.payment.country') }}</label>
     <Select2
       class="form-control"
+      :data-payment-data-field="field || 'country_id'"
       @input="paymentData[field || 'country_id'] = Number($event) || ''"
     >
       <option

@@ -7,6 +7,7 @@
       class="form-control"
       :class="{error: Boolean(errors?.phone)}"
       :placeholder="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask']?.replace(/#/g, '_') : ''"
+      data-payment-data-field="phone"
       v-model="paymentData.phone"
       v-mask="!$store.state.site.settings?.['general:multicountry'] ? $store.state.site.settings?.['general:phone-mask'] : null"
     >

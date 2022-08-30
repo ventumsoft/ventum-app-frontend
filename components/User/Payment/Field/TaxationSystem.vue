@@ -6,6 +6,7 @@
     <label>{{ $trans('checkout.payment_step.cash_on_delivery.fields.taxation_system') }}</label>
     <Select2
       class="form-control"
+      data-payment-data-field="taxation_system_id"
       @input="paymentData.taxation_system_id = Number($event) || ''"
     >
       <option value="">{{ $trans('checkout.payment_step.cash_on_delivery.empty.taxation_system') }}</option>

@@ -24,8 +24,8 @@
             </ul>
             <div class="clear"></div>
             <div id="client-account" class="client-account account-tab-content">
-              <div v-if="$nuxt.$loading?.show" class="account-tab-content-loader"><i class="icon-cog spinner"></i></div>
-              <NuxtChild v-if="!$nuxt.$loading?.show" />
+              <div v-if="false" class="account-tab-content-loader"><i class="icon-cog spinner"></i></div>
+              <NuxtChild v-if="true" />
             </div>
           </div>
         </div>

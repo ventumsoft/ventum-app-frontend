@@ -23,7 +23,7 @@
                         class="radio-style"
                         type="radio"
                         :checked="selectedPaymentSystem?.id === paymentSystem.id"
-                        @change="changePaymentSystem(paymentSystem)"
+                        @change="selectedPaymentSystem = paymentSystem"
                       >
                       <label :for="'payment-type-' + paymentSystem.id" class="radio-style-2-label radio-small">
                         {{ paymentSystem.name }}
@@ -36,8 +36,7 @@
                         id="bonus_account"
                         class="checkbox-style"
                         type="checkbox"
-                        :checked="useBonuses"
-                        @change="$store.commit('checkout/payment/update', {useBonuses: !useBonuses})"
+                        v-model="useBonuses"
                       >
                       <label for="bonus_account" class="checkbox-style-2-label checkbox-small">
                         {{ $trans('checkout.payment_step.bonus_account_name') }}
@@ -57,7 +56,7 @@
                           <span class="amount">{{ totalWithoutDiscount }}</span>
                         </td>
                       </tr>
-                      <tr v-if="!(void 'is_recipient_payer')" class="cart_item">
+                      <tr v-if="deliveryPrice" class="cart_item">
                         <td class="cart-product-name">
                           <strong>{{ $trans('order.payment.table_delivery_price') }}</strong>
                         </td>
@@ -121,48 +120,21 @@
                   <h3>{{ $trans('order.payment.buyer_data') }}</h3>
                   <form class="nobottommargin payment-type-form" @submit.prevent>
                     <div class="control-block">
-                      <template v-if="userTypesFields">
-                        <div v-if="userTypes?.length > 1" class="col_full">
-                          <label>{{ $trans('checkout.payment_step.cash_on_delivery.user_type_label') }}</label>
-                          <div v-for="iteratedUserType of userTypes">
-                            <input
-                              type="radio"
-                              class="radio-style"
-                              :id="'payment-form-type-user-' + iteratedUserType"
-                              name="payment-form-type-user"
-                              :value="iteratedUserType"
-                              v-model="paymentData.type_user"
-                            >
-                            <label
-                              :for="'payment-form-type-user-' + iteratedUserType"
-                              class="radio-style-2-label radio-small"
-                            >{{ $trans('checkout.payment_step.cash_on_delivery.user_type.' + iteratedUserType) }}</label>
-                          </div>
-                        </div>
-                        <component
-                          v-for="(title, field) of userTypesFields[userType]"
-                          v-if="(field !== 'tax_number') || !userTypesFields[userType]['is_tax_payer']"
-                          :key="field"
-                          :is="Fields[upperFirst(camelCase(field))] || 'UserPaymentFieldDefault'"
-                          :field="field"
-                          :title="title"
-                          v-bind="{paymentData, errors}"
-                        />
-                      </template>
-                      <template v-else>
-                        <OrderPaymentFieldIsTaxPayer v-bind="{paymentData, errors}" />
-                        <OrderPaymentFieldCountry v-bind="{paymentData, errors}" />
-                        <OrderPaymentFieldDefault :field="'name'" v-bind="{paymentData, errors}" />
-                        <OrderPaymentFieldDefault :field="'address'" v-bind="{paymentData, errors}" />
-                        <OrderPaymentFieldPhone v-bind="{paymentData, errors}" />
-                      </template>
+                      <UserPaymentFields
+                        v-bind="{
+                          userTypesFields,
+                          taxationSystems,
+                          paymentData,
+                          errors,
+                        }"
+                      />
                     </div>
                   </form>
                 </div>
               </div>
               <a
                 href="#"
-                :class="'button button-rounded button-reveal tright nomargin fright ' + (((void 'isBlockedEditing') || !selectedPaymentSystem || makingOrder) ? 'disabled' : '')"
+                :class="'button button-rounded button-reveal tright nomargin fright ' + (((void 'isBlockedEditing') || !selectedPaymentSystem || loading) ? 'disabled' : '')"
                 @click.prevent="submitPaymentForm"
               >
                 <i class="icon-arrow-right2"></i>
@@ -177,49 +149,30 @@
 </template>
 
 <script>
-import camelCase from 'lodash/camelCase';
-import upperFirst from 'lodash/upperFirst';
-
-import IsTaxPayer from '@/components/User/Payment/Field/IsTaxPayer';
-import Country from '@/components/User/Payment/Field/Country';
-import CompanyCountry from '@/components/User/Payment/Field/CompanyCountry';
-import Phone from '@/components/User/Payment/Field/Phone';
-import TaxationSystem from '@/components/User/Payment/Field/TaxationSystem';
-
 export default {
   async asyncData({params, $axios}) {
     const {data: {
+      deliveryPrice,
+      paymentSystems,
       userTypesFields,
+      taxationSystems,
       paymentData,
     }} = await $axios.get('order-payment/data', {params: {orderNumber: params.orderNumber}});
     return {
+      deliveryPrice,
+      paymentSystems,
       userTypesFields,
+      taxationSystems,
       paymentData,
     };
   },
   data: () => ({
-    Fields: {
-      IsTaxPayer,
-      Country,
-      CompanyCountry,
-      Phone,
-      TaxationSystem,
-    },
     loading: false,
+    selectedPaymentSystem: null,
     useBonuses: false,
     errors: null,
   }),
-  computed: {
-    userTypes() {
-      return this.userTypesFields ? Object.keys(this.userTypesFields) : null;
-    },
-    userType() {
-      return this.paymentData.type_user || this.userTypes && this.userTypes[0] || null;
-    },
-  },
   methods: {
-    camelCase,
-    upperFirst,
     async submitPaymentForm() {
       this.loading = true;
       this.errors = null;

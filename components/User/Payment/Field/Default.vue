@@ -6,6 +6,7 @@
       type="text"
       class="form-control"
       :class="{error: Boolean(errors?.[field])}"
+      :data-payment-data-field="field"
       v-model="paymentData[field]"
     >
   </div>

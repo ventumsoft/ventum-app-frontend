@@ -9,6 +9,7 @@
             class="radio-style payment-form-is-vat-payer"
             type="radio"
             name="payment-form-is-vat-payer"
+            data-payment-data-field="is_vat_payer"
             value="tax"
             :checked="!paymentData.is_vat_payer"
             @input="paymentData.is_vat_payer = 0"
@@ -21,6 +22,7 @@
             class="radio-style payment-form-is-vat-payer"
             type="radio"
             name="payment-form-is-vat-payer"
+            data-payment-data-field="is_vat_payer"
             value="vat"
             :checked="!!paymentData.is_vat_payer"
             @input="paymentData.is_vat_payer = 1"
@@ -37,6 +39,7 @@
           id="payment-form-tax"
           class="form-control"
           :class="{error: Boolean(errors?.['tax_number'])}"
+          data-payment-data-field="tax_number"
           v-model="paymentData.tax_number"
         >
       </div>
@@ -48,6 +51,7 @@
             id="payment-form-vat"
             class="form-control"
             :class="{error: Boolean(errors?.['vat_number'])}"
+            data-payment-data-field="vat_number"
             v-model="paymentData.vat_number"
             v-mask="'####################'"
           >
@@ -66,5 +70,12 @@
 <script>
 export default {
   props: ['paymentData', 'errors'],
+  mounted() {
+    if (this.$store.state.site.settings?.['pricing:is-taxpayer']) {
+      if (this.paymentData.is_vat_payer === undefined) {
+        this.paymentData.is_vat_payer = 1;
+      }
+    }
+  },
 }
 </script>

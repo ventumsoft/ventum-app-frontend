@@ -1,5 +1,14 @@
 <template>
-  <CheckoutStepPayment />
+  <CheckoutStepPayment
+    v-bind="{
+      deliveryPrice,
+      paymentSystems,
+      paymentRoutes,
+      userTypesFields,
+      taxationSystems,
+      paymentData,
+    }"
+  />
 </template>
 
 <script>
@@ -34,8 +43,25 @@ export default {
       if (from?.name !== 'checkout/delivery') {
         await store.dispatch('checkout/delivery/fetchDeliveryStepData');
       }
-      await store.dispatch('checkout/payment/fetchPaymentStepData');
     },
   ],
+  async asyncData({$axios}) {
+    const {data: {
+      deliveryPrice,
+      paymentSystems,
+      paymentRoutes,
+      userTypesFields,
+      taxationSystems,
+      paymentData,
+    }} = await $axios.get('checkout/step/payment');
+    return {
+      deliveryPrice,
+      paymentSystems,
+      paymentRoutes,
+      userTypesFields,
+      taxationSystems,
+      paymentData: paymentData || {},
+    };
+  },
 }
 </script>

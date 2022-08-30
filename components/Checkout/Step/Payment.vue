@@ -1,6 +1,6 @@
 <template>
   <div class="tab-content checkout-payment-block">
-    <div v-if="paymentStepLoading" class="form-process"></div>
+    <div v-if="loading" class="form-process"></div>
     <div class="row clearfix checkout-payment-block-content">
       <div class="col-md-6">
         <h3>{{ $trans('checkout.payment_step.choose_system_title') }}</h3>
@@ -11,7 +11,7 @@
               class="radio-style"
               type="radio"
               :checked="selectedPaymentSystem?.id === paymentSystem.id"
-              @change="changePaymentSystem(paymentSystem)"
+              @change="selectedPaymentSystem = paymentSystem"
             >
             <label :for="'payment-type-' + paymentSystem.id" class="radio-style-2-label radio-small">
               {{ paymentSystem.name }}
@@ -24,8 +24,7 @@
               id="bonus_account"
               class="checkbox-style"
               type="checkbox"
-              :checked="useBonuses"
-              @change="$store.commit('checkout/payment/update', {useBonuses: !useBonuses})"
+              v-model="useBonuses"
             >
             <label for="bonus_account" class="checkbox-style-2-label checkbox-small">
               {{ $trans('checkout.payment_step.bonus_account_name') }}
@@ -51,7 +50,7 @@
                 <span class="amount">{{ totalWithoutDiscount }}</span>
               </td>
             </tr>
-            <tr v-if="!(void 'is_recipient_payer')" class="cart_item">
+            <tr v-if="deliveryPrice" class="cart_item">
               <td class="cart-product-name">
                 <strong>{{ $trans('checkout.payment_step.table_delivery_price') }}</strong>
               </td>
@@ -113,10 +112,26 @@
       </div>
       <div class="col-md-6 payment-forms">
         <h3>{{ $trans('checkout.payment_step.buyer_data') }}</h3>
-        <CheckoutPaymentForm />
+        <form class="nobottommargin payment-type-form" @submit.prevent>
+          <div class="control-block">
+            <UserPaymentFields
+              v-bind="{
+                userTypesFields,
+                taxationSystems,
+                paymentData,
+                errors,
+              }"
+            />
+          </div>
+        </form>
       </div>
     </div>
-    <a v-if="availablePaymentRoutes?.length" href="#" :class="'button button-rounded button-reveal tright nomargin fright ' + ((!selectedPaymentSystem || makingOrder) ? 'disabled' : '')" @click.prevent="checkout">
+    <a
+      v-if="availablePaymentRoutes?.length"
+      href="#"
+      :class="'button button-rounded button-reveal tright nomargin fright ' + ((!selectedPaymentSystem || loading) ? 'disabled' : '')"
+      @click.prevent="handleCheckout"
+    >
       <i class="icon-arrow-right2"></i><span>{{ $trans('checkout.payment_step.next_step_btn') }}</span>
     </a>
     <TheLink :to="$page({name: 'checkout/delivery'})" class="button button-rounded button-reveal  button-amber notopmargin fright">
@@ -127,12 +142,26 @@
 
 <script>
 import PaymentSystemTypeEnum from '@/enums/PaymentSystemTypeEnum';
-import {mapGetters, mapState} from 'vuex';
+import PaymentResultEnum from '@/enums/PaymentResultEnum';
+import MobileDetect from 'mobile-detect';
+import {mapState} from 'vuex';
+import _pick from "lodash/pick";
 
 export default {
-  data: () => ({
+  props: [
+    'deliveryPrice',
+    'paymentSystems',
+    'paymentRoutes',
+    'userTypesFields',
+    'taxationSystems',
+    'paymentData',
+  ],
+  data: ({$props}) => ({
     PaymentSystemTypeEnum,
-    makingOrder: false,
+    loading: false,
+    selectedPaymentSystem: $props.paymentSystems?.find(paymentSystem => paymentSystem.id == $props.paymentData?.['payment_system_id']) || $props.paymentSystems?.[0] || null,
+    useBonuses: false,
+    errors: null,
   }),
   computed: {
     ...mapState('cart', [
@@ -143,40 +172,62 @@ export default {
       'bonus',
       'vat',
     ]),
-    ...mapState('checkout/payment', [
-      'paymentStepLoading',
-      'deliveryPrice',
-      'paymentSystems',
-      'selectedPaymentSystem',
-      'useBonuses',
-      'paymentData',
-    ]),
-    ...mapGetters('checkout/payment', [
-      'availablePaymentRoutes',
-    ]),
-  },
-  mounted() {
-    this.$store.commit('checkout/payment/paymentData', {payment_route_id: this.availablePaymentRoutes?.[0]?.id || null});
-  },
-  watch: {
     availablePaymentRoutes() {
-      this.$store.commit('checkout/payment/paymentData', {payment_route_id: this.availablePaymentRoutes?.[0]?.id || null});
+      return this.paymentRoutes?.filter(paymentRoute =>
+        ((paymentRoute.userType === 'all') || (paymentRoute.userType === this.paymentData?.type_user)) &&
+        ((paymentRoute.taxPayer === 'all') || (paymentRoute.taxPayer === 'tax_payer') && (this.paymentData?.is_vat_payer === 'vat') || (paymentRoute.taxPayer === 'not_tax_payer') && (this.paymentData?.is_vat_payer === 'tax')) &&
+        ((paymentRoute.paymentSystemsIds === 'all') || paymentRoute.paymentSystemsIds?.includes(this.selectedPaymentSystem?.id)) &&
+        ((paymentRoute.countriesIds === 'all') || paymentRoute.countriesIds?.includes(this.paymentData?.country_id)) &&
+        ((paymentRoute.taxationSystemsIds === 'all') || paymentRoute.taxationSystemsIds?.includes(this.paymentData?.taxation_system_id))
+      )
     },
   },
   methods: {
-    async changePaymentSystem(paymentSystem) {
-      this.$store.commit('checkout/payment/update', {selectedPaymentSystem: paymentSystem});
-      this.$store.commit('checkout/payment/paymentData', {payment_system_id: paymentSystem.id});
-    },
-    async checkout() {
-      this.makingOrder = true;
-      if (!await this.$store.dispatch('checkout/payment/savePaymentData', {
-        paymentDataFields: [...this.$el.querySelectorAll('[data-payment-data-field]')].map(element => element.dataset.paymentDataField),
-      })) {
-        this.makingOrder = false;
+    async handleCheckout() {
+      this.loading = true;
+      this.errors = null;
+      const paymentDataFields = [...this.$el.querySelectorAll('[data-payment-data-field]')].map(element => element.dataset.paymentDataField);
+      try {
+        await this.$axios.post('checkout/payment/data', {
+          payment_system_id: this.selectedPaymentSystem?.id,
+          payment_route_id: this.availablePaymentRoutes?.[0]?.id,
+          ..._pick(this.paymentData, paymentDataFields),
+        }, {silenceException: true});
+      } catch (exception) {
+        if ('object' === typeof exception.response?.data?.errors) {
+          this.errors = exception.response.data.errors;
+        } else {
+          this.$noty(exception.response?.data?.message || exception.message, 'error');
+        }
+        return;
+      } finally {
+        this.loading = false;
+      }
+      const {data: {
+        clientRedirect,
+        redirectUrl,
+        orderNumber,
+        success,
+      }} = await this.$axios.post('checkout/order', {
+        delivery_system_id: this.$store.state.checkout.delivery.selectedDeliverySystem?.id,
+        payment_system_id: this.selectedPaymentSystem?.id,
+        payment_route_id: this.availablePaymentRoutes?.[0]?.id,
+        use_bonus: this.useBonuses,
+        device_type: (new MobileDetect(window.navigator.userAgent)).mobile() ? 'mobile' : 'desktop',
+      });
+      if (clientRedirect?.public_key && clientRedirect?.session?.id) {
+        Stripe(clientRedirect.public_key).redirectToCheckout({sessionId: clientRedirect.session.id});
         return;
       }
-      await this.$store.dispatch('checkout/makeOrder');
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+        return;
+      }
+      this.$store.commit('checkout/success/update', {
+        orderNumber,
+        paymentResult: success ? null : PaymentResultEnum.FAIL,
+      });
+      this.$router.push(this.$page({name: 'checkout/success'}));
     },
   },
 }
