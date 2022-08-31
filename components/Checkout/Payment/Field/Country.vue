@@ -4,7 +4,7 @@
     class="col_full"
     :class="{'has-error': Boolean(errors?.[field || 'country_id'])}"
   >
-    <label>{{ $trans('account.payment.country') }}</label>
+    <label>{{ $trans('checkout.payment_step.cash_on_delivery.country') }}</label>
     <Select2
       class="form-control"
       :data-payment-data-field="field || 'country_id'"

@@ -8,6 +8,7 @@
             type="radio"
             class="radio-style"
             :id="'payment-form-type-user-' + iteratedUserType"
+            :disabled="!isAllowedChangingUserType"
             name="payment-form-type-user"
             data-payment-data-field="type_user"
             :value="iteratedUserType"
@@ -19,23 +20,28 @@
           >{{ $trans('checkout.payment_step.cash_on_delivery.user_type.' + iteratedUserType) }}</label>
         </div>
       </div>
-      <input v-else type="hidden" data-payment-data-field="type_user" :value="userType">
+      <input
+        v-if="!userTypes?.length || !isAllowedChangingUserType"
+        type="hidden"
+        data-payment-data-field="type_user"
+        :value="userType"
+      >
       <component
         v-for="(title, field) of userTypesFields[userType]"
         v-if="(field !== 'tax_number') || !userTypesFields[userType].is_tax_payer"
         :key="field"
-        :is="Fields[upperFirst(camelCase(field))] || 'UserPaymentFieldDefault'"
+        :is="Fields[upperFirst(camelCase(field))] || 'CheckoutPaymentFieldDefault'"
         :field="field"
         :title="title"
         v-bind="{taxationSystems, paymentData, errors}"
       />
     </template>
     <template v-else>
-      <UserPaymentFieldIsTaxPayer v-bind="{paymentData, errors}" />
-      <UserPaymentFieldCountry v-bind="{paymentData, errors}" />
-      <UserPaymentFieldDefault :field="'name'" v-bind="{paymentData, errors}" />
-      <UserPaymentFieldDefault :field="'address'" v-bind="{paymentData, errors}" />
-      <UserPaymentFieldPhone v-bind="{paymentData, errors}" />
+      <CheckoutPaymentFieldIsTaxPayer v-bind="{paymentData, errors}" />
+      <CheckoutPaymentFieldCountry v-bind="{paymentData, errors}" />
+      <CheckoutPaymentFieldDefault :field="'name'" v-bind="{paymentData, errors}" />
+      <CheckoutPaymentFieldDefault :field="'address'" v-bind="{paymentData, errors}" />
+      <CheckoutPaymentFieldPhone v-bind="{paymentData, errors}" />
     </template>
   </fragment>
 </template>
@@ -44,14 +50,15 @@
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 
-import IsTaxPayer from '@/components/User/Payment/Field/IsTaxPayer';
-import Country from '@/components/User/Payment/Field/Country';
-import CompanyCountry from '@/components/User/Payment/Field/CompanyCountry';
-import Phone from '@/components/User/Payment/Field/Phone';
-import TaxationSystem from '@/components/User/Payment/Field/TaxationSystem';
+import IsTaxPayer from '@/components/Checkout/Payment/Field/IsTaxPayer';
+import Country from '@/components/Checkout/Payment/Field/Country';
+import CompanyCountry from '@/components/Checkout/Payment/Field/CompanyCountry';
+import Phone from '@/components/Checkout/Payment/Field/Phone';
+import TaxationSystem from '@/components/Checkout/Payment/Field/TaxationSystem';
 
 export default {
   props: [
+    'isAllowedChangingUserType',
     'userTypesFields',
     'taxationSystems',
     'paymentData',

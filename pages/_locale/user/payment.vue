@@ -8,13 +8,14 @@
         @submit.prevent="handlePaymentFormSubmit"
       >
         <div v-if="loading" class="form-process"></div>
-        <UserPaymentFields
+        <CheckoutPaymentFields
           v-bind="{
             userTypesFields,
             taxationSystems,
             paymentData,
             errors,
           }"
+          :isAllowedChangingUserType="true"
         />
         <button class="button button-rounded button-reveal tright nomargin fright" id="billing-form-submit">
           <i class="icon-save"></i><span>{{ $trans('account.payment.save') }}</span>

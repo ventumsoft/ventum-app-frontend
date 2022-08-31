@@ -1,6 +1,6 @@
 <template>
   <div class="col_full">
-    <label :for="'payment-form-' + field">{{ title || $trans('account.payment.' + field) }}</label>
+    <label :for="'payment-form-' + field">{{ title || $trans('checkout.payment_step.cash_on_delivery.' + field) }}</label>
     <input
       :id="'payment-form-' + field"
       type="text"

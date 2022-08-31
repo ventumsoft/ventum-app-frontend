@@ -2,7 +2,7 @@
   <fragment>
     <div v-if="$store.state.site.settings?.['pricing:is-taxpayer']" class="col_full">
       <div class="col_one_third">
-        <label for="payment-form-vat">{{ $trans('account.payment.is_vat_payer') }}</label>
+        <label for="payment-form-vat">{{ $trans('checkout.payment_step.cash_on_delivery.vat_or_tax') }}</label>
         <div>
           <input
             id="payment-form-vat-no"
@@ -15,7 +15,7 @@
             @input="paymentData.is_vat_payer = 0"
           >
           <label for="payment-form-vat-no" class="radio-style-2-label radio-small">
-            {{ $trans('account.payment.is_vat_payer.no') }}
+            {{ $trans('checkout.payment_step.cash_on_delivery.vat_or_tax_no') }}
           </label>
           <input
             id="payment-form-vat-yes"
@@ -28,12 +28,12 @@
             @input="paymentData.is_vat_payer = 1"
           >
           <label for="payment-form-vat-yes" class="radio-style-2-label radio-small color">
-            {{ $trans('account.payment.is_vat_payer.yes') }}
+            {{ $trans('checkout.payment_step.cash_on_delivery.vat_or_tax_yes') }}
           </label>
         </div>
       </div>
       <div v-if="!paymentData.is_vat_payer" class="col_two_third col_last tax-number">
-        <label for="payment-form-tax" class="vat-type">{{ $trans('account.payment.tax_number') }}</label>
+        <label for="payment-form-tax" class="vat-type">{{ $trans('checkout.payment_step.cash_on_delivery.tax_number') }}</label>
         <input
           type="text"
           id="payment-form-tax"
@@ -44,7 +44,7 @@
         >
       </div>
       <div v-if="paymentData.is_vat_payer" class="col_two_third col_last vat-number form-group">
-        <label for="payment-form-vat" class="vat-type control-label">{{ $trans('account.payment.vat_number') }}</label>
+        <label for="payment-form-vat" class="vat-type control-label">{{ $trans('checkout.payment_step.cash_on_delivery.vat_number') }}</label>
         <div class="form-group has-feedback">
           <input
             type="text"

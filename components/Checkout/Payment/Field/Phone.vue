@@ -1,6 +1,6 @@
 <template>
   <div class="col_full">
-    <label for="payment-form-phone">{{ $trans('account.payment.phone') }}</label>
+    <label for="payment-form-phone">{{ $trans('checkout.payment_step.phone') }}</label>
     <input
       id="payment-form-phone"
       type="text"

@@ -114,13 +114,14 @@
         <h3>{{ $trans('checkout.payment_step.buyer_data') }}</h3>
         <form class="nobottommargin payment-type-form" @submit.prevent>
           <div class="control-block">
-            <UserPaymentFields
+            <CheckoutPaymentFields
               v-bind="{
                 userTypesFields,
                 taxationSystems,
                 paymentData,
                 errors,
               }"
+              :isAllowedChangingUserType="true"
             />
           </div>
         </form>

@@ -1,5 +1,5 @@
 <template>
-  <UserPaymentFieldCountry
+  <CheckoutPaymentFieldCountry
     :field="'company_country_id'"
     v-bind="{paymentData, errors}"
   />
