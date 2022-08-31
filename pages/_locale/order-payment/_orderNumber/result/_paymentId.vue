@@ -13,7 +13,7 @@ export default {
     'authenticate',
   ],
   async asyncData({params, query, $axios}) {
-    const {data: {paymentResult}} = await $axios.get('order-payment/result', {params: {
+    const {data: {paymentResult}} = await $axios.get('order/payment/result', {params: {
       ...query,
       ..._pick(params, [
         'orderNumber',

@@ -1,7 +1,6 @@
 <template>
   <CheckoutStepPayment
     v-bind="{
-      deliveryPrice,
       paymentSystems,
       paymentRoutes,
       userTypesFields,
@@ -46,16 +45,11 @@ export default {
     },
   ],
   async asyncData({$axios}) {
-    const {data: {
-      deliveryPrice,
-      paymentSystems,
-      paymentRoutes,
-      userTypesFields,
-      taxationSystems,
-      paymentData,
-    }} = await $axios.get('checkout/step/payment');
+    const {data: userTypesFields} = await $axios.get('checkout/payment/user-types-fields');
+    const {data: taxationSystems} = await $axios.get('checkout/payment/taxation-systems');
+    const {data: {paymentSystems, paymentRoutes}} = await $axios.get('checkout/payment/systems-and-routes');
+    const {data: paymentData} = await $axios.get('checkout/payment/data');
     return {
-      deliveryPrice,
       paymentSystems,
       paymentRoutes,
       userTypesFields,

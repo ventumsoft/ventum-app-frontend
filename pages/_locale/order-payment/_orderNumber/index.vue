@@ -138,7 +138,7 @@
                 @click.prevent="submitPaymentForm"
               >
                 <i class="icon-arrow-right2"></i>
-                <span>{{ $trans((void 'online') ? 'order.payment.submit.online' : 'order.payment.submit.offline') }}</span>
+                <span>{{ $trans(selectedPaymentSystem?.isOnline ? 'order.payment.submit.online' : 'order.payment.submit.offline') }}</span>
               </a>
             </div>
           </div>
@@ -150,17 +150,14 @@
 
 <script>
 export default {
-  async asyncData({params, $axios}) {
-    const {data: {
-      deliveryPrice,
-      paymentSystems,
-      userTypesFields,
-      taxationSystems,
-      paymentData,
-    }} = await $axios.get('order-payment/data', {params: {orderNumber: params.orderNumber}});
+  async asyncData({params: {orderNumber}, $axios}) {
+    const {data: userTypesFields} = await $axios.get('checkout/payment/user-types-fields');
+    const {data: taxationSystems} = await $axios.get('checkout/payment/taxation-systems');
+    const {data: {paymentSystems, paymentRoutes}} = await $axios.get('checkout/payment/systems-and-routes', {params: {orderNumber}});
+    const {data: paymentData} = await $axios.get('order/payment/data', {params: {orderNumber}});
     return {
-      deliveryPrice,
       paymentSystems,
+      paymentRoutes,
       userTypesFields,
       taxationSystems,
       paymentData,
@@ -178,7 +175,7 @@ export default {
       this.errors = null;
       let success;
       try {
-        ({data: {success}} = await this.$axios.post('order-payment/submit', this.paymentData, {silenceException: true}));
+        ({data: {success}} = await this.$axios.post('order/payment/submit', this.paymentData, {silenceException: true}));
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
           this.errors = exception.response.data.errors;

@@ -27,11 +27,9 @@
 <script>
 export default {
   async asyncData({$axios}) {
-    const {data: {
-      userTypesFields,
-      taxationSystems,
-      paymentData,
-    }} = await $axios.get('user/payment-data');
+    const {data: userTypesFields} = await $axios.get('checkout/payment/user-types-fields');
+    const {data: taxationSystems} = await $axios.get('checkout/payment/taxation-systems');
+    const {data: paymentData} = await $axios.get('user/payment-data');
     return {
       userTypesFields,
       taxationSystems,

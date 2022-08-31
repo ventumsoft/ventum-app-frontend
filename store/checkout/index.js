@@ -3,6 +3,5 @@ export const actions = {
     commit('cart/clear', undefined, {root: true});
     dispatch('cart/fetch', undefined, {root: true});
     commit('delivery/clear');
-    commit('payment/clear');
   },
 }

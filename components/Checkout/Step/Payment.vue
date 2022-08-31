@@ -50,12 +50,12 @@
                 <span class="amount">{{ totalWithoutDiscount }}</span>
               </td>
             </tr>
-            <tr v-if="deliveryPrice" class="cart_item">
+            <tr v-if="selectedDeliverySystem?.checkout?.isCalcPriceEnabled" class="cart_item">
               <td class="cart-product-name">
                 <strong>{{ $trans('checkout.payment_step.table_delivery_price') }}</strong>
               </td>
               <td class="cart-product-subtotal">
-                <span class="amount">{{ deliveryPrice }}</span>
+                <span class="amount">{{ selectedDeliverySystem.checkout.deliveryPrice }}</span>
               </td>
             </tr>
             <tr v-if="selectedPaymentSystem && selectedPaymentSystem.checkout.paymentPrice" class="payment-price-row">
@@ -149,7 +149,6 @@ import _pick from "lodash/pick";
 
 export default {
   props: [
-    'deliveryPrice',
     'paymentSystems',
     'paymentRoutes',
     'userTypesFields',
@@ -171,6 +170,9 @@ export default {
       'discounts',
       'bonus',
       'vat',
+    ]),
+    ...mapState('checkout/delivery', [
+      'selectedDeliverySystem',
     ]),
     availablePaymentRoutes() {
       return this.paymentRoutes?.filter(paymentRoute =>
