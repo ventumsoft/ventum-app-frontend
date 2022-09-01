@@ -140,11 +140,7 @@ export default {
     showingMessagesModalForOrder: null,
   }),
   mounted() {
-    this.$echo.private('Api.Site.User.' + this.$auth.user.id)
-      .listen('OrderWasSaved', ({order}) => {
-        this.updateOrderInDataTable(order);
-      })
-    ;
+    this.listenOrdersEchoEvents();
   },
   methods: {
     async fetchOrdersForDataTable (sSource, aoData, fnCallback, oSettings) {
@@ -185,16 +181,38 @@ export default {
         }
       }
     },
+    updateOrderInDataTableById(orderId, updaterCallback) {
+      const dataTableRow = this.$refs.dataTable.$dataTable.row((index, order, element) => order.id === orderId);
+      const order = dataTableRow.data();
+      if (order) {
+        updaterCallback(order)
+        this.updateOrderInDataTable(order);
+      }
+    },
     reloadDataTable() {
       this.$refs.dataTable.$dataTable.draw();
     },
     openMessagesModal(order) {
       this.showingMessagesModalForOrder = order;
     },
+    listenOrdersEchoEvents() {
+      this.$echo.private('Api.Site.User.' + this.$auth.user.id)
+        .listen('OrderWasSaved', ({order}) => this.updateOrderInDataTable(order))
+        .listen('HelpDesk.TicketWasUpdated', ({ticket}) =>
+          !this._isDestroyed && this.updateOrderInDataTableById(ticket.orderId, order => {
+            order.ticketMessagesTotalCount = ticket.totalMessagesCount;
+            order.ticketMessagesUnreadCount = ticket.unreadMessagesCount;
+          }))
+        .listen('DocumentWasCreated', ({document}) =>
+          this.updateOrderInDataTableById(document.orderId, order => {
+            order.hasLatestDocumentsForUser = true;
+          }));
+    },
   },
   beforeDestroy() {
     this.$echo.private('Api.Site.User.' + this.$auth.user.id)
-      .stopListening('OrderWasSaved');
+      .stopListening('OrderWasSaved')
+      .stopListening('DocumentWasCreated');
   },
 }
 </script>

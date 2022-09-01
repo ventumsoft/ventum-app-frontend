@@ -93,21 +93,9 @@ export default {
   }),
   async fetch() {
     ({data: this.ticket} = await this.$axios.get('user/order/ticket', {params: {number: this.order.number}}));
-  },
-  mounted() {
-    this.$echo.private('Api.Site.User.' + this.$auth.user.id)
-      .listen('HelpDesk.TicketMessageWasBuilded', ({message}) => {
-        if (message.ticket_id !== this.ticket?.id) {
-          return;
-        }
-        this.handleMessageAddingOrUpdating(message);
-      })
-      .listen('HelpDesk.TicketMessageWasUpdated', ({message}) => {
-        if (message.ticket_id !== this.ticket?.id) {
-          return;
-        }
-        this.handleMessageAddingOrUpdating(message);
-      });
+    if (this.ticket) {
+      this.listenTicketEchoEvents();
+    }
   },
   methods: {
     handleSelectingFiles(event) {
@@ -169,7 +157,11 @@ export default {
       this.resetFormData();
 
       if (!this.ticket || (this.ticket.id !== ticket.id)) {
+        if (this.ticket) {
+          this.stopListeningTicketEchoEvents();
+        }
         this.ticket = ticket;
+        this.listenTicketEchoEvents();
       }
 
       this.handleMessageAddingOrUpdating(message);
@@ -180,8 +172,8 @@ export default {
     },
 
     handleMessageAddingOrUpdating(message) {
-      if (this.ticket.messages === undefined) {
-        this.ticket.messages = [];
+      if (!this.ticket.messages) {
+        this.$set(this.ticket, 'messages', []);
       }
 
       const messageIndex = this.ticket.messages.findIndex(iteratedMessage => iteratedMessage.id === message.id);
@@ -192,10 +184,22 @@ export default {
 
       this.ticket.messages.push(message);
     },
+
+    listenTicketEchoEvents() {
+      this.$echo.private('Api.Site.HelpDesk.Ticket.' + this.ticket.id)
+        .listen('HelpDesk.TicketMessageWasBuilded', ({message}) => this.handleMessageAddingOrUpdating(message))
+        .listen('HelpDesk.TicketMessageWasUpdated', ({message}) => this.handleMessageAddingOrUpdating(message));
+    },
+
+    stopListeningTicketEchoEvents() {
+      this.$echo.private('Api.Site.HelpDesk.Ticket.' + this.ticket.id)
+        .stopListening('HelpDesk.TicketMessageWasBuilded')
+        .stopListening('HelpDesk.TicketMessageWasUpdated');
+    },
   },
 
   beforeDestroy() {
-    // echo stop listening
+    this.stopListeningTicketEchoEvents();
   },
 }
 </script>

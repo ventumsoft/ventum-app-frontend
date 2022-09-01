@@ -78,15 +78,15 @@
                           <strong>{{ extraSum.name }}</strong>
                         </td>
                         <td class="cart-product-subtotal">
-                          {{ $currency(extraSum.value) }}
+                          {{ extraSum.value }}
                         </td>
                       </tr>
-                      <tr v-for="discounts of order.discounts">
+                      <tr v-for="discount of order.discounts">
                         <td class="cart-product-name">
                           <strong>{{ discount.name }}:</strong>
                         </td>
                         <td class="cart-product-subtotal">
-                          <span class="amount">- {{ $currency(discount.value) }}</span>
+                          <span class="amount">- {{ discount.value }}</span>
                         </td>
                       </tr>
                       <tr v-if="order.usedBonuses || useBonuses" class="payment-use-bonus-row">

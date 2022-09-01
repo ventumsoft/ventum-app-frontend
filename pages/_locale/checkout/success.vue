@@ -71,8 +71,18 @@ export default {
   },
   mounted() {
     this.$store.dispatch('checkout/clear');
+    if (this.documentsPending) {
+      this.$echo.private('Api.Site.User.' + this.$auth.user.id)
+        .listen('DocumentWasCreated', ({document}) => {
+          if (this.orderNumber === document.orderNumber) {
+            this.$store.commit('checkout/success/update', {documentsExists: true});
+          }
+        });
+    }
   },
   beforeDestroy() {
+    this.$echo.private('Api.Site.User.' + this.$auth.user.id)
+      .stopListening('DocumentWasCreated');
     this.$store.commit('checkout/success/clear');
   },
 }
