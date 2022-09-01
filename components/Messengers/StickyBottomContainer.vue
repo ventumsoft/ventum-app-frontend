@@ -67,7 +67,10 @@
         </div>
         <div class="panel-body">
           <div v-if="chatMode === 'online'" class="chat-block-online">
-            <MessengersChatMessages />
+            <MessengersChatMessages
+              :ticket="chatTicket"
+              :welcome="chatWelcome"
+            />
             <MessengersChatForm />
           </div>
           <MessengersChatOffline v-else-if="chatMode === 'offline'" />

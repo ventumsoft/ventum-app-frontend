@@ -109,6 +109,12 @@
       <tbody></tbody>
       </DataTable>
     </div>
+    <UserOrderMessagesModal
+      v-if="showingMessagesModalForOrder"
+      :key="showingMessagesModalForOrder.id"
+      :order="showingMessagesModalForOrder"
+      @closed="showingMessagesModalForOrder = null"
+    />
   </div>
 </template>
 
@@ -131,6 +137,7 @@ export default {
       Status,
       Messages,
     },
+    showingMessagesModalForOrder: null,
   }),
   mounted() {
     this.$echo.private('Api.Site.User.' + this.$auth.user.id)
@@ -163,6 +170,7 @@ export default {
       });
       tempApp.$on('update', this.updateOrderInDataTable);
       tempApp.$on('reload', this.reloadDataTable);
+      tempApp.$on('messages', this.openMessagesModal);
       tempApp.$mount();
       cellElement.append(tempApp.$el);
     },
@@ -180,6 +188,13 @@ export default {
     reloadDataTable() {
       this.$refs.dataTable.$dataTable.draw();
     },
+    openMessagesModal(order) {
+      this.showingMessagesModalForOrder = order;
+    },
+  },
+  beforeDestroy() {
+    this.$echo.private('Api.Site.User.' + this.$auth.user.id)
+      .stopListening('OrderWasSaved');
   },
 }
 </script>

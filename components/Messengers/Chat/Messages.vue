@@ -1,6 +1,6 @@
 <template>
   <ul class="media-list chat-list content-group chat-messages">
-    <template v-if="!ticket?.messages?.length">
+    <template v-if="welcome && !ticket?.messages?.length">
       <li class="media date-step content-divider chat-message-date">
         <span class="chat-message-date-text">{{ $dt(new Date, 'date') }}</span>
       </li>
@@ -28,14 +28,9 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
-
 export default {
+  props: ['ticket', 'welcome'],
   computed: {
-    ...mapState('chat', [
-      'ticket',
-      'welcome',
-    ]),
     firstMessagesAtDays() {
       const result = new Map;
       let lastDay;
