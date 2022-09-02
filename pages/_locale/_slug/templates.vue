@@ -147,10 +147,17 @@ export default {
   head() {
     return {
       title: this.meta?.title,
-      meta: [{
-        name: 'description',
-        content: this.meta?.description,
-      }],
+      link: [
+        {rel: 'canonical', href: this.$router.resolve(this.$page({name: 'slug/templates', params: {slug: this.$route.params.slug}, query: {categoryId: this.$route.query.categoryId}})).href},
+      ],
+      meta: [
+        {name: 'description', content: this.meta?.description},
+        {property: 'og:type', content: 'website'},
+        {property: 'og:title', content: this.meta?.title},
+        {property: 'og:description', content: this.meta?.description},
+        {property: 'og:url', content: this.$router.resolve(this.$page({name: 'slug/templates', params: {slug: this.$route.params.slug}, query: {categoryId: this.$route.query.categoryId}})).href},
+        {property: 'og:image', content: this.$store.state.site.settings?.['logo_og'] || '/images/no-image.png'},
+      ],
     };
   },
   async asyncData({route, $axios}) {

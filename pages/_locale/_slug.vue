@@ -113,6 +113,9 @@ export default {
     const meta = this.pageEntity?.meta;
     return {
       title: meta?.title,
+      link: meta && [
+        meta.canonical && {rel: 'canonical', href: meta.canonical},
+      ].filter(v => v),
       meta: meta && [
         meta.description && {
           name: 'description',
@@ -122,6 +125,10 @@ export default {
           name: 'keywords',
           content: meta.keywords,
         },
+        ...(meta.og && Object.entries(meta.og).map(([key, value]) => ({
+          property: 'og:' + key,
+          content: value,
+        })) || []),
       ].filter(v => v),
     };
   },

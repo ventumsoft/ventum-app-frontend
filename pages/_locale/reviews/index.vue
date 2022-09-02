@@ -113,12 +113,14 @@ import {mapState} from 'vuex';
 export default {
   head() {
     return {
-      title: this.$trans('reviews.title'),
+      title: this.$trans('reviews.title') + ((this.page > 1) ? (' ' + this.$trans('reviews.page').replace(':number', this.page)) : ''),
       meta: [
-        {
-          name: 'description',
-          content: this.$trans('reviews.meta-description'),
-        },
+        {name: 'description', content: this.$trans('reviews.meta-description') + ((this.page > 1) ? (' ' + this.$trans('reviews.page').replace(':number', this.page)) : '')},
+        {property: 'og:type', content: 'article'},
+        {property: 'og:title', content: this.$trans('reviews.title') + ((this.page > 1) ? (' ' + this.$trans('reviews.page').replace(':number', this.page)) : '')},
+        {property: 'og:description', content: this.$trans('reviews.meta-description') + ((this.page > 1) ? (' ' + this.$trans('reviews.page').replace(':number', this.page)) : '')},
+        {property: 'og:url', content: this.$router.resolve(this.$page({name: 'reviews', query: {page: this.$route.query.page}})).href},
+        {property: 'og:image', content: this.$store.state.site.settings?.['logo_og'] || '/images/no-image.png'},
       ],
     };
   },

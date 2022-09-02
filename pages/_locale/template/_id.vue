@@ -176,10 +176,17 @@ export default {
   head() {
     return {
       title: this.metaTitle,
-      meta: [{
-        name: 'description',
-        content: this.metaDescription,
-      }],
+      link: [
+        {rel: 'canonical', href: this.template.url},
+      ],
+      meta: [
+        {name: 'description', content: this.metaDescription},
+        {property: 'og:type', content: 'website'},
+        {property: 'og:title', content: this.metaTitle},
+        {property: 'og:description', content: this.metaDescription},
+        {property: 'og:url', content: this.template.url},
+        {property: 'og:image', content: this.template.image + '?' + 'width=955&height=500&fit=exact'},
+      ],
     };
   },
   computed: {
