@@ -13,9 +13,6 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ],
     bodyAttrs: {
       class: 'stretched no-transition',
       'data-loader': 12,
@@ -57,6 +54,27 @@ export default {
     '~/assets/css/search.scss',
     '~/assets/css/custom-styles.scss',
   ],
+
+  hooks: {
+    'vue-renderer': {
+      ssr: {
+        templateParams(templateParams, renderContext) {
+          if (renderContext.nuxt.state.site.settings?.favicon_html) {
+            templateParams.HEAD += renderContext.nuxt.state.site.settings.favicon_html;
+          }
+          if (renderContext.nuxt.state.site.settings?.['seo-integration:js-to-head']) {
+            templateParams.HEAD += renderContext.nuxt.state.site.settings['seo-integration:js-to-head'];
+          }
+          if (renderContext.nuxt.state.site.settings?.['seo-integration:js-to-body']) {
+            templateParams.APP = renderContext.nuxt.state.site.settings['seo-integration:js-to-body'] + templateParams.APP;
+          }
+          if (renderContext.nuxt.state.site.settings?.['seo-integration:js-to-footer']) {
+            templateParams.APP += renderContext.nuxt.state.site.settings['seo-integration:js-to-footer'];
+          }
+        },
+      },
+    },
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -108,6 +126,15 @@ export default {
     '/attachment': process.env.API_ORIGIN,
     '/storage': process.env.API_ORIGIN,
     '/socket.io': process.env.API_ORIGIN,
+    '/favicons': process.env.API_URL,
+    '/favicon.ico': process.env.API_URL + 'favicons',
+    '/robots.txt': process.env.API_URL,
+    '/sitemap.xml': process.env.API_URL,
+    '/*/sitemap.xml': {
+      target: process.env.API_URL,
+      pathRewrite: {'^/.*/sitemap.xml' : '/sitemap.xml'},
+      onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/sitemap.xml')?.[1]),
+    },
   },
 
   echo: {

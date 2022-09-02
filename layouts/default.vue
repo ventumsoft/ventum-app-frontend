@@ -25,6 +25,10 @@ export default {
         lang: this.$store.state.page.language?.slug,
         class: 'flex-footer',
       },
+      link: [
+        !this.$store.state.site.settings?.favicon_link && !this.$store.state.site.settings?.favicon_html && {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
+        this.$store.state.site.settings?.favicon_link && {rel: 'shortcut icon', href: this.$store.state.site.settings.favicon_link},
+      ].filter(v => v),
     };
   },
   mounted() {
