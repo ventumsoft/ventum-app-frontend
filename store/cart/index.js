@@ -1,6 +1,7 @@
 export const state = () => ({
   loading: false,
   items: null,
+  totalWithoutDiscountValue: null,
   totalWithoutDiscount: null,
   totalWithDiscount: null,
   discounts: null,
@@ -16,6 +17,7 @@ export const mutations = {
   },
   clear(state) {
     state.items = null;
+    state.totalWithoutDiscountValue = null;
     state.totalWithoutDiscount = null;
     state.totalWithDiscount = null;
     state.discounts = null;

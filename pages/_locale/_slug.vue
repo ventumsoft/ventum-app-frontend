@@ -140,6 +140,20 @@ export default {
           content: value,
         })) || []),
       ].filter(v => v),
+      script: [
+        (this.pageType === 'Product') && this.pageEntity?.calculator && this.$store.state.site.settings?.['seo-integration:gads-dynamic-remarketing:enabled'] && {body: true, innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          dataLayer.push(${JSON.stringify({
+            event: 'view_item',
+            value: this.pageEntity.calculator.basicPriceValue,
+            items: [{
+              id: this.pageEntity.id + '-' + this.$store.state.site.language.id,
+              google_business_vertical: 'retail',
+            }],
+          })});
+        `},
+      ].filter(v => v),
+      __dangerouslyDisableSanitizers: ['script'],
     };
   },
   computed: {

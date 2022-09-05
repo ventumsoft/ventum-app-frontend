@@ -51,6 +51,7 @@ export default {
   ],
   async asyncData({store, $axios}) {
     const {data: {
+      order,
       paymentResult,
       documentsExists,
       documentsPending,
@@ -62,6 +63,7 @@ export default {
       paymentId: store.state.checkout.success.paymentId,
     }});
     return {
+      order,
       paymentResult: paymentResult || store.state.checkout.success.paymentResult,
       documentsExists,
       documentsPending,
@@ -71,10 +73,33 @@ export default {
     };
   },
   head() {
-    return this.$store.state.site.settings?.['seo-integration:google-shopping-reviews:enabled'] && {
+    return {
       script: [
-        {body: true, src: 'https://apis.google.com/js/platform.js?onload=renderOptIn', async: true, defer: true},
-        {body: true, innerHTML: `
+        this.$store.state.site.settings?.['seo-integration:gads-dynamic-remarketing:enabled'] && {body: true, innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          dataLayer.push(${JSON.stringify({
+            event: 'purchase',
+            value: this.order.price,
+            items: this.order.items.map(orderItem => ({
+              id: orderItem.productId + '-' + this.$store.state.site.language.id,
+              google_business_vertical: 'retail',
+            })),
+          })});
+        `},
+        this.$store.state.site.settings?.['seo-integration:ga-ecommerce-tracking:enabled'] && {body: true, innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          dataLayer.push(${JSON.stringify({
+            transactionId: this.order.number,
+            transactionTotal: this.order.price,
+            transactionProducts: this.order.items.map(orderItem => ({
+              name: orderItem.name,
+              price: orderItem.price,
+              quantity: 1,
+            })),
+          })});
+        `},
+        this.$store.state.site.settings?.['seo-integration:google-shopping-reviews:enabled'] && {body: true, src: 'https://apis.google.com/js/platform.js?onload=renderOptIn', async: true, defer: true},
+        this.$store.state.site.settings?.['seo-integration:google-shopping-reviews:enabled'] && {body: true, innerHTML: `
           window.renderOptIn = function() {
             window.gapi.load('surveyoptin', function() {
               window.gapi.surveyoptin.render({

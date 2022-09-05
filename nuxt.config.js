@@ -136,6 +136,12 @@ export default {
       pathRewrite: {'^/.*/sitemap.xml' : '/sitemap.xml'},
       onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/sitemap.xml')?.[1]),
     },
+    '/google-shopping.xml': process.env.API_URL,
+    '/*/google-shopping.xml': {
+      target: process.env.API_URL,
+      pathRewrite: {'^/.*/google-shopping.xml' : '/google-shopping.xml'},
+      onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/google-shopping.xml')?.[1]),
+    },
   },
 
   echo: {
