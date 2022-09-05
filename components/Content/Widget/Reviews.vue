@@ -36,9 +36,8 @@
     <div
       v-if="$store.state.site.settings?.['seo-integration:google-shopping-reviews:enabled'] && $store.state.site.settings?.['seo-integration:google-shopping-reviews:show-badge'] && ($store.state.site.settings?.['seo-integration:google-shopping-reviews:badge-position'] === 'INLINE')"
       class="google-shopping-badge-container"
-    >
-      <g:ratingbadge merchant_id={{ $currentShowcase->config('seo-integration:google-shopping-reviews:merchant-id') }}></g:ratingbadge>
-    </div>
+      v-html="`<g:ratingbadge :merchant_id=${$store.state.site.settings?.['seo-integration:google-shopping-reviews:merchant-id']}></g:ratingbadge>`"
+    ></div>
     <span v-if="is_show_rating">
       <div class="center" itemscope itemtype="http://schema.org/AggregateRating">
         {{ $trans('widgets.clients_reviews.average_rating') }}

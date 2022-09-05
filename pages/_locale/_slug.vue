@@ -1,5 +1,15 @@
 <template>
   <Fragment>
+    <div v-if="(pageType === 'Product') && pageEntity.meta?.microdata" class="hidden" itemscope itemtype="http://schema.org/Product">
+      <meta itemprop="name" :content="pageEntity.meta.microdata.name">
+      <meta itemprop="description" :content="pageEntity.meta.microdata.description">
+      <meta itemprop="image" :content="pageEntity.meta.microdata.image">
+      <div class="hidden" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <meta itemprop="priceCurrency" :content="pageEntity.meta.microdata.currency">
+        <meta itemprop="price" :content="pageEntity.meta.microdata.price">
+        <link itemprop="availability" href="https://schema.org/InStock">
+      </div>
+    </div>
     <template v-if="pageType"><PageTitle
       v-if="pageEntity && ((pageType !== 'Static') || (pageEntity.type !== 'main'))"
       :title="pageEntity.meta?.h1 || pageEntity.title"

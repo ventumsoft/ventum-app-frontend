@@ -97,6 +97,7 @@ export default {
     '~/plugins/mask.client',
     '~/plugins/noty.client',
     '~/plugins/confirm.client',
+    '~/plugins/google-shopping.client',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

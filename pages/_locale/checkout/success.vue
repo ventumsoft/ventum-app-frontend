@@ -47,19 +47,56 @@ export default {
         redirect($page({name: 'checkout/cart'}));
         return;
       }
-      await store.dispatch('checkout/success/fetchOrderResultData');
     },
   ],
+  async asyncData({store, $axios}) {
+    const {data: {
+      paymentResult,
+      documentsExists,
+      documentsPending,
+      agentShowcaseUrl,
+      googleShoppingReviewsCountryCode,
+      googleShoppingReviewsEstimatedDeliveryDate,
+    }} = await $axios.get('checkout/result', {params: {
+      orderNumber: store.state.checkout.success.orderNumber,
+      paymentId: store.state.checkout.success.paymentId,
+    }});
+    return {
+      paymentResult: paymentResult || store.state.checkout.success.paymentResult,
+      documentsExists,
+      documentsPending,
+      agentShowcaseUrl,
+      googleShoppingReviewsCountryCode,
+      googleShoppingReviewsEstimatedDeliveryDate,
+    };
+  },
+  head() {
+    return this.$store.state.site.settings?.['seo-integration:google-shopping-reviews:enabled'] && {
+      script: [
+        {body: true, src: 'https://apis.google.com/js/platform.js?onload=renderOptIn', async: true, defer: true},
+        {body: true, innerHTML: `
+          window.renderOptIn = function() {
+            window.gapi.load('surveyoptin', function() {
+              window.gapi.surveyoptin.render({
+                "merchant_id": ${this.$store.state.site.settings?.['seo-integration:google-shopping-reviews:merchant-id']},
+                "order_id": ${this.orderNumber},
+                "email": '${this.$auth.user.email}',
+                "delivery_country": '${this.googleShoppingReviewsCountryCode}',
+                "estimated_delivery_date": '${this.googleShoppingReviewsEstimatedDeliveryDate}',
+              });
+            });
+          }
+        `},
+      ].filter(v => v),
+      __dangerouslyDisableSanitizers: ['script'],
+    };
+  },
   data: () => ({
     PersonalAccountTabEnum,
   }),
   computed: {
     ...mapState('checkout/success', [
       'orderNumber',
-      'paymentResult',
-      'documentsExists',
-      'documentsPending',
-      'agentShowcaseUrl',
     ]),
     paymentResultClass() {
       return {
@@ -75,7 +112,7 @@ export default {
       this.$echo.private('Api.Site.User.' + this.$auth.user.id)
         .listen('DocumentWasCreated', ({document}) => {
           if (this.orderNumber === document.orderNumber) {
-            this.$store.commit('checkout/success/update', {documentsExists: true});
+            this.documentsExists = true;
           }
         });
     }
