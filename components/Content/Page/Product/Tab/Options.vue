@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-if="i18nParams.items" class="topmargin-sm">
+    <div v-if="params.items?.length" class="topmargin-sm">
       <div
-        v-for="(item, index) of Object.values(i18nParams.items)"
+        v-for="(item, index) of params.items"
         class="col_one_third col-max-height"
         :class="{col_last: index % 3 === 2}"
       >
@@ -20,6 +20,6 @@
 
 <script>
 export default {
-  props: ['commonParams', 'i18nParams'],
+  props: ['params'],
 }
 </script>

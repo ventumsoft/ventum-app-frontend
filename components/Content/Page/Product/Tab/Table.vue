@@ -1,19 +1,19 @@
 <template>
   <div>
-    <h3 v-html="i18nParams.header || ''"></h3>
-    <table v-if="Number(commonParams.columns)" class="table table-striped" style="font-size: 15px">
+    <h3 v-html="params.header || ''"></h3>
+    <table v-if="params.columns" class="table table-striped" style="font-size: 15px">
       <thead>
       <tr>
         <th
-          v-for="columnNumber in Number(commonParams.columns)"
-          v-html="i18nParams.th?.[columnNumber - 1] || ''"
+          v-for="columnNumber in params.columns"
+          v-html="params.th?.[columnNumber - 1] || ''"
         ></th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="td of i18nParams.td">
+      <tr v-for="td of params.td">
         <td
-          v-for="columnNumber in Number(commonParams.columns)"
+          v-for="columnNumber in params.columns"
           v-html="td?.[columnNumber - 1] || ''"
         ></td>
       </tr>
@@ -24,6 +24,6 @@
 
 <script>
 export default {
-  props: ['commonParams', 'i18nParams'],
+  props: ['params'],
 }
 </script>

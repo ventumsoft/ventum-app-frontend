@@ -4,10 +4,10 @@
       <ul class="tab-nav clearfix">
         <li
           v-for="contentTab of product.contentTabs"
-          v-if="contentTab?.params?.[language.id]"
+          v-if="contentTab.params"
         >
           <a class="text-break" :href="'#tabs-' + contentTab.id">
-            {{ contentTab?.params?.[language.id]?.frontend_name || '' }}
+            {{ contentTab.params.name || '' }}
           </a>
         </li>
       </ul>
@@ -15,12 +15,11 @@
         <component
           v-for="contentTab of product.contentTabs"
           :key="contentTab.id"
-          v-if="contentTab?.params?.[language.id]"
+          v-if="contentTab.params"
           :is="'ContentPageProductTab' + upperFirst(camelCase(contentTab.type))"
           class="tab-content clearfix"
           :id="'tabs-' + contentTab.id"
-          :commonParams="contentTab.params"
-          :i18nParams="contentTab.params[language.id]"
+          :params="contentTab.params"
         ></component>
       </div>
     </JqTabs>
@@ -34,7 +33,6 @@ import {mapState} from 'vuex';
 
 export default {
   computed: {
-    ...mapState('site', ['language']),
     ...mapState('page', ['product']),
   },
   methods: {

@@ -1,13 +1,13 @@
 <template>
   <div class="no-fv">
-    <h3 v-html="i18nParams.header || ''"></h3>
-    <fragment v-html="i18nParams.description || ''"></fragment>
+    <h3 v-html="params.header || ''"></h3>
+    <fragment v-html="params.description || ''"></fragment>
     <div class="clear"></div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['commonParams', 'i18nParams'],
+  props: ['params'],
 }
 </script>
