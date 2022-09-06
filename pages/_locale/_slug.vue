@@ -160,6 +160,32 @@ export default {
     ...mapState('page', {pageType: 'type'}),
     ...mapGetters('page', {pageEntity: 'entity'}),
   },
+  async mounted() {
+    this.loadPageRemnantMiddleWidgetsIfNeeded();
+  },
   watchQuery: true,
+  watch: {
+    pageEntity() {
+      this.loadPageRemnantMiddleWidgetsIfNeeded();
+    },
+  },
+  methods: {
+    async loadPageRemnantMiddleWidgetsIfNeeded() {
+      if (this.$store.state.site.settings?.['general:widgets-via-ajax'] && this.$store.state.widgets.page?.middle?.length) {
+        const {onPageLoadedAndInteracted} = await import('@/plugins/load-interacted.client.js');
+        await new Promise(resolve => onPageLoadedAndInteracted(event => resolve()));
+        const {data: pageRemnantMiddleWidgets} = await this.$axios.get('page/remnant-middle-widgets', {params: {slug: this.$store.state.page.slug}});
+        this.$store.commit('widgets/update', {
+          page: {
+            ...this.$store.state.widgets.page,
+            middle: [
+              ...this.$store.state.widgets.page.middle,
+              ...pageRemnantMiddleWidgets,
+            ],
+          },
+        })
+      }
+    },
+  },
 }
 </script>
