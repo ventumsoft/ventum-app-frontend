@@ -19,13 +19,7 @@ export default {
       settings,
       language,
       languages,
-    }} = await $axios.get('common/data', {
-      headers: {
-        common: {
-          'Accept-Language': params.locale || '*',
-        },
-      },
-    });
+    }} = await $axios.get('common/data');
     store.commit('site/update', {
       trans,
       settings,
@@ -41,13 +35,7 @@ export default {
     const {data: {
       header,
       footer,
-    }} = await $axios.get('common/widgets', {
-      headers: {
-        common: {
-          'Accept-Language': params.locale || '*',
-        },
-      },
-    });
+    }} = await $axios.get('common/widgets');
     store.commit('widgets/update', {
       header,
       footer,
