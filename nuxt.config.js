@@ -78,7 +78,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    //'~/plugins/axios-cache.server.js',
+    '~/plugins/axios-cache.server.js',
     '~/plugins/axios-error.js',
     '~/plugins/axios-headers.js',
     '~/plugins/fragment',
@@ -119,7 +119,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     'vue-social-sharing/nuxt',
-    //'~/modules/axios-cache', // @fixme: temporary disable caching due issue with caching same requests of different languages
+    '~/modules/axios-cache',
   ],
 
   // Proxy module configuration: https://github.com/nuxt-community/proxy-module#object-config
