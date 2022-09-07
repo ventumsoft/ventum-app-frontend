@@ -1,13 +1,12 @@
 <template>
-  <fragment>
-    <PageTitle title="Creator Page" />
-    <section id="content">
-      <div class="content-wrap">
-        <div class="container clearfix">
-          <div>{{ JSON.stringify($route.params) }}</div>
-          <div>{{ JSON.stringify($route.query) }}</div>
-        </div>
-      </div>
-    </section>
-  </fragment>
+  <div></div>
 </template>
+
+<script>
+export default {
+  async middleware({from, route, redirect}) {
+    redirect(from);
+    window.location.href = route.fullPath;
+  },
+}
+</script>

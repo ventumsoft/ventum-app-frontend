@@ -1,4 +1,7 @@
+import EventEmitter from 'events';
 import webpack from 'webpack';
+
+EventEmitter.defaultMaxListeners = 20;
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -141,6 +144,12 @@ export default {
       target: process.env.API_URL,
       pathRewrite: {'^/.*/google-shopping.xml' : '/google-shopping.xml'},
       onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/google-shopping.xml')?.[1]),
+    },
+    '/creator/*': process.env.API_URL,
+    '/*/creator/*': {
+      target: process.env.API_URL,
+      pathRewrite: {'^/.*/creator/(.*)' : '/creator/$1'},
+      onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/creator')?.[1]),
     },
   },
 
