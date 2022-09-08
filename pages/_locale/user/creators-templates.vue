@@ -3,7 +3,7 @@
     <div class="btn-group bottommargin-sm">
       <TheLink
         class="btn btn-success"
-        :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: undefined}})"
+        :to="$page({name: 'user/design-template/creator', params: {creator: CreatorEnum.UNIVERSAL}, query: {templateId: undefined}})"
       >
         {{ $trans('account.creators-templates.create') }}
       </TheLink>
@@ -47,7 +47,7 @@
                 <br><br>
                 <TheLink
                   class="btn btn-default"
-                  :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id}})"
+                  :to="$page({name: 'user/design-template/creator', params: {creator: CreatorEnum.UNIVERSAL}, query: {templateId: template.id}})"
                 >{{ $trans('account.creators-templates.table.open-in-constructor') }}</TheLink>
               </template>
               <span v-else-if="template.approval === TemplateApprovalEnum.MODERATION" class="label label-warning">
@@ -63,7 +63,7 @@
                 <br><br>
                 <TheLink
                   class="btn btn-default"
-                  :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {templateId: template.id}})"
+                  :to="$page({name: 'user/design-template/creator', params: {creator: CreatorEnum.UNIVERSAL}, query: {templateId: template.id}})"
                 >{{ $trans('account.creators-templates.table.open-in-constructor') }}</TheLink>
               </template>
             </td>
@@ -130,6 +130,7 @@
 </template>
 
 <script>
+import CreatorEnum from '@/enums/CreatorEnum';
 import TemplateApprovalEnum from '@/enums/TemplateApprovalEnum';
 
 export default {
@@ -146,6 +147,7 @@ export default {
     };
   },
   data: () => ({
+    CreatorEnum,
     TemplateApprovalEnum,
   }),
   watchQuery: true,
