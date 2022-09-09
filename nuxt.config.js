@@ -164,6 +164,8 @@ export default {
       onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/user/design-template')?.[1]),
     },
     '/creator-dist/': process.env.API_ORIGIN,
+    '/creators/lists/': process.env.API_ORIGIN,
+    '/creators/twemoji/': process.env.API_ORIGIN,
   },
 
   echo: {
