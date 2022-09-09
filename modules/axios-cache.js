@@ -27,24 +27,29 @@ export default function () {
   });
 
   const preCacheCommonDataRequests = async () => {
-    const {data: {trans, settings, language, languages}} = await cache.adapter({
-      url: 'common/data',
-      method: 'GET',
-      baseURL: process.env.API_URL,
-      headers: {},
-    });
-    await Promise.all(languages.reduce((result, language) => {
-      for (const url of cacheableEndpoints) {
-        result.push(cache.adapter({
-          url,
-          method: 'GET',
-          baseURL: process.env.API_URL,
-          headers: {'Accept-Language': language.slug},
-        }));
-      }
-      return result;
-    }, []));
-    setTimeout(preCacheCommonDataRequests, cacheMaxAge);
+    try {
+      const {data: {languages}} = await cache.adapter({
+        url: 'common/data',
+        method: 'GET',
+        baseURL: process.env.API_URL,
+        headers: {},
+      });
+      await Promise.all(languages.reduce((result, language) => {
+        for (const url of cacheableEndpoints) {
+          result.push(cache.adapter({
+            url,
+            method: 'GET',
+            baseURL: process.env.API_URL,
+            headers: {'Accept-Language': language.slug},
+          }));
+        }
+        return result;
+      }, []));
+    } catch (exception) {
+      console.error(exception);
+    } finally {
+      setTimeout(preCacheCommonDataRequests, cacheMaxAge);
+    }
   };
   preCacheCommonDataRequests();
 }
