@@ -161,14 +161,14 @@ export default {
       }
       let elementsPrices;
       try {
-        ({data: elementsPrices} = await this.$axios.post('products/option-elements-prices', {
+        ({data: elementsPrices} = await this.$axios.get('products/option-elements-prices', {params: {
           productId: this.product.id,
           params: this.params,
           usingPrice: this.$store.state.product.currentActiveEmbeddedIntegration?.usingPrice || undefined,
           optionId: this.option.id,
           optionValues: [!this.option.required ? 0 : undefined, ...this.option.elements.map(element => element.id)].filter(v => v !== undefined),
           optionsIds: Object.keys(this.params.options),
-        }, {progress: false}));
+        }}, {progress: false}));
       } catch (exception) {
         return;
       }

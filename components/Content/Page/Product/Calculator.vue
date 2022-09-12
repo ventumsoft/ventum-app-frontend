@@ -90,10 +90,10 @@
       style="font-size: xx-large; min-height: 48px;"
     >
       <Transition>
-        <span class="total-price-product" v-if="priceData.formatted && (priceData.formatted !== priceData.formattedWithDiscount)">{{ priceData.formatted }}</span>
+        <span class="total-price-product" v-if="priceData.formattedPrice && (priceData.formattedPrice !== priceData.formattedPriceWithDiscount)">{{ priceData.formattedPrice }}</span>
       </Transition>
       <Transition>
-        <ins v-if="priceData.formattedWithDiscount"><span>{{ priceData.formattedWithDiscount || product.calculator.basicPrice }}</span></ins>
+        <ins v-if="priceData.formattedPriceWithDiscount"><span>{{ priceData.formattedPriceWithDiscount || product.calculator.basicPrice }}</span></ins>
       </Transition>
       <Transition>
         <div class="discount-bonus-info" v-if="priceData.discountBonusInfo" style="display: block;">{{ priceData.discountBonusInfo }}</div>
@@ -103,7 +103,7 @@
         class="button button-reveal button-rounded tright fright nomargin product-calculator-order-button"
         :class="{
           hidden: preventing,
-          'product-calculator-order-button-disabled': priceData.value === null,
+          'product-calculator-order-button-disabled': priceData.price === null,
           'hidden-xs': integrationsAvailableOnMobile?.length !== 1,
           'hidden-sm hidden-md hidden-lg': integrationsAvailableOnDesktop?.length !== 1,
         }"
@@ -136,10 +136,10 @@ export default {
     preventing: true,
     priceData: {
       error: null,
-      value: null,
-      formatted: null,
-      valueWithDiscount: null,
-      formattedWithDiscount: null,
+      price: null,
+      formattedPrice: null,
+      priceWithDiscount: null,
+      formattedPriceWithDiscount: null,
       discountBonusInfo: null,
     },
   }),
@@ -173,10 +173,10 @@ export default {
       for (const key in this.priceData) {
         this.priceData[key] = null;
       }
-      ({data: this.priceData} = await this.$axios.post('products/price', {
+      ({data: this.priceData} = await this.$axios.get('products/price', {params: {
         productId: this.product.id,
         params: this.params,
-      }, {progress: false}));
+      }}, {progress: false}));
     }, 10),
   },
 }

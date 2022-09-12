@@ -101,12 +101,19 @@ export const actions = {
   async addToCart({state, rootState}, {compilation, integration}) {
     await this.$auth.getUserOrGuest();
 
-    const {data: cartItem} = await this.$axios.post('cart/add', {
+    const {data: {redirectUrl, ...cartItem}} = await this.$axios.post('cart/add', {
       productId: rootState.page.product.id,
       compilationId: compilation?.id,
       integrationId: integration?.id || undefined,
       params: state.params,
     });
+
+    if (redirectUrl) {
+      await new Promise(resolve => {
+        window.location.href = redirectUrl;
+      });
+      return;
+    }
 
     return cartItem;
   },

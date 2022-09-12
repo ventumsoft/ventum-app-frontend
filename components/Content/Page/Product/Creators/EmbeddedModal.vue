@@ -132,13 +132,13 @@
         </div>
         <div class="col_full">
           <div class="fleft btn-link product-creator-embedded-price">
-            <div v-if="priceData.formatted === null" class="form-process"></div>
-            <Transition><span v-if="priceData.formatted !== null">{{ priceData.formatted }}</span></Transition>
+            <div v-if="priceData.formattedPrice === null" class="form-process"></div>
+            <Transition><span v-if="priceData.formattedPrice !== null">{{ priceData.formattedPrice }}</span></Transition>
           </div>
           <button
             type="submit"
             class="button button-reveal button-rounded tright fright nomargin"
-            :class="{disabled: priceData.value === null}"
+            :class="{disabled: priceData.price === null}"
           >
             <span>{{ $trans('product.button.order') }}</span>
             <i class="icon-angle-right"></i>
@@ -160,10 +160,10 @@ export default {
     CreatorEnum,
     priceData: {
       error: null,
-      value: null,
-      formatted: null,
-      valueWithDiscount: null,
-      formattedWithDiscount: null,
+      price: null,
+      formattedPrice: null,
+      priceWithDiscount: null,
+      formattedPriceWithDiscount: null,
       discountBonusInfo: null,
     },
     loading: false,
