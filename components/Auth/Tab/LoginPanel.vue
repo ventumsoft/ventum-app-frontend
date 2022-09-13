@@ -57,7 +57,7 @@ export default {
       } finally {
         this.loading = false;
       }
-      this.$emit('success');
+      this.$emit('result', {success: true});
     },
   },
 }

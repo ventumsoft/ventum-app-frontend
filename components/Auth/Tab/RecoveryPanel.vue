@@ -41,6 +41,11 @@ export default {
   }),
   methods: {
     async handleRecoverySubmit() {
+      if (this.$store.state.auth.constructorLayoutSaveCallback) {
+        if (!await this.$store.state.auth.constructorLayoutSaveCallback()) {
+          return;
+        }
+      }
       this.loading = true;
       let success, message;
       try {
@@ -49,6 +54,7 @@ export default {
           message,
         }} = await this.$axios.post('recovery/request', {
           email: this.email,
+          backurl: this.$store.state.auth.loginFrameCallback ? window.parent.location.href : undefined,
         }));
       } catch (exception) {
         this.error = exception.response?.data?.errors?.email?.[0] || exception.response?.data?.message || exception.message;
@@ -56,12 +62,7 @@ export default {
       } finally {
         this.loading = false;
       }
-      if (!success) {
-        this.error = message;
-        return;
-      }
-      this.$noty(message);
-      this.$emit('success');
+      this.$emit('result', {success, message});
     },
   },
 }

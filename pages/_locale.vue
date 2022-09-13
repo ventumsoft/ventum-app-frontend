@@ -41,5 +41,11 @@ export default {
       footer,
     });
   },
+  layout({route}) {
+    if (route.name === 'auth/login-frame') {
+      return 'frame';
+    }
+    return 'default';
+  },
 }
 </script>

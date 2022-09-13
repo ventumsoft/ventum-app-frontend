@@ -17,7 +17,7 @@
               <span>
                 <button
                   class="button btn-success nomargin fright add-review-button"
-                  @click="$auth.loggedIn ? (isShowingReviewModal = true) : $store.commit('site/setShowingLoginModal', true)"
+                  @click="$auth.loggedIn ? (isShowingReviewModal = true) : $store.commit('auth/update', {isShowingLoginModal: true});"
                 >
                   {{ $trans('reviews.leave_review') }}
                 </button>

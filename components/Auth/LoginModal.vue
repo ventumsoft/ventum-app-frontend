@@ -1,9 +1,9 @@
 <template>
   <BsModal
-    v-if="$store.state.site.isShowingLoginModal"
+    v-if="$store.state.auth.isShowingLoginModal"
     id="loginRegisterModal"
     class="modaltop fade"
-    @closed="$store.commit('site/setShowingLoginModal', false)"
+    @closed="$store.commit('auth/update', {isShowingLoginModal: false}); $store.state.auth.loginFrameCallback?.({success: false});"
   >
     <div class="modal-dialog">
       <div class="modal-body">
@@ -33,12 +33,12 @@
                   <AuthTabLoginPanel
                     v-if="!isShowingRecoveryInsteadOfLogin"
                     @recovery="isShowingRecoveryInsteadOfLogin = true"
-                    @success="close"
+                    @result="handleResult"
                   />
                   <AuthTabRecoveryPanel
                     v-if="isShowingRecoveryInsteadOfLogin"
                     @cancel="isShowingRecoveryInsteadOfLogin = false"
-                    @success="close"
+                    @result="handleResult"
                   />
                 </div>
                 <div
@@ -46,7 +46,7 @@
                   class="tab-content clearfix"
                   id="tab-register"
                 >
-                  <AuthTabRegisterPanel @success="close" />
+                  <AuthTabRegisterPanel @result="handleResult" />
                 </div>
               </div>
             </JqTabs>
@@ -89,14 +89,13 @@ export default {
             code,
           }));
         } catch (exception) {
-          this.$noty(exception.response?.data?.message || exception.message, 'error');
+          success = false;
+          message = exception.response?.data?.message || exception.message;
         }
-        if (message) {
-          this.$noty(message, success ? 'alert' : 'error');
-        }
-        if (token) {
+        if (success && token) {
           this.$auth.login({data: token});
         }
+        this.handleResult({success, message});
       }
       let query = querystring.parse(window.location.search.substr(1));
       delete query.confirmUserId;
@@ -104,8 +103,17 @@ export default {
       query = querystring.stringify(query);
       history.replaceState(null, null, window.location.pathname + (query ? ('?' + query) : ''));
     },
-    close() {
-      $(this.$el).modal('hide');
+    handleResult({success, message}) {
+      if (this.$store.state.auth.loginFrameCallback) {
+        this.$store.state.auth.loginFrameCallback({success: !message, message});
+        this.$store.commit('auth/update', {loginFrameCallback: null});
+      }
+      if (message) {
+        this.$noty(message, success ? 'alert' : 'error');
+      }
+      if (this.$store.state.auth.isShowingLoginModal) {
+        $(this.$el).modal('hide');
+      }
     },
   },
 }

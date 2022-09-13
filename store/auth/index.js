@@ -1,8 +1,7 @@
 export const state = () => ({
-  trans: null,
-  settings: null,
-  languages: null,
-  language: null,
+  isShowingLoginModal: false,
+  loginFrameCallback: null,
+  constructorLayoutSaveCallback: null,
 });
 
 export const mutations = {

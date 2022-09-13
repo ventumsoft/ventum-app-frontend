@@ -1,6 +1,6 @@
 <template>
   <li :class="{'sub-menu': subMenuClass && $auth.loggedIn}">
-    <a v-if="!$auth.loggedIn" href="#" @click.prevent="$store.commit('site/setShowingLoginModal', true)">
+    <a v-if="!$auth.loggedIn" href="#" @click.prevent="$store.commit('auth/update', {isShowingLoginModal: true})">
       <i class="icon-signin"></i> {{ $trans('header.login') }}
     </a>
     <a v-if="$auth.loggedIn" href="#" @click.prevent>

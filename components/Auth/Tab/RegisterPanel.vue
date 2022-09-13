@@ -115,6 +115,11 @@ export default {
   }),
   methods: {
     async handleRegisterSubmit() {
+      if (this.$store.state.auth.constructorLayoutSaveCallback) {
+        if (!await this.$store.state.auth.constructorLayoutSaveCallback()) {
+          return;
+        }
+      }
       this.loading = true;
       this.errors = null;
       let success, confirmed, message, token;
@@ -124,7 +129,10 @@ export default {
           confirmed,
           message,
           token,
-        }} = await this.$axios.post('register/user', this.credentials, {silenceException: true}));
+        }} = await this.$axios.post('register/user', {
+          ...this.credentials,
+          backurl: this.$store.state.auth.loginFrameCallback ? window.parent.location.href : undefined,
+        }, {silenceException: true}));
       } catch (exception) {
         if ('object' === typeof exception.response?.data?.errors) {
           this.errors = exception.response.data.errors;
@@ -136,17 +144,10 @@ export default {
         this.loading = false;
         this.$refs.captcha?.resetRepatcha();
       }
-      if (!success) {
-        this.$noty(message, 'error');
-        return;
-      }
-      if (message) {
-        this.$noty(message);
-      }
-      if (confirmed && token) {
+      if (success && confirmed && token) {
         this.$auth.login({data: token});
       }
-      this.$emit('success');
+      this.$emit('result', {success, message});
     },
   },
 }

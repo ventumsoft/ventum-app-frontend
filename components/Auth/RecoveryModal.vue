@@ -3,7 +3,7 @@
     v-if="email && code"
     id="RestorePasswordModal"
     class="modaltop fade"
-    @closed="$emit('closed')"
+    @closed="$emit('closed'); $store.state.auth.loginFrameCallback?.({success: false});"
   >
     <div class="modal-dialog">
       <div class="modal-content">
@@ -126,11 +126,16 @@ export default {
       } finally {
         this.loading = false;
       }
-      if (!success) {
-        this.$noty(message, 'error');
-        return;
+      if (success && token) {
+        this.$auth.login({data: token});
       }
-      this.$auth.login({data: token});
+      if (this.$store.state.auth.loginFrameCallback) {
+        this.$store.state.auth.loginFrameCallback({success: !message, message});
+        this.$store.commit('auth/update', {loginFrameCallback: null});
+      }
+      if (message) {
+        this.$noty(message, success ? 'alert' : 'error');
+      }
       $(this.$el).modal('hide');
     },
   },

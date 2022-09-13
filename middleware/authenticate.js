@@ -5,7 +5,7 @@ export default function (context) {
     if (!context.$auth.loggedIn) {
       //context.next(false);
       context.redirect(context.from);
-      context.store.commit('site/setShowingLoginModal', true);
+      context.store.commit('auth/update', {isShowingLoginModal: true});
       return;
     }
   }
