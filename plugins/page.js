@@ -1,4 +1,4 @@
-export default ({app: {router}, store}, inject) => {
+export default ({app: {router}, store, route: currentRoute}, inject) => {
   inject('page', route => {
     const isUsingLocaleParameter = Boolean(router.options.routes.find(iteratedRoute =>
       iteratedRoute.path?.includes?.('/:locale') &&
@@ -7,6 +7,7 @@ export default ({app: {router}, store}, inject) => {
     if (isUsingLocaleParameter && !route.params?.locale) {
       route.params = route.params || {};
       route.params.locale = store.state.site.language?.slug;
+      //route.params.locale = currentRoute?.params?.locale;
     }
     return route;
   });

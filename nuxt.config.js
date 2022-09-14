@@ -254,10 +254,14 @@ export default {
         for (const route of routes) {
           if (route.name === 'locale') {
             route.name = 'index';
+            route.path = '/:locale(\\w{2})?';
           }
           if (route.name?.startsWith('locale/')) {
             route.name = route.name.substr('locale/'.length);
           }
+          //if (route.name === 'slug') {
+          //  route.path = ':slug';
+          //}
           if (route.children?.length) {
             removeLocaleFromRoutesNames(route.children);
           }
