@@ -145,7 +145,7 @@ export default {
         this.$refs.captcha?.resetRepatcha();
       }
       if (success && confirmed && token) {
-        this.$auth.login({data: token});
+        await this.$auth.login({data: token});
       }
       this.$emit('result', {success, message});
     },

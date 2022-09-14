@@ -11,3 +11,13 @@ export const mutations = {
     }
   },
 }
+
+export const actions = {
+  async callLoginFrameCallbackIfExists({state, commit}, {success, message}) {
+    if (!state.loginFrameCallback) {
+      return;
+    }
+    state.loginFrameCallback({success: !message, message});
+    commit('update', {loginFrameCallback: null});
+  },
+}

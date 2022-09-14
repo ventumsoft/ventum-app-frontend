@@ -3,7 +3,7 @@
     v-if="$store.state.auth.isShowingLoginModal"
     id="loginRegisterModal"
     class="modaltop fade"
-    @closed="$store.commit('auth/update', {isShowingLoginModal: false}); $store.state.auth.loginFrameCallback?.({success: false});"
+    @closed="$store.commit('auth/update', {isShowingLoginModal: false}); $store.dispatch('auth/callLoginFrameCallbackIfExists', {success: false});"
   >
     <div class="modal-dialog">
       <div class="modal-body">
@@ -93,7 +93,7 @@ export default {
           message = exception.response?.data?.message || exception.message;
         }
         if (success && token) {
-          this.$auth.login({data: token});
+          await this.$auth.login({data: token});
         }
         this.handleResult({success, message});
       }
@@ -104,10 +104,7 @@ export default {
       history.replaceState(null, null, window.location.pathname + (query ? ('?' + query) : ''));
     },
     handleResult({success, message}) {
-      if (this.$store.state.auth.loginFrameCallback) {
-        this.$store.state.auth.loginFrameCallback({success: !message, message});
-        this.$store.commit('auth/update', {loginFrameCallback: null});
-      }
+      this.$store.dispatch('auth/callLoginFrameCallbackIfExists', {success, message});
       if (message) {
         this.$noty(message, success ? 'alert' : 'error');
       }

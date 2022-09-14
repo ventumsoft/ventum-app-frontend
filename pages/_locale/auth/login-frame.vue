@@ -7,7 +7,8 @@ export default {
   layout: 'frame',
   mounted() {
     if (!(this.$route.query.restorePasswordEmail && this.$route.query.restorePasswordCode) &&
-      !(this.$route.query.confirmUserId && this.$route.query.confirmUserCode)
+      !(this.$route.query.confirmUserId && this.$route.query.confirmUserCode) &&
+      !this.$route.query.authUserOrGuest
     ) {
       this.$store.commit('auth/update', {isShowingLoginModal: true});
     }
@@ -15,6 +16,11 @@ export default {
     this.$store.commit('auth/update', {loginFrameCallback: result => {
       window.parent.postMessage('Auth.LoginFrame.Result.' + JSON.stringify(result), window.location.origin);
     }});
+    if (this.$route.query.authUserOrGuest) {
+      this.$auth.getUserOrGuest().then(user => {
+        this.$store.dispatch('auth/callLoginFrameCallbackIfExists', {success: this.$auth.loggedIn});
+      });
+    }
     let constructorLayoutSaveResolve;
     window.addEventListener('message', event => {
       if (window.location.origin !== event.origin) {

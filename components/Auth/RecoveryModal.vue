@@ -3,7 +3,7 @@
     v-if="email && code"
     id="RestorePasswordModal"
     class="modaltop fade"
-    @closed="$emit('closed'); $store.state.auth.loginFrameCallback?.({success: false});"
+    @closed="$emit('closed'); $store.dispatch('auth/callLoginFrameCallbackIfExists', {success: false});"
   >
     <div class="modal-dialog">
       <div class="modal-content">
@@ -127,12 +127,9 @@ export default {
         this.loading = false;
       }
       if (success && token) {
-        this.$auth.login({data: token});
+        await this.$auth.login({data: token});
       }
-      if (this.$store.state.auth.loginFrameCallback) {
-        this.$store.state.auth.loginFrameCallback({success: !message, message});
-        this.$store.commit('auth/update', {loginFrameCallback: null});
-      }
+      this.$store.dispatch('auth/callLoginFrameCallbackIfExists', {success, message});
       if (message) {
         this.$noty(message, success ? 'alert' : 'error');
       }

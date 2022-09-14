@@ -212,6 +212,9 @@ export default {
       login: '/',
       home: false,
     },
+    vuex: {
+      namespace: '$auth',
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
