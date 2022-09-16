@@ -121,7 +121,7 @@ export default {
     // 'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next',
+    '@netsells/nuxt-auth',
     'vue-social-sharing/nuxt',
     '~/modules/axios-cache',
   ],
@@ -188,17 +188,12 @@ export default {
   },
 
   auth: {
+    authModule: '@nuxtjs/auth-next',
     strategies: {
       laravelJWT: {
         scheme: '~/modules/auth/scheme',
         provider: 'laravel/jwt',
-        url: process.env.API_URL,
-        endpoints: {
-          login: {url: 'auth/login'},
-          refresh: {url: 'auth/refresh'},
-          logout: {url: 'auth/logout'},
-          user: {url: 'auth/user'},
-        },
+        url: process.env.BASE_URL, // temporary value that will not be used, needs to be not empty for app build
         token: {
           property: 'access_token',
           maxAge: 60 * 60,
@@ -215,6 +210,22 @@ export default {
     vuex: {
       namespace: '$auth',
     },
+  },
+
+  publicRuntimeConfig: {
+    auth: {
+      strategies: {
+        laravelJWT: {
+          url: process.env.API_URL,
+          endpoints: {
+            login: {url: 'auth/login'},
+            refresh: {url: 'auth/refresh'},
+            logout: {url: 'auth/logout'},
+            user: {url: 'auth/user'},
+          },
+        },
+      },
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
