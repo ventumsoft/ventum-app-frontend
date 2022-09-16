@@ -184,7 +184,7 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     // baseURL: '/',
-    baseURL: process.env.API_URL,
+    baseURL: process.env.BASE_URL + '/api', // temporary value that will not be used, needs to be not empty for app build
   },
 
   auth: {
@@ -213,6 +213,9 @@ export default {
   },
 
   publicRuntimeConfig: {
+    axios: {
+      baseURL: process.env.API_URL,
+    },
     auth: {
       strategies: {
         laravelJWT: {
