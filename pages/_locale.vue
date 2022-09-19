@@ -35,12 +35,6 @@ export default {
       return redirect({...route, params: {...params, locale: localePrefixToBe}, query: route.query});
     }
 
-    //if (language.slug !== params.locale) {
-    //  return redirect(((route.name === 'index') || (route.name === 'slug')) && !params.slug ?
-    //    {name: 'slug', params: {locale: language.slug, slug: params.locale}, query: route.query} :
-    //    {...route, params: {...params, locale: language.slug}, query: route.query});
-    //}
-
     const {data: {
       header,
       footer,

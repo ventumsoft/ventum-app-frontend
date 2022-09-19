@@ -7,7 +7,6 @@ export default ({app: {router}, store, route: currentRoute}, inject) => {
     if (isUsingLocaleParameter && !route.params?.locale) {
       route.params = route.params || {};
       route.params.locale = store.state.site.language?.slug;
-      //route.params.locale = currentRoute?.params?.locale;
     }
     return route;
   });
