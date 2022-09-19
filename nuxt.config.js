@@ -110,7 +110,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     ['nuxt-storm', { nested: true, alias: true }],
-    '@nuxtjs/laravel-echo',
+    'nuxtjs-laravel-echo-module',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -171,8 +171,8 @@ export default {
 
   echo: {
     broadcaster: 'socket.io',
-    host: process.env.API_ORIGIN,
-    auth: {headers: {'X-Echo-Showcase-Slug': process.env.API_SITE}},
+    //host: process.env.API_ORIGIN,
+    //auth: {headers: {'X-Echo-Showcase-Slug': process.env.API_SITE}},
     authModule: true,
     connectOnLogin: false,
     disconnectOnLogout: false,
@@ -213,6 +213,10 @@ export default {
   },
 
   publicRuntimeConfig: {
+    echo: {
+      host: process.env.API_ORIGIN,
+      auth: {headers: {'X-Echo-Showcase-Slug': process.env.API_SITE}},
+    },
     axios: {
       baseURL: process.env.API_URL,
     },
@@ -273,9 +277,6 @@ export default {
           if (route.name?.startsWith('locale/')) {
             route.name = route.name.substr('locale/'.length);
           }
-          //if (route.name === 'slug') {
-          //  route.path = ':slug';
-          //}
           if (route.children?.length) {
             removeLocaleFromRoutesNames(route.children);
           }

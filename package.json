@@ -42,6 +42,7 @@
     "number_format-php": "^1.0.14",
     "nuxt": "^2.15.8",
     "nuxt-route-meta": "^2.3.4",
+    "nuxtjs-laravel-echo-module": "^2.0.0-alpha.5-fix.runtime.config",
     "owl.carousel": "git+https://github.com/i-galetsky-gs-by/OwlCarousel2.git#b623c767486e77ed349cf5c1fd67d6547f8a0b24",
     "qs": "^6.11.0",
     "select2": "^4.0.4",
@@ -59,7 +60,6 @@
     "webpack": "^4.46.0"
   },
   "devDependencies": {
-    "@nuxtjs/laravel-echo": "^2.0.0-alpha.5",
     "nuxt-storm": "^1.1.3",
     "sass": "^1.49.7",
     "sass-loader": "^10.2.1",
