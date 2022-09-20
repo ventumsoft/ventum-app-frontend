@@ -21,7 +21,7 @@
         </div>
       </div>
       <input
-        v-if="!userTypes?.length || !isAllowedChangingUserType"
+        v-if="!(userTypes?.length > 1) || !isAllowedChangingUserType"
         type="hidden"
         data-payment-data-field="type_user"
         :value="userType"

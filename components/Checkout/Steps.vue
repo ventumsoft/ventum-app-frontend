@@ -6,7 +6,7 @@
         active: step === active,
         disabled: (steps.indexOf(active) + 1 < stepIndex) ||
           (step === 'delivery') && !items?.length ||
-          (step === 'payment') && selectedDeliverySystem?.checkout?.pendingAddressForPrice,
+          (step === 'payment') && (!selectedDeliverySystem || selectedDeliverySystem.checkout?.pendingAddressForPrice),
       }"
     >
       <TheLink

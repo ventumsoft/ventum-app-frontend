@@ -151,7 +151,18 @@ export default {
   },
   methods: {
     async removeCartItem(item) {
-      // await confirm
+      if (!await this.$confirm({
+        mainTitle: this.$trans('default.confirmation.are_you_sure'),
+        mainSubTitle: this.$trans('checkout.remove_item_confirm_text'),
+        mainYesBtn: this.$trans('default.confirmation.yes_remove'),
+        mainNoBtn: this.$trans('default.confirmation.no_cancel'),
+        yesTitle: this.$trans('default.confirmation.deleted'),
+        yesSubTitle: this.$trans('default.confirmation.item_deleted'),
+        noTitle: this.$trans('default.confirmation.canceled'),
+        noSubTitle: this.$trans('default.confirmation.item_not_deleted'),
+      })) {
+        return;
+      }
       await this.$axios.delete('cart/remove', {params: {id: item.id}});
       await this.$store.dispatch('cart/fetch');
     },

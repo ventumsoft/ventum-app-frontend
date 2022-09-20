@@ -4,7 +4,11 @@ export default ({app: {router}, store, route: currentRoute}, inject) => {
       iteratedRoute.path?.includes?.('/:locale') &&
       ((iteratedRoute.name === route.name) || findChildrenRouteByName(iteratedRoute, route.name))
     ));
-    if (isUsingLocaleParameter && !route.params?.locale) {
+    if (isUsingLocaleParameter &&
+      !route.params?.locale &&
+      (store.state.site.languages?.length > 1) &&
+      (store.state.site.language?.id !== store.state.site.settings?.['general:disable-language-in-url'])
+    ) {
       route.params = route.params || {};
       route.params.locale = store.state.site.language?.slug;
     }

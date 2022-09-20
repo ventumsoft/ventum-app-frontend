@@ -156,6 +156,7 @@ export default {
       }
       if (success) {
         this.$noty(this.$trans('account.profile.saved'));
+        this.$auth.fetchUser();
       }
     },
     async handleProfileDelete() {

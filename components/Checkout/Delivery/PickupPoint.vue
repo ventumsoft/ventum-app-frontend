@@ -1,7 +1,7 @@
 <template>
   <form class="nobottommargin" @submit.prevent>
     <CheckoutDeliveryFieldName />
-    <CheckoutDeliveryFieldMiddleName />
+    <CheckoutDeliveryFieldSecondName />
     <div class="clear"></div>
     <CheckoutDeliveryFieldCountry />
     <CheckoutDeliveryFieldEmail />

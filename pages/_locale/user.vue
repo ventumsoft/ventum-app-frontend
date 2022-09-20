@@ -15,17 +15,21 @@
               <li
                 v-for="tab of PersonalAccountTabEnum"
                 v-if="(tab !== PersonalAccountTabEnum.CREATORS_TEMPLATES) && (tab !== PersonalAccountTabEnum.CREATORS_TEMPLATES_PAYMENTS) || $auth.user.isDesigner"
-                :class="{activeFilter: $route.name === 'user/' + tab}"
+                :class="{activeFilter: loading ? (loading === tab) : ($route.name === 'user/' + tab)}"
               >
-                <TheLink :to="$page({name: 'user/' + tab})" class="account-tab-toggler">
+                <a
+                  :href="$router.resolve($page({name: 'user/' + tab})).href"
+                  class="account-tab-toggler"
+                  @click.prevent="loading = tab; $router.push($page({name: 'user/' + tab}))?.catch(() => loading = false);"
+                >
                   {{ $trans('account.tabs.' + tab) }}
-                </TheLink>
+                </a>
               </li>
             </ul>
             <div class="clear"></div>
             <div id="client-account" class="client-account account-tab-content">
-              <div v-if="false" class="account-tab-content-loader"><i class="icon-cog spinner"></i></div>
-              <NuxtChild v-if="true" />
+              <div v-if="loading" class="account-tab-content-loader"><i class="icon-cog spinner"></i></div>
+              <NuxtChild v-if="!loading" />
             </div>
           </div>
         </div>
@@ -54,6 +58,12 @@ export default {
   ],
   data: () => ({
     PersonalAccountTabEnum,
+    loading: null,
   }),
+  watch: {
+    $route() {
+      this.loading = null;
+    },
+  },
 }
 </script>
