@@ -212,11 +212,11 @@ export default {
       for (const key in this.priceData) {
         this.priceData[key] = null;
       }
-      ({data: this.priceData} = await this.$axios.post('products/price', {
+      ({data: this.priceData} = await this.$axios.get('products/price', {params: {
         productId: this.product.id,
         params: this.params,
         usingPrice: this.integration.usingPrice,
-      }, {progress: false}));
+      }}, {progress: false}));
     }, 10),
     async handleEmbeddedCreatorFormSubmit() {
       this.loading = true;
