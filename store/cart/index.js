@@ -4,6 +4,7 @@ export const state = () => ({
   totalWithoutDiscountValue: null,
   totalWithoutDiscount: null,
   totalWithDiscount: null,
+  couponCode: null,
   discounts: null,
   bonus: null,
   vat: null,
@@ -20,6 +21,7 @@ export const mutations = {
     state.totalWithoutDiscountValue = null;
     state.totalWithoutDiscount = null;
     state.totalWithDiscount = null;
+    state.couponCode = null;
     state.discounts = null;
     state.bonus = null;
     state.vat = null;

@@ -11,9 +11,11 @@ export default function () {
     key: req => {
       const url = `${req.baseURL ? req.baseURL : ''}${req.url}`;
       const locale = req.headers?.['Accept-Language'];
+      const token = req.headers?.['X-Visiting-From-Admin-Token'];
       return url + serializeQuery(req) +
-        ((locale || req.data) ? '#' : '') +
+        ((locale || token || req.data) ? '#' : '') +
         (locale ? locale : '') +
+        (token ? token : '') +
         (req.data ? md5(req.data) : '');
     },
     exclude: {

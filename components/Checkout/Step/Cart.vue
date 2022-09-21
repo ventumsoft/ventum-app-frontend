@@ -44,19 +44,30 @@
             <span class="amount">{{ item.price }}</span>
           </td>
         </tr>
-        <tr class="cart_coupon">
+        <tr v-if="$store.state.site.settings?.['order-settings:show-apply-coupon-button']" class="cart_coupon">
           <td colspan="4">
             <div class="row clearfix">
               <div class="col-md-12 col-xs-12 nopadding">
                 <div class="col-md-8 col-xs-7 nopadding">
-                  <input type="text" :value="void 'coupon_cod'" class="form-control coupon-value" :placeholder="$trans('checkout.goods_step.coupon_placeholder') + '..'">
+                  <input
+                    type="text"
+                    class="form-control coupon-value"
+                    :placeholder="$trans('checkout.goods_step.coupon_placeholder') + '..'"
+                    :class="{disabled: applyingCoupon}"
+                    v-model="couponCode"
+                  >
                 </div>
                 <div class="col-md-4 col-xs-5">
-                  <a href="#" class="button button-small button-rounded button-reveal nomargin tright btn-apply-coupon" @click.prevent>
+                  <a
+                    href="#"
+                    class="button button-small button-rounded button-reveal nomargin tright btn-apply-coupon"
+                    :class="{disabled: applyingCoupon}"
+                    @click.prevent="applyCoupon(couponCode)"
+                  >
                     <i class="icon-gift"></i><span>{{ $trans('checkout.goods_step.btn_apply_coupon') }}</span>
                   </a>
                 </div>
-                <div v-if="false" class="form-process" style="left: 0;"></div>
+                <div v-if="applyingCoupon" class="form-process" style="left: 0;"></div>
               </div>
             </div>
           </td>
@@ -140,6 +151,10 @@
 import {mapState} from 'vuex';
 
 export default {
+  data: ({$store}) => ({
+    couponCode: $store.state.cart.couponCode,
+    applyingCoupon: false,
+  }),
   computed: {
     ...mapState('cart', [
       'items',
@@ -164,7 +179,25 @@ export default {
         return;
       }
       await this.$axios.delete('cart/remove', {params: {id: item.id}});
-      await this.$store.dispatch('cart/fetch');
+      await this.$store.dispatch('cart/fetch', {checkout: true});
+    },
+    async applyCoupon(coupon) {
+      this.applyingCoupon = true;
+      let success;
+      try {
+        ({data: {success}} = await this.$axios.post('cart/coupon', {coupon}, {progress: false}));
+      } catch (exception) {
+        this.$noty(exception.response?.data?.message || exception.message, 'error');
+        return;
+      } finally {
+        this.applyingCoupon = false;
+      }
+      if (success) {
+        this.$toastr('<i class="icon-ok-sign"></i> ' + this.$trans('checkout.message.coupon_apply_success'), 'success');
+      } else {
+        this.$toastr('<i class="icon-exclamation"></i> ' + this.$trans('checkout.message.coupon_apply_not_found'), 'error');
+      }
+      await this.$store.dispatch('cart/fetch', {checkout: true});
     },
   },
 }

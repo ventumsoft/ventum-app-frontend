@@ -33,6 +33,7 @@ export default {
   },
   mounted() {
     this.responsiveClasses();
+    this.checkVisitingFromAdminToken();
   },
   methods: {
     responsiveClasses() {
@@ -67,6 +68,20 @@ export default {
           exit: () => $body.removeClass('device-xxs'),
         },
       ]);
+    },
+    checkVisitingFromAdminToken() {
+      if (this.$route.query?.visitingFromAdminToken) {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('visitingFromAdminToken', this.$route.query.visitingFromAdminToken);
+          this.$router.replace({
+            ...this.$route,
+            query: {
+              ...this.$route.query,
+              visitingFromAdminToken: undefined,
+            },
+          });
+        }
+      }
     },
   },
 }

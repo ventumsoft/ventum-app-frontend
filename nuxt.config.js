@@ -100,6 +100,7 @@ export default {
     '~/plugins/fitvids.client',
     '~/plugins/mask.client',
     '~/plugins/noty.client',
+    '~/plugins/toastr.client',
     '~/plugins/confirm.client',
     '~/plugins/google-shopping.client',
   ],
