@@ -204,6 +204,13 @@ export default {
         },
       },
     },
+    cookie: {
+      options: {
+        //sameSite: 'lax',
+        //sameSite: 'none',
+        expires: 1,
+      },
+    },
     redirect: {
       login: '/',
       home: false,
