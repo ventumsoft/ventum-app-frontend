@@ -167,6 +167,8 @@
 </template>
 
 <script>
+import _pick from 'lodash/pick';
+
 export default {
   head() {
     return {
@@ -212,6 +214,7 @@ export default {
       this.loading = true;
       this.errors = null;
       if (!this.order.isBlockedEditing) {
+        const paymentDataFields = [...this.$el.querySelectorAll('[data-payment-data-field]')].map(element => element.dataset.paymentDataField);
         let success;
         try {
           ({data: {success}} = await this.$axios.post('order/payment/data', {
@@ -219,7 +222,7 @@ export default {
             payment_system_id: this.selectedPaymentSystem?.id,
             payment_route_id: this.availablePaymentRoutes?.[0]?.id,
             use_bonus: this.useBonuses,
-            ...this.paymentData,
+            ..._pick(this.paymentData, paymentDataFields),
           }, {silenceException: true}));
         } catch (exception) {
           if ('object' === typeof exception.response?.data?.errors) {
