@@ -135,7 +135,7 @@
                 </div>
                 <div class="col-md-6 payment-forms">
                   <h3>{{ $trans('order.payment.buyer_data') }}</h3>
-                  <form class="nobottommargin payment-type-form" @submit.prevent>
+                  <form ref="form" class="nobottommargin payment-type-form" @submit.prevent>
                     <div class="control-block">
                       <CheckoutPaymentFields
                         v-bind="{
@@ -214,7 +214,7 @@ export default {
       this.loading = true;
       this.errors = null;
       if (!this.order.isBlockedEditing) {
-        const paymentDataFields = [...this.$el.querySelectorAll('[data-payment-data-field]')].map(element => element.dataset.paymentDataField);
+        const paymentDataFields = [...this.$refs.form.querySelectorAll('[data-payment-data-field]')].map(element => element.dataset.paymentDataField);
         let success;
         try {
           ({data: {success}} = await this.$axios.post('order/payment/data', {
