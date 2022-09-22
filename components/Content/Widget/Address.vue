@@ -3,7 +3,7 @@
     <div class="widget widget_links clearfix">
       <meta itemprop="name" :content="$store.state.site.settings?.['general:display-site-name']">
       <h4 v-if="title">{{ title }}</h4>
-      <template v-if="subtitle && address"><strong>{{ subtitle }}</strong><br></template>
+      <template v-if="subtitle"><strong>{{ subtitle }}</strong><br></template>
       <div itemscope itemprop="address" itemtype="http://schema.org/PostalAddress">
         <div v-if="address" itemprop="streetAddress" v-html="address?.replace(/(\\r)*\\n/g, '<br>')"></div>
         <div v-for="phone of phones">

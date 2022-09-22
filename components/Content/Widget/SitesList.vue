@@ -1,5 +1,5 @@
 <template>
-  <li v-if="parentCount" class="sub-menu">
+  <li v-if="parentItems?.length" class="sub-menu">
     <a href="#" @click.prevent>
       <i class="icon-globe"></i>
       {{ title }}
@@ -32,9 +32,6 @@ export default {
     items: {type: Array},
   },
   computed: {
-    parentCount() {
-      return this.items.filter(item => item.parent_link).length;
-    },
     parentItems() {
       return this.items.filter(item => !item.parent_link);
     },
