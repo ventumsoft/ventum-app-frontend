@@ -59,7 +59,7 @@ export default {
       store.commit('page/set', {slug: params.slug});
       return;
     }
-    if (from && store.state.page.type &&
+    if ((from?.name === 'slug') && store.state.page.type &&
       (params.locale === from.params.locale) &&
       (params.slug === from.params.slug)
     ) {
