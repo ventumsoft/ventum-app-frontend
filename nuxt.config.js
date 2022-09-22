@@ -301,4 +301,17 @@ export default {
       //
     ],
   },
+
+  serverMiddleware: [
+    (req, res, next) => {
+      if ((req.method === 'POST') &&
+        /\/order-payment\/\d+\/result\/\d+/.test(req.url)
+      ) {
+        res.writeHead(301, {Location: req.url});
+        res.end();
+        return;
+      }
+      next();
+    },
+  ],
 }
