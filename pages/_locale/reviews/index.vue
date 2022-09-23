@@ -34,7 +34,7 @@
                 v-for="(review, index) of reviews"
                 :key="review.id"
                 class="entry entry_guestbook clearfix"
-                :class="{'site-review-scroll-to': void '$review->id == Request::input(\'toReviewId\')'}"
+                :class="{'site-review-scroll-to': review.id == $route.query.toReviewId}"
               >
                 <div class="entry-timeline" :style="{top: (index === 0) && '70px' || ''}"><div class="timeline-divider"></div></div>
 
@@ -71,7 +71,7 @@
           <div v-if="page < pages" id="load-next-posts" class="center timeline-link">
             <a
               class="button btn-success button-large timeline-add"
-              @click.prevent="$store.dispatch('reviews/fetch', {page: page + 1, append: true});"
+              @click.prevent="$store.dispatch('reviews/fetch', {params: {page: page + 1}, append: true});"
             >
               <div v-if="loading" class="form-process" style="left: 0;"></div>
               {{ $trans('blog.look_yet') }}
@@ -138,8 +138,30 @@ export default {
     ]),
   },
   async asyncData({store, route}) {
-    await store.dispatch('reviews/fetch', {page: Number(route.query.page) || 1});
+    await store.dispatch('reviews/fetch', {params: {
+      page: Number(route.query.page) || undefined,
+      toReviewId: Number(route.query.toReviewId) || undefined,
+    }});
+  },
+  mounted() {
+    this.scrollToReviewIfNeeded();
+  },
+  watch: {
+    reviews() {
+      this.scrollToReviewIfNeeded();
+    },
   },
   watchQuery: true,
+  methods: {
+    scrollToReviewIfNeeded() {
+      setTimeout(() => {
+        const reviewScrollToElement = this.$refs.entries.find(element => element.classList.contains('site-review-scroll-to'));
+        if (!reviewScrollToElement) {
+          return;
+        }
+        $('html,body').animate({scrollTop: $(reviewScrollToElement).position().top});
+      }, 334);
+    },
+  },
 }
 </script>

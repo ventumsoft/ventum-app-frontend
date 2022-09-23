@@ -35,6 +35,19 @@ export default {
     this.responsiveClasses();
     this.checkVisitingFromAdminToken();
   },
+  watch: {
+    $route() {
+      setTimeout(() => {
+        $('body').addClass({
+          desktop: 'device-lg',
+          laptop: 'device-md',
+          tablet: 'device-sm',
+          handheld: 'device-xs',
+          smallest: 'device-xxs',
+        }[this.$jRes.getBreakpoint()]);
+      }, 10);
+    },
+  },
   methods: {
     responsiveClasses() {
       const $body = $('body');
@@ -68,6 +81,7 @@ export default {
           exit: () => $body.removeClass('device-xxs'),
         },
       ]);
+      this.$jRes = jRes;
     },
     checkVisitingFromAdminToken() {
       if (this.$route.query?.visitingFromAdminToken) {

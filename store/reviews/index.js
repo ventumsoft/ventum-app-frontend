@@ -31,20 +31,20 @@ export const mutations = {
 
 export const actions = {
   async fetch({commit, rootState}, {
-    page,
+    params = {},
     append = false,
   } = {}) {
     commit('loading', true);
 
-    let reviews, pages, count, averageRating;
+    let reviews, page, pages, count, averageRating;
     try {
       ({data: {
         data: reviews,
-        pagination: {pages},
+        pagination: {page, pages},
         reviewsCount: count,
         ratingValue: averageRating,
       }} = (await this.$axios.get('reviews', {
-        params: {page},
+        params,
         showErrorPageOnException: true,
       })));
     } catch (exception) {

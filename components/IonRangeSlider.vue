@@ -18,7 +18,7 @@ export default {
     const $el = $(this.$el);
     $el.ionRangeSlider({
       ...this.options,
-      grid_num: Math.min(Math.max(0, this.options.max - this.options.min), 4) || 0,
+      grid_num: Math.min(Math.max(0, this.options.max - this.options.min), 4) || undefined,
       onUpdate: event => {
         if (this.value != this.$el.value) {
           this.$emit('input', this.$el.value);
@@ -34,7 +34,10 @@ export default {
   },
   watch: {
     options() {
-      this.$slider?.update(this.options);
+      this.$slider?.update({
+        ...this.options,
+        grid_num: Math.min(Math.max(0, this.options.max - this.options.min), 4) || undefined,
+      });
     },
   },
   destroyed() {
