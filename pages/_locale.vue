@@ -20,7 +20,7 @@ export default {
       language,
       languages,
     }} = await $axios.get('common/data');
-    store.commit('site/update', {
+    store.commit('site/preload', {
       trans,
       settings,
       language,
@@ -39,10 +39,14 @@ export default {
       header,
       footer,
     }} = await $axios.get('common/widgets');
-    store.commit('widgets/update', {
+    store.commit('widgets/preload', {
       header,
       footer,
     });
+  },
+  async asyncData({store}) {
+    store.commit('site/update', {preload: null, ...store.state.site.preload});
+    store.commit('widgets/update', {preload: null, ...store.state.widgets.preload});
   },
   layout({route}) {
     if (route.name === 'auth/login-frame') {

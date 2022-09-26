@@ -18,7 +18,7 @@
     <ContentWidgetsOnPage type="page" location="top" />
     <section
       id="content"
-      :class="{'no-top-widgets': !$store.state.widgets.page.top?.length}"
+      :class="{'no-top-widgets': !$store.state.widgets.page?.top?.length}"
       :style="{
         fontSize: ((pageType === 'BlogMain') || (pageType === 'Custom') || (pageType === 'FaqItem')) && '15px' || '',
       }"
@@ -77,16 +77,17 @@ export default {
       if (redirectSlug) {
         return redirect({...route, params: {...params, slug: redirectSlug}});
       }
-      store.commit('widgets/update', {page: widgets});
+      store.commit('widgets/preload', {page: widgets});
       store.commit('page/set', {slug: params.slug, ...data});
     } catch (exception) {
       return;
     }
+  },
+  async asyncData({route, params, store}) {
+    store.commit('widgets/update', {preload: null, ...store.state.widgets.preload});
     if (!process.server) {
       store.dispatch('widgets/loadPageRemnantMiddleWidgetsIfNeeded');
     }
-  },
-  async asyncData({route, params, store}) {
     const pageType = store.state.page.type;
     if ((pageType === 'BlogMain') || (pageType === 'BlogCategory')) {
       await store.dispatch('blog/fetchArticles', {

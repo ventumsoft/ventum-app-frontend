@@ -1,8 +1,8 @@
 <template>
   <Fragment>
     <ContentWidgetWrapper
-      v-for="widget of widgets"
-      :key="widget.id"
+      v-for="(widget, index) of widgets"
+      :key="index + '-' + widget.id"
       :widget="widget"
       :class="getWidgetAdditionalClass(widget)"
     ></ContentWidgetWrapper>
