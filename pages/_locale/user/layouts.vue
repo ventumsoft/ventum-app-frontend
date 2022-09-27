@@ -48,7 +48,7 @@
             <td class="order-price">
               <TheLink
                 class="btn btn-default"
-                :to="$page({name: 'creator/creator', params: {creator: 'universal'}, query: {layoutId: layout.id}})"
+                :to="$page({name: 'layout/layout/edit/token', params: {layout: layout.id}})"
               >{{ $trans('account.layouts.table.edit') }}</TheLink>
             </td>
             <td>

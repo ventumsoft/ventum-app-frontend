@@ -147,24 +147,6 @@ export default {
       pathRewrite: {'^/.*/google-shopping.xml' : '/google-shopping.xml'},
       onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/google-shopping.xml')?.[1]),
     },
-    '/creator/*': {
-      target: process.env.API_URL,
-      pathRewrite: {'^/creator/(.*)' : '/products/creator/$1'},
-    },
-    '/*/creator/*': {
-      target: process.env.API_URL,
-      pathRewrite: {'^/.*/creator/(.*)' : '/products/creator/$1'},
-      onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/creator')?.[1]),
-    },
-    '/user/design-template/*': {
-      target: process.env.API_URL,
-      pathRewrite: {'^/user/design-template/(.*)' : '/user/design-template/$1'},
-    },
-    '/*/user/design-template/*': {
-      target: process.env.API_URL,
-      pathRewrite: {'^/.*/user/design-template/(.*)' : '/user/design-template/$1'},
-      onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('Accept-Language', req.originalUrl.match('^/(.*)/user/design-template')?.[1]),
-    },
     '/creator-dist/': process.env.API_ORIGIN,
     '/creators/lists/': process.env.API_ORIGIN,
     '/creators/twemoji/': process.env.API_ORIGIN,

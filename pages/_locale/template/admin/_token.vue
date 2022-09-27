@@ -5,7 +5,7 @@
 <script>
 export default {
   meta: {
-    apiEndpointBuilder: params => 'user/design-template/' + params.creator,
+    apiEndpointBuilder: params => 'template/admin/' + params.token,
   },
   middleware: 'creator',
 }
