@@ -43,6 +43,11 @@ export default {
       header,
       footer,
     });
+
+    if (process.server) {
+      store.commit('site/update', {preload: null, ...store.state.site.preload});
+      store.commit('widgets/update', {preload: null, ...store.state.widgets.preload});
+    }
   },
   async asyncData({store}) {
     store.commit('site/update', {preload: null, ...store.state.site.preload});

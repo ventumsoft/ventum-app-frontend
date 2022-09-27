@@ -11,5 +11,9 @@
 <script>
 export default {
   props: ['error'],
+  updated() {
+    this.$store.commit('site/update', {preload: null, ...this.$store.state.site.preload});
+    this.$store.commit('widgets/update', {preload: null, ...this.$store.state.widgets.preload});
+  },
 }
 </script>

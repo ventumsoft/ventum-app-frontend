@@ -82,6 +82,9 @@ export default {
     } catch (exception) {
       return;
     }
+    if (process.server) {
+      store.commit('widgets/update', {preload: null, ...store.state.widgets.preload});
+    }
   },
   async asyncData({route, params, store}) {
     store.commit('widgets/update', {preload: null, ...store.state.widgets.preload});
