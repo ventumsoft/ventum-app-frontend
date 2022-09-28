@@ -1,12 +1,10 @@
-<template>
-  <div></div>
-</template>
-
 <script>
+import AbstractCreator from '~/components/AbstractCreator';
+
 export default {
+  extends: AbstractCreator,
   meta: {
     apiEndpointBuilder: params => 'template/admin/' + params.token,
   },
-  middleware: 'creator',
 }
 </script>

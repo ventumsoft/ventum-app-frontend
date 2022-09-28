@@ -1,12 +1,10 @@
-<template>
-  <div></div>
-</template>
-
 <script>
+import AbstractCreator from '~/components/AbstractCreator';
+
 export default {
+  extends: AbstractCreator,
   meta: {
-    apiEndpointBuilder: params => 'layout/' + params.layout + '/edit/' + params.token,
+    apiEndpointBuilder: params => 'layout/' + params.layout + '/edit/' + (params.token || ''),
   },
-  middleware: 'creator',
 }
 </script>
