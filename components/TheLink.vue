@@ -1,10 +1,19 @@
 <template>
-  <Fragment>
-    <slot v-if="withoutLinkIfEmpty && (!to || (to === '#'))"></slot>
-    <a v-else-if="to === '#'" :href="to" :class="$vnode.data.class || $vnode.data.staticClass" :style="$vnode.data.style" @click.prevent><slot></slot></a>
-    <NuxtLink v-else-if="to && ((typeof to !== 'string') || !to.includes('://'))" :to="to" :class="$vnode.data.class || $vnode.data.staticClass" :style="$vnode.data.style"><slot></slot></NuxtLink>
-    <a v-else :href="to" :class="$vnode.data.class || $vnode.data.staticClass" :style="$vnode.data.style"><slot></slot></a>
-  </Fragment>
+  <component
+    :is="
+      withoutLinkIfEmpty && (!to || (to === '#')) && 'slot' ||
+      (to === '#') && 'a' ||
+      to && ((typeof to !== 'string') || !to.includes('://')) && 'NuxtLink' ||
+      'a'
+    "
+    v-bind="
+      withoutLinkIfEmpty && (!to || (to === '#')) && {} ||
+      (to === '#') && {href: to, class: $vnode.data.class || $vnode.data.staticClass, style: $vnode.data.style} ||
+      to && ((typeof to !== 'string') || !to.includes('://')) && {to, class: $vnode.data.class || $vnode.data.staticClass, style: $vnode.data.style} ||
+      {class: $vnode.data.class || $vnode.data.staticClass, style: $vnode.data.style}
+    "
+    @click.prevent
+  ><slot></slot></component>
 </template>
 
 <script>
