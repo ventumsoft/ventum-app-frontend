@@ -97,6 +97,7 @@ export default {
     '~/plugins/trans',
     '~/plugins/bs.client',
     '~/plugins/mfp.client',
+    '~/plugins/owl-carousel.client',
     '~/plugins/fitvids.client',
     '~/plugins/mask.client',
     '~/plugins/noty.client',

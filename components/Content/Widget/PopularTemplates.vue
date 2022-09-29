@@ -4,7 +4,7 @@
     <div class="fancy-title title-border title-center bottommargin">
       <h3 v-html="title"></h3>
     </div>
-    <div ref="carousel" class="owl-carousel portfolio-carousel">
+    <div class="owl-carousel portfolio-carousel" v-owl-carousel="{loop: (templatesData?.length > 2) ? 1 : 0}">
       <div v-for="(templateData, templateIndex) of templatesData" class="oc-item">
         <div class="iportfolio">
           <div class="portfolio-image">
@@ -69,28 +69,6 @@ export default {
     title: {type: String},
     templatesData: {type: Array},
     templatesProductsMap: {type: Object},
-  },
-  async mounted() {
-    await import('owl.carousel/dist/owl.carousel');
-
-    const $carousel = $(this.$refs.carousel);
-    $carousel.owlCarousel({
-      margin: 2,
-      nav: true,
-      navText: ['<i class="icon-angle-left"></i>', '<i class="icon-angle-right"></i>'],
-      autoplay: false,
-      autoplayHoverPause: true,
-      dots: false,
-      loop: (this.templatesData?.length > 2) ? 1 : 0,
-      lazyLoad: true,
-      lazyLoadEager: 3,
-      responsive: {
-        0: {items: 1},
-        400: {items: 2},
-        800: {items: 3},
-        1200: {items: 4},
-      },
-    });
   },
 }
 </script>

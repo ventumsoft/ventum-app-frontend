@@ -95,7 +95,7 @@
             <div class="fancy-title title-border title-center  bottommargin">
               <h3>{{ $trans('product.template.related_templates') }}</h3>
             </div>
-            <div ref="carousel" id="owl-carousel-templates" class="owl-carousel portfolio-carousel">
+            <div id="owl-carousel-templates" class="owl-carousel portfolio-carousel" v-owl-carousel="{loop: (template.similar.length > 2) ? 1 : 0}">
               <div v-for="(similarTemplate, templateIndex) of template.similar" class="oc-item">
                 <div class="iportfolio">
                   <div class="portfolio-image">
@@ -210,30 +210,6 @@ export default {
         'constructor:templates:auto-add-template-id-to-meta-h1' ? ('ID' + this.template.id) : null,
       ].filter(v => v).join(' | ');
     },
-  },
-  async mounted() {
-    await import('owl.carousel/dist/owl.carousel');
-
-    if (this.$refs.carousel) {
-      const $carousel = $(this.$refs.carousel);
-      $carousel.owlCarousel({
-        margin: 2,
-        nav: true,
-        navText: ['<i class="icon-angle-left"></i>', '<i class="icon-angle-right"></i>'],
-        autoplay: false,
-        autoplayHoverPause: true,
-        dots: false,
-        loop: (this.template.similar?.length > 2) ? 1 : 0,
-        lazyLoad: true,
-        lazyLoadEager: 3,
-        responsive: {
-          0: {items: 1},
-          400: {items: 2},
-          800: {items: 3},
-          1200: {items: 4},
-        },
-      });
-    }
   },
 }
 </script>

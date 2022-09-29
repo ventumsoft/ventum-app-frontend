@@ -5,7 +5,11 @@
     data-widget="MainthemPopularProducts"
   >
     <h3 v-html="title"></h3>
-    <div ref="carousel" class="owl-carousel product-carousel fixed-size-image">
+    <div class="owl-carousel product-carousel fixed-size-image" v-owl-carousel="{
+      margin: 20,
+      nav: products.length > 2,
+      loop: products.length > 2,
+    }">
       <div v-for="product of products" class="oc-item">
         <div class="product iproduct clearfix">
           <div class="product-image-wrapper">
@@ -42,25 +46,6 @@ export default {
   props: {
     title: {type: String},
     products: {type: Array},
-  },
-  async mounted() {
-    await import('owl.carousel/dist/owl.carousel');
-    const $carousel = $(this.$refs.carousel);
-    $carousel.owlCarousel({
-      margin: 20,
-      nav: this.products.length > 2,
-      navText: ['<i class="icon-angle-left"></i>', '<i class="icon-angle-right"></i>'],
-      autoplay: false,
-      autoplayHoverPause: true,
-      dots: false,
-      loop: this.products.length > 2,
-      responsive: {
-        0: {items: 1},
-        400: {items: 2},
-        800: {items: 3},
-        1200: {items: 4}
-      }
-    });
   },
 }
 </script>

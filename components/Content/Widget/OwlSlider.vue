@@ -4,6 +4,22 @@
     id="owl-carousel-widget"
     class="showcase-widget container main-home-slider owl-carousel owl-theme owl-loaded clearfix prevent-transition"
     data-widget="MainthemOwlSlider"
+    v-owl-carousel="{
+      margin: 10,
+      autoplayTimeout: this.slide_time || 100000000,
+      autoplay: true,
+      dots: true,
+      video: true,
+      videoWidth: 780,
+      lazyLoad: true,
+      animateOut: 'fadeOut',
+      animateIn: 'fadeIn',
+      lazyLoadEager: 1,
+      responsive: {0: {items: 1}},
+      onInitialized: carouselInitialized,
+      onTranslated: carouselPlayVideo,
+      onChanged: carouselChanged,
+    }"
   >
     <div
       v-for="(item, index) of items"
@@ -56,49 +72,6 @@ export default {
     slide_time: {type: Number},
     items: {type: Array},
   },
-  async mounted() {
-    if (!this.items?.length) {
-      return;
-    }
-    await import('owl.carousel/dist/owl.carousel');
-    const $owlCarousel = $(this.$el);
-    $owlCarousel.owlCarousel({
-      margin: 10,
-      nav: true,
-      autoplayTimeout: this.slide_time || 100000000,
-      navText: ['<i class=icon-angle-left></i>', '<i class=icon-angle-right></i>'],
-      autoplay: true,
-      autoplayHoverPause: true,
-      dots: true,
-      loop: true,
-      video: true,
-      videoWidth: 780,
-      lazyLoad: true,
-      animateOut: 'fadeOut',
-      animateIn: 'fadeIn',
-      lazyLoadEager: 1,
-      responsive: {
-        0: {items: 1},
-      },
-      onInitialized: this.carouselInitialized,
-      onTranslated: this.carouselPlayVideo,
-      onChanged: event => {
-        const $currentSlide = $(event.target).find('.owl-item').eq(event.item.index);
-        this.setTimeSlide($owlCarousel, $currentSlide);
-        if (event.page.index === 0) {
-          const $cloned = $owlCarousel.find('.owl-item:not(.cloned):last').next('.cloned');
-          setTimeout(() => void $cloned.addClass('active'), 10);
-          $owlCarousel.find('.owl-item.cloned').filter(function () { return !$cloned.is(this); }).removeClass('active');
-        } else if (event.page.index === event.page.count - 1) {
-          const $cloned = $owlCarousel.find('.owl-item:not(.cloned):first').prev('.cloned');
-          setTimeout(() => void $cloned.addClass('active'), 10);
-          $owlCarousel.find('.owl-item.cloned').filter(function () { return !$cloned.is(this); }).removeClass('active');
-        } else {
-          $owlCarousel.find('.owl-item.cloned').removeClass('active');
-        }
-      },
-    });
-  },
   methods: {
     carouselPlayVideo(event) {
       for (const video of [...event.currentTarget.querySelectorAll('.owl-item:not(.active) video')]) {
@@ -147,6 +120,22 @@ export default {
       const time = this.slide_time;
       $owlCarousel.trigger('stop.owl.autoplay');
       setTimeout(function() {$owlCarousel.trigger('play.owl.autoplay')}, (time > 0) ? time : 100000000)
+    },
+    carouselChanged(event) {
+      const $owlCarousel = $(this.$el);
+      const $currentSlide = $(event.target).find('.owl-item').eq(event.item.index);
+      this.setTimeSlide($owlCarousel, $currentSlide);
+      if (event.page.index === 0) {
+        const $cloned = $owlCarousel.find('.owl-item:not(.cloned):last').next('.cloned');
+        setTimeout(() => void $cloned.addClass('active'), 10);
+        $owlCarousel.find('.owl-item.cloned').filter(function () { return !$cloned.is(this); }).removeClass('active');
+      } else if (event.page.index === event.page.count - 1) {
+        const $cloned = $owlCarousel.find('.owl-item:not(.cloned):first').prev('.cloned');
+        setTimeout(() => void $cloned.addClass('active'), 10);
+        $owlCarousel.find('.owl-item.cloned').filter(function () { return !$cloned.is(this); }).removeClass('active');
+      } else {
+        $owlCarousel.find('.owl-item.cloned').removeClass('active');
+      }
     },
   },
 }

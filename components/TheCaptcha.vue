@@ -39,7 +39,6 @@ export default {
     },
   },
   async mounted() {
-    console.log('TheCaptcha');
     if (!this.enabled) {
       return;
     }
@@ -66,26 +65,20 @@ export default {
       if (typeof grecaptcha === 'undefined') {
         return;
       }
-      console.log('grecaptcha ready before');
       grecaptcha.ready(() => {
-        console.log('grecaptcha ready');
         if (this.version === CaptchaVersionEnum.RECAPTCHA_V2) {
           if (this.recaptchaWidgetId !== undefined) {
             grecaptcha.reset(this.recaptchaWidgetId);
           } else {
-            console.log('grecaptcha render before');
             this.recaptchaWidgetId = grecaptcha.render(this.$refs.recaptchaContainer, {
               sitekey: this.sitekey,
               callback: token => {
-                console.log('grecaptcha render callback');
                 this.$emit('input', token);
               },
             });
           }
         } else if (this.version === CaptchaVersionEnum.RECAPTCHA_V3) {
-          console.log('grecaptcha execute before');
           grecaptcha.execute(this.sitekey).then(token => {
-            console.log('grecaptcha execute then');
             this.$emit('input', token);
           });
         }
