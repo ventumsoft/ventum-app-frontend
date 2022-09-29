@@ -8,9 +8,9 @@
     "
     v-bind="
       withoutLinkIfEmpty && (!to || (to === '#')) && {} ||
-      (to === '#') && {href: to, class: $vnode.data.class || $vnode.data.staticClass, style: $vnode.data.style} ||
-      to && ((typeof to !== 'string') || !to.includes('://')) && {to, class: $vnode.data.class || $vnode.data.staticClass, style: $vnode.data.style} ||
-      {class: $vnode.data.class || $vnode.data.staticClass, style: $vnode.data.style}
+      (to === '#') && {href: to} ||
+      to && ((typeof to !== 'string') || !to.includes('://')) && {to} ||
+      {}
     "
     @click.prevent
   ><slot></slot></component>
