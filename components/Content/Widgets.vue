@@ -1,11 +1,13 @@
 <template>
   <Fragment>
-    <ContentWidgetWrapper
+    <component
       v-for="(widget, index) of widgets"
       :key="index + '-' + widget.id"
-      :widget="widget"
+      :is="'ContentWidget' + widget.name"
       :class="getWidgetAdditionalClass(widget)"
-    ></ContentWidgetWrapper>
+      :widgetId="widget.id"
+      v-bind="widget.data"
+    ></component>
   </Fragment>
 </template>
 

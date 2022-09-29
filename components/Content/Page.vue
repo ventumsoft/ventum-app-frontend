@@ -5,7 +5,7 @@
       :title="pageEntity.meta?.h1 || pageEntity.title"
       :breadcrumbs="pageEntity.breadcrumbs"
     />
-    <ContentWidgetsOnPage type="page" location="top" />
+    <ContentWidgets type="page" location="top" />
     <section
       id="content"
       :class="{'no-top-widgets': !$store.state.widgets.page?.top?.length}"
@@ -31,10 +31,10 @@
           :is="'ContentPage' + pageType"
           :key="$store.state.site.language.slug + '-' + pageType + '-' + pageEntity.id"
         ></component>
-        <ContentWidgetsOnPage type="page" location="middle" />
+        <ContentWidgets type="page" location="middle" />
       </div>
     </section>
-    <ContentWidgetsOnPage type="page" location="bottom" />
+    <ContentWidgets type="page" location="bottom" />
   </fragment>
 </template>
 

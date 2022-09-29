@@ -99,15 +99,16 @@
 <script>
 export default {
   props: {
+    widgetId: {type: Number},
     title: {type: String},
     subtitle: {type: String},
     terms_message: {type: String},
     is_captcha_enabled: {type: Boolean},
   },
-  data: ({$parent}) => ({
+  data: ({widgetId}) => ({
     isShowingSubscriberModal: false,
     formData: {
-      widgetId: $parent.widget.id,
+      widgetId,
       email: undefined,
       firstname: undefined,
       surname: undefined,

@@ -72,16 +72,17 @@ import CaptchaVersionEnum from '@/enums/CaptchaVersionEnum';
 
 export default {
   props: {
+    widgetId: {type: Number},
     title: {type: String},
     terms_message: {type: String},
     is_captcha_enabled: {type: Boolean},
   },
-  data: ({$auth, $parent}) => ({
+  data: ({$auth, widgetId}) => ({
     CaptchaVersionEnum,
     focused: false,
     loading: false,
     formData: {
-      widgetId: $parent.widget.id,
+      widgetId,
       name: $auth.user?.name || undefined,
       email: $auth.user?.email || undefined,
       message: undefined,

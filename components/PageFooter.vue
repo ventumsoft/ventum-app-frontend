@@ -18,7 +18,7 @@
         <div class="col_full">
           <div class="widget clearfix">
             <div class="row">
-              <ContentWidgetsOnPage type="footer" location="middle" />
+              <ContentWidgets type="footer" location="middle" />
             </div>
           </div>
         </div>
@@ -26,7 +26,7 @@
     </div>
     <div id="copyrights" style="padding-top: 10px; padding-bottom: 10px;">
       <div class="container clearfix">
-        <ContentWidgetsOnPage type="footer" location="bottom" />
+        <ContentWidgets type="footer" location="bottom" />
         <div class="col_half col_last tright">
           Powered by <a :href="$store.state.site.settings?.['general:super-company-url']" target="_blank">
           {{ $store.state.site.settings?.['general:super-company-name'] }}

@@ -217,6 +217,7 @@ import CaptchaVersionEnum from '@/enums/CaptchaVersionEnum';
 
 export default {
   props: {
+    widgetId: {type: Number},
     is_phone_enabled: {type: Boolean},
     is_terms_message_enabled: {type: Boolean},
     contact_details: {type: String},
@@ -267,7 +268,7 @@ export default {
       this.errors = null;
 
       const formData = new FormData;
-      formData.append('widgetId', this.$parent.widget.id);
+      formData.append('widgetId', this.widgetId);
       for (const [key, value] of Object.entries(this.formData)) {
         if (value !== undefined) {
           if (value instanceof FileList) {
