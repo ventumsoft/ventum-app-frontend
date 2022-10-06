@@ -992,6 +992,19 @@ ul>div[data-widget="MainthemPhones"] {
   }
 }
 
+[data-widget="MainthemRevolutionSlider"] {
+  .tp-banner:not(.revslider-initialised) {
+    visibility: hidden;
+    opacity: 0;
+    @media (min-width: 1140px) {
+      height: 500px;
+    }
+    @media (max-width: 1139px) {
+      aspect-ratio: 1140 / 500;
+    }
+  }
+}
+
 @media (max-width: 767px) {
   #footer {
     .footer-widgets-wrap {

@@ -45,7 +45,6 @@
     "nuxtjs-laravel-echo-module": "^2.0.0-alpha.5-fix.runtime.config",
     "owl.carousel": "git+https://github.com/i-galetsky-gs-by/OwlCarousel2.git#b623c767486e77ed349cf5c1fd67d6547f8a0b24",
     "qs": "^6.11.0",
-    "revslider": "^5.4.201-8.6",
     "select2": "^4.0.4",
     "socket.io-client": "^2.3.1",
     "striptags": "^3.0.1",
