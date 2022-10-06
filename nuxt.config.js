@@ -38,6 +38,10 @@ export default {
     'bootstrap-star-rating/css/star-rating.css',
     'ion-rangeslider/css/ion.rangeSlider.css',
     'ion-rangeslider/css/ion.rangeSlider.skinNice.css',
+    //'revslider/scss/settings.scss',
+    //'~/static/vendor/rs-plugin/css/settings.css',
+    '~/static/vendor/rs-plugin/css/layers.css',
+    '~/static/vendor/rs-plugin/css/navigation.css',
     '~/assets/css/ionrangeslider.scss',
     '~/assets/css/google-fonts.scss',
     '~/assets/css/back-font-icons.scss',
@@ -254,6 +258,15 @@ export default {
         'window.jQuery': 'jquery',
       }),
     ],
+    extend(config, { isDev, isClient }) {
+      if (isClient) {
+        config.module.rules.push({
+          test: require.resolve('jquery'),
+          loader: 'expose-loader',
+          options: {exposes: ['$', 'jQuery']},
+        });
+      }
+    },
   },
 
   // Router property -  https://nuxtjs.org/docs/2.x/features/file-system-routing#the-router-property
