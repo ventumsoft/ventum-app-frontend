@@ -86,6 +86,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/axios-params-serializer.js',
+    '~/plugins/axios-headers.server.js',
     '~/plugins/axios-cache.server.js',
     '~/plugins/axios-error.js',
     '~/plugins/axios-headers.js',
@@ -122,7 +123,9 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     'nuxt-route-meta',
-    '@nuxtjs/proxy',
+    ['@nuxtjs/proxy', {
+      onProxyReq: (proxyReq, req, res) => proxyReq.setHeader('X-Secret-Key', process.env.API_SECRET),
+    }],
     // https://go.nuxtjs.dev/bootstrap
     // 'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
@@ -134,6 +137,10 @@ export default {
 
   // Proxy module configuration: https://github.com/nuxt-community/proxy-module#object-config
   proxy: {
+    '/api/': {
+      target: process.env.API_URL,
+      pathRewrite: {'^/api/': ''},
+    },
     '/attachment': process.env.API_ORIGIN,
     '/storage': process.env.API_ORIGIN,
     '/socket.io': process.env.API_ORIGIN,
@@ -172,7 +179,9 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     // baseURL: '/',
-    baseURL: process.env.BASE_URL + '/api', // temporary value that will not be used, needs to be not empty for app build
+    baseURL: process.env.BASE_URL + '/', // temporary value that will not be used, needs to be not empty for app build
+    prefix: '/api/',
+    proxy: true,
   },
 
   auth: {
@@ -211,9 +220,6 @@ export default {
     echo: {
       host: process.env.API_ORIGIN,
       auth: {headers: {'X-Echo-Showcase-Slug': process.env.API_SITE}},
-    },
-    axios: {
-      baseURL: process.env.API_URL,
     },
     auth: {
       strategies: {

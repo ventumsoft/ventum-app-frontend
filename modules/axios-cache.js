@@ -34,7 +34,7 @@ export default function () {
         url: 'common/data',
         method: 'GET',
         baseURL: process.env.API_URL,
-        headers: {},
+        headers: {'X-Secret-Key': process.env.API_SECRET},
       });
       await Promise.all(languages.reduce((result, language) => {
         for (const url of cacheableEndpoints) {
@@ -42,7 +42,7 @@ export default function () {
             url,
             method: 'GET',
             baseURL: process.env.API_URL,
-            headers: {'Accept-Language': language.slug},
+            headers: {'X-Secret-Key': process.env.API_SECRET, 'Accept-Language': language.slug},
           }));
         }
         return result;
