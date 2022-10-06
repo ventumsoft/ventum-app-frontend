@@ -17,9 +17,9 @@ export default {
   head() {
     return {
       link: [
-        {rel: 'stylesheet', href: 'vendor/rs-plugin/css/settings.css', media: 'screen'},
-        //{rel: 'stylesheet', href: 'vendor/rs-plugin/css/layers.css'},
-        //{rel: 'stylesheet', href: 'vendor/rs-plugin/css/navigation.css'},
+        {rel: 'stylesheet', href: '/vendor/rs-plugin/css/settings.css', media: 'screen'},
+        {rel: 'stylesheet', href: '/vendor/rs-plugin/css/layers.css'},
+        {rel: 'stylesheet', href: '/vendor/rs-plugin/css/navigation.css'},
       ],
       style: [
         {innerHTML: this.slider_styles},
@@ -43,7 +43,7 @@ export default {
     await import('revslider/js/extensions/revolution.extension.parallax.min.js');
     $(this.$el).find('.tp-banner').show().revolution({
       sliderType: 'standard',
-      jsFileLocation: 'vendor/rs-plugin/js/',
+      jsFileLocation: '/vendor/rs-plugin/js/',
       sliderLayout: 'fullwidth',
       dottedOverlay: 'none',
       delay: 9000,
@@ -101,7 +101,7 @@ export default {
         },
       },
     });
-    await this.$nextTick();
+    await new Promise(resolve => setTimeout(() => resolve(), 100));
     this.loaded = true;
   },
 }
