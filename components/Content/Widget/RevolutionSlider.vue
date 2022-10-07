@@ -23,18 +23,24 @@ export default {
       style: [
         {innerHTML: this.slider_styles},
       ],
-      script: [
-        !$?.fn?.revolution && {src: '/vendor/rs-plugin/js/jquery.themepunch.tools.min.js', body: true, defer: true, callback: () => this.initialize()},
-        !$?.fn?.revolution && {src: '/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js', body: true, defer: true, callback: () => this.initialize()},
-      ].filter(v => v),
+      script: !$?.fn?.revolution && [
+        {src: '/vendor/rs-plugin/js/jquery.themepunch.tools.min.js', body: true, defer: true, callback: () => this.initialize()},
+        {src: '/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js', body: true, defer: true, callback: () => this.initialize()},
+        {src: '/vendor/rs-plugin/js/extensions/revolution.extension.video.min.js', body: true, defer: true},
+        {src: '/vendor/rs-plugin/js/extensions/revolution.extension.slideanims.min.js', body: true, defer: true},
+        {src: '/vendor/rs-plugin/js/extensions/revolution.extension.actions.min.js', body: true, defer: true},
+        {src: '/vendor/rs-plugin/js/extensions/revolution.extension.layeranimation.min.js', body: true, defer: true},
+        {src: '/vendor/rs-plugin/js/extensions/revolution.extension.kenburn.min.js', body: true, defer: true},
+        {src: '/vendor/rs-plugin/js/extensions/revolution.extension.navigation.min.js', body: true, defer: true},
+        {src: '/vendor/rs-plugin/js/extensions/revolution.extension.migration.min.js', body: true, defer: true},
+        {src: '/vendor/rs-plugin/js/extensions/revolution.extension.parallax.min.js', body: true, defer: true},
+      ],
       __dangerouslyDisableSanitizers: ['style'],
     }
   },
   mounted() {
-    $(() => {
-      $(document).ready(() => {
-        this.initialize();
-      });
+    $(document).ready(() => {
+      this.initialize();
     });
   },
   methods: {
