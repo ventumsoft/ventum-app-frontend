@@ -5,7 +5,8 @@
 <script>
 export default {
   layout: 'frame',
-  mounted() {
+  async mounted() {
+    await new Promise(resolve => $(() => resolve()));
     if (!(this.$route.query.restorePasswordEmail && this.$route.query.restorePasswordCode) &&
       !(this.$route.query.confirmUserId && this.$route.query.confirmUserCode) &&
       !this.$route.query.authUserOrGuest
