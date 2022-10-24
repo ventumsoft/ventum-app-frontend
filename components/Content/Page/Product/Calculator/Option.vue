@@ -119,7 +119,7 @@ export default {
       if (this.params.options?.[this.option.id] !== undefined) {
         return this.params.options[this.option.id];
       }
-      if (this.defaults?.options?.[this.option.id] !== undefined) {
+      if ((this.defaults?.options?.[this.option.id] !== undefined) && (this.defaults.options[this.option.id] !== 'any')) {
         return this.defaults.options[this.option.id];
       }
       if ((this.option.inputType === 'select') && this.option.required && this.option.elements?.length) {
