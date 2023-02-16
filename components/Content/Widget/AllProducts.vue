@@ -11,6 +11,7 @@
               :src="item.image || '/images/no-image.png'"
               :srcset="(item.image || '/images/no-image.png') + ', ' + (item.image2x || '/images/no-image.png') + ' 2x'"
               :alt="item.name"
+              :loading="(index >= 3) ? 'lazy' : ''"
             >
             <div v-if="item.new" class="sale-flash new">{{ $trans('widgets.all_category.novelty') }}</div>
             <div v-if="item.sale" class="sale-flash" :style="{'margin-top': item.new ? '42px' : ''}">- {{ item.sale }}%</div>

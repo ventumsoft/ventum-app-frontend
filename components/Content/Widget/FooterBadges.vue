@@ -7,6 +7,7 @@
           v-for="item of items"
           :src="item.image || '/images/no-image.png'"
           :alt="item.name"
+          loading="lazy"
         >
       </div>
     </div>

@@ -14,6 +14,7 @@
               :src="item.image || '/images/no-image.png'"
               :srcset="(item.image || '/images/no-image.png') + ', ' + (item.image2x || '/images/no-image.png') + ' 2x'"
               :alt="item.name"
+              loading="lazy"
             >
             <br />
             <h4 v-html="item.name"></h4>
